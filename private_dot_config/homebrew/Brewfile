@@ -1,0 +1,21 @@
+tap "homebrew/bundle"
+tap "homebrew/core"
+
+brew "sqlite"
+brew "fish"
+brew "vim"
+brew "chezmoi"
+# Version Control
+brew "git"
+brew "glab"
+brew "hub"
+brew "pre-commit"
+# JSON Manipulation
+brew "jq"
+brew "jo"
+# Language Version Managers
+brew "nvm"
+brew "pyenv"
+# Credential/Identity Management
+brew "gnupg"
+brew "keychain"
