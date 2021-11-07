@@ -1,0 +1,19 @@
+[user]
+	name = Joel Gerber
+	email = {{ .email }}
+	signingkey = {{ .gpg.key }}
+
+[core]
+	editor = code --wait
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+
+[init]
+	defaultbranch = main
+
+[credential]
+{{- if contains "WSL" .chezmoi.kernel.osrelease }}
+	helper = /mnt/c/Users/{{ .chezmoi.username }}/AppData/Local/Programs/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
+{{- end }}
+
+[commit]
+	gpgsign = true
