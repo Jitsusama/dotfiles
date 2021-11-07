@@ -1,10 +1,11 @@
 tap "homebrew/bundle"
 tap "homebrew/core"
 
-brew "sqlite"
-brew "fish"
-brew "vim"
 brew "chezmoi"
+brew "fish"
+brew "sqlite"
+brew "tree"
+brew "vim"
 # Version Control
 brew "git"
 brew "glab"
