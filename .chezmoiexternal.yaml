@@ -2,7 +2,7 @@
   type: archive
   url: https://github.com/tpope/vim-sensible/archive/master.tar.gz
   stripComponents: 1
-# File Nabigation/Version Control
+# File Navigation/Version Control
 .vim/pack/scrooloose/start/nerdtree:
   type: archive
   url: https://github.com/scrooloose/nerdtree/archive/master.tar.gz
