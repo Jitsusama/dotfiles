@@ -1,2 +1,5 @@
 # pyenv version configuration
 .python-version
+# visual studio code configuration
+jsconfig.json
+.vscode
