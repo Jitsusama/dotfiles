@@ -12,7 +12,7 @@
 {{- if contains "WSL" .chezmoi.kernel.osrelease }}
 	helper = /mnt/c/Users/{{ .chezmoi.username }}/AppData/Local/Programs/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
 {{- else if eq .chezmoi.os "darwin" }}
-    manager = osxkeychain
+	manager = osxkeychain
 {{- end }}
 
 {{- if eq .chezmoi.os "windows" }}
