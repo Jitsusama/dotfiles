@@ -1,0 +1,12 @@
+{{- $email := "" -}}
+{{- if hasKey . "email" }}{{- $email = .email -}}
+{{- else -}}{{- $email := promptString "email" -}}
+{{- end -}}
+data:
+  email: {{ $email }}
+  gpg:
+    keyId: {{ .gpg.keyid }}
+    keyRingDocument: {{ .gpg.keyringdocument }}
+  ssh:
+    publicKeyDocument: {{ .ssh.publickeydocument }}
+    privateKeyDocument: {{ .ssh.privatekeydocument }}
