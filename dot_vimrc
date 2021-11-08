@@ -1,0 +1,10 @@
+"- User Interface
+set bg=dark
+set nowrap
+set colorcolumn=80
+
+"- Formatting Options
+set tabstop=2
+set shiftwidth=2
+set noexpandtab
+set modeline

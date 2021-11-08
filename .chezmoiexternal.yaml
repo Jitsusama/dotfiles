@@ -1,0 +1,30 @@
+.vim/pack/vim-sensible/start/vim-sensible:
+  type: archive
+  url: https://github.com/tpope/vim-sensible/archive/master.tar.gz
+  stripComponents: 1
+# File Nabigation/Version Control
+.vim/pack/scrooloose/start/nerdtree:
+  type: archive
+  url: https://github.com/scrooloose/nerdtree/archive/master.tar.gz
+  stripComponents: 1
+.vim/pack/Xuyuanp/start/nerdtree-git-plugin:
+  type: archive
+  url: https://github.com/Xuyuanp/nerdtree-git-plugin/archive/master.tar.gz
+  stripComponents: 1
+.vim/pack/tpope/start/vim-fugitive:
+  type: archive
+  url: https://github.com/tpope/vim-fugitive/archive/master.tar.gz
+  stripComponents: 1
+# Color Schemes
+.vim/pack/morhetz/opt/gruvbox:
+  type: archive
+  url: https://github.com/morhetz/gruvbox/archive/master.tar.gz
+  stripComponents: 1
+.vim/pack/tomasr/opt/molokai:
+  type: archive
+  url: https://github.com/tomasr/molokai/archive/master.tar.gz
+  stripComponents: 1
+.vim/pack/rakr/opt/vim-one:
+  type: archive
+  url: https://github.com/rakr/vim-one/archive/master.tar.gz
+  stripComponents: 1
