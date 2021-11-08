@@ -17,3 +17,8 @@ data:
   ssh:
     publicKeyDocument: {{ .ssh.publickeydocument }}
     privateKeyDocument: {{ .ssh.privatekeydocument }}
+  pypi:
+    host: {{ .pypi.host }}
+    repo: {{ .pypi.repo }}
+    username: {{ .pypi.username }}
+    password: {{ .pypi.password }}
