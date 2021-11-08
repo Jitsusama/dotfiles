@@ -14,6 +14,9 @@ brew "vim"
 {{- end }}
 # Version Control
 brew "git"
+{{- if eq .location "work" }}
+brew "git-lfs"
+{{- end }}
 brew "glab"
 brew "hub"
 brew "pre-commit"
