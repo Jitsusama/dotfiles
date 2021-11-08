@@ -1,11 +1,17 @@
 tap "homebrew/bundle"
 tap "homebrew/core"
 
+# Miscellaneous
 brew "chezmoi"
 brew "fish"
 brew "sqlite"
 brew "tree"
+{{- if eq .chezmoi.os "darwin" }}
+brew "telnet"
+brew "macvim"
+{{- else }}
 brew "vim"
+{{- end }}
 # Version Control
 brew "git"
 brew "glab"
@@ -20,3 +26,7 @@ brew "pyenv"
 # Credential/Identity Management
 brew "gnupg"
 brew "keychain"
+{{- if (and (eq .location "home") (eq .chezmoi.os "darwin")) }}
+# Gaming
+brew "openemu"
+{{- end }}

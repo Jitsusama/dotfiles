@@ -2,8 +2,15 @@
 {{- if hasKey . "email" }}{{- $email = .email -}}
 {{- else -}}{{- $email := promptString "email" -}}
 {{- end -}}
+
+{{- $location := "" -}}
+{{- if hasKey . "location" }}{{- $location = .location -}}
+{{- else -}}{{- $location := promptString "location" -}}
+{{- end -}}
+
 data:
   email: {{ $email }}
+  location: {{ $location }}
   gpg:
     keyId: {{ .gpg.keyid }}
     keyRingDocument: {{ .gpg.keyringdocument }}
