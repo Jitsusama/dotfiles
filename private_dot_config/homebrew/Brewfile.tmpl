@@ -12,6 +12,11 @@ brew "macvim"
 {{- else }}
 brew "vim"
 {{- end }}
+{{- if eq .location "home" }}
+brew "imapsync"
+cask "inkscape"
+cask "xquartz"
+{{- end }}
 # Version Control
 brew "git"
 {{- if eq .location "work" }}
@@ -29,7 +34,7 @@ brew "pyenv"
 # Credential/Identity Management
 brew "gnupg"
 brew "keychain"
-{{- if (and (eq .location "home") (eq .chezmoi.os "darwin")) }}
+{{- if and (eq .location "home") (eq .chezmoi.os "darwin") }}
 # Gaming
-brew "openemu"
+cask "openemu"
 {{- end }}

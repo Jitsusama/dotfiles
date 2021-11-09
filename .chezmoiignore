@@ -1,2 +1,5 @@
 README.md
 bootstrap.sh
+{{- if eq .chezmoi.os "darwin" }}
+.config/fish/conf.d/brew.fish
+{{- end }}

@@ -2,4 +2,3 @@
 {{- if eq .location "work" }}
 index-url = https://{{ .pypi.username }}:{{ .pypi.password }}@{{ .pypi.host }}/artifactory/api/pypi/{{ .pypi.repo }}/simple
 {{- end }}
-

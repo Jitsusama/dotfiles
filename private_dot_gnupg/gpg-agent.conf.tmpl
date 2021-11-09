@@ -1,5 +1,9 @@
+{{- if eq .chezmoi.os "linux" -}}
 {{- if contains "WSL" .chezmoi.kernel.osrelease -}}
 pinentry-program /mnt/c/Users/{{ .chezmoi.group }}/AppData/Local/Programs/Gpg4win/bin/pinentry.exe
+{{- end }}
+{{- else if eq .chezmoi.os "darwin" -}}
+pinentry-program /usr/local/MacGPG2/libexec/pinentry-mac.app/Contents/MacOS/pinentry-mac
 {{- end }}
 
 # TTL of cached GPG credentials
