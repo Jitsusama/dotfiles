@@ -6,3 +6,5 @@ jsconfig.json
 # jetbrains IDE files
 *.iml
 .idea/
+# python virtual environments
+.venv/
