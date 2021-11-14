@@ -3,3 +3,8 @@ bootstrap.sh
 {{- if eq .chezmoi.os "darwin" }}
 .config/fish/conf.d/brew.fish
 {{- end }}
+{{- if eq .chezmoi.os "linux" -}}
+{{- if contains "WSL" .chezmoi.kernel.osrelease -}}
+.config/fish/conf.d/docker.fish
+{{- end }}
+{{- end }}
