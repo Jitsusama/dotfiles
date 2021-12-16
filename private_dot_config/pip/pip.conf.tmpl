@@ -1,4 +1,12 @@
 [global]
 {{- if eq .location "work" }}
-index-url = https://{{ .pypi.username }}:{{ .pypi.password }}@{{ .pypi.host }}/artifactory/api/pypi/{{ .pypi.repo }}/simple
+index-url = https://{{
+ (onepasswordDetailsFields "6sjkpsmwwltvonxtvqg3y65vwe").username.value
+}}:{{
+ (onepasswordItemFields "6sjkpsmwwltvonxtvqg3y65vwe").key.v
+}}@{{
+ (onepasswordItemFields "6sjkpsmwwltvonxtvqg3y65vwe").host.v
+}}/artifactory/api/pypi/{{
+ (onepasswordItemFields "6sjkpsmwwltvonxtvqg3y65vwe").pypi.v
+}}/simple
 {{- end }}
