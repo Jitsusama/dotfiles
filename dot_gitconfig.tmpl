@@ -1,7 +1,12 @@
 [user]
 	name = Joel Gerber
-	email = {{ .email }}
-	signingkey = {{ .gpg.keyid }}
+{{- if eq .location "work" }}
+	email = {{ (onepasswordItemFields "px6i642ammj2c626mv2lgoz4lm").email.v }}
+	signingkey = {{ (onepasswordItemFields "7mqw6bj6yszkbgqumabctc7wmq").id.v }}
+{{- else if eq .location "home" }}
+	email = {{ (onepasswordItemFields "e6k5uztqr5ednktpnz2wuf3dyu").email.v }}
+	signingkey = {{ (onepasswordItemFields "v42o4tpedwhxnv5lm7pugsmunu").id.v }}
+{{- end }}
 
 [core]
 	autocrlf = input
