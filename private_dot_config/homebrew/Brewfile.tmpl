@@ -41,6 +41,9 @@ brew "maven"
 # Credential/Identity Management
 brew "gnupg"
 brew "keychain"
+{{- if eq .location "work" }}
+brew "vault"
+{{- end }}
 {{- if and (eq .location "home") (eq .chezmoi.os "darwin") }}
 # Gaming
 cask "openemu"

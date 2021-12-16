@@ -1,6 +1,13 @@
 README.md
 bootstrap.sh
 .config/fish/conf.d/docker.fish
+{{- if ne .location "work" }}
+.config/fish/conf.d/vault.fish
+.config/pip/pip.conf
+.ssh/id_devops_rsa
+.ssh/id_jgerber-bastion_rsa
+.ssh/id_jgerber-klockwork_rsa
+{{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 .config/fish/conf.d/brew.fish
 {{- end }}
