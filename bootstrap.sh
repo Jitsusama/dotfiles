@@ -31,6 +31,7 @@ function print_usage {
 function main {
     setup_homebrew
     setup_onepassword $1
+    # TODO - setup vault
     setup_chezmoi $2
 }
 

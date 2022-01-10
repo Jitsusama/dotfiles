@@ -1,5 +1,6 @@
 README.md
 bootstrap.sh
+bootstrap.ps1
 .config/fish/conf.d/docker.fish
 {{- if ne .location "work" }}
 .config/fish/conf.d/iar.fish
@@ -16,4 +17,9 @@ bootstrap.sh
 {{- if contains "WSL" .chezmoi.kernel.osrelease -}}
 !.config/fish/conf.d/docker.fish
 {{- end }}
+{{- end }}
+{{- if eq .chezmoi.os "windows" }}
+.config/homebrew/
+.config/omf/
+.config/fish/
 {{- end }}

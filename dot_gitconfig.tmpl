@@ -11,7 +11,7 @@
 [core]
 	autocrlf = input
 	editor = code --wait
-	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+	excludesfile = {{ .chezmoi.homeDir | replace "\\" "/" }}/.gitignore
 
 [credential]
 {{- if eq .chezmoi.os "linux" }}
@@ -20,15 +20,19 @@
 {{- end }}
 {{- else if eq .chezmoi.os "darwin" }}
 	manager = osxkeychain
+{{- else if eq .chezmoi.os "windows" }}
+	helper = {{- .chezmoi.homeDir | replace "\\" "/" }}/AppData/Local/Programs/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
 {{ end }}
 
-{{- if eq .chezmoi.os "darwin" }}
 [gpg]
+{{- if eq .chezmoi.os "darwin" }}
 	program = /usr/local/bin/gpg
+{{- else if eq .chezmoi.os "windows" }}
+	program = {{ .chezmoi.homeDir | replace "\\" "/" }}/AppData/Local/Programs/GnuPG/bin/gpg.exe
 {{- end }}
 
-{{- if eq .chezmoi.os "windows" }}
 [http]
+{{- if eq .chezmoi.os "windows" }}
 	sslbackend = schannel
 {{- end }}
 
