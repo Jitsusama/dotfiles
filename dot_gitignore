@@ -3,6 +3,7 @@
 # visual studio code configuration
 jsconfig.json
 .vscode
+*.code-workspace
 # jetbrains IDE files
 *.iml
 .idea/
