@@ -1,1 +1,5 @@
+{{- if eq .location "work" -}}
 {{- onepasswordDocument "wnamsi5xsspybxx4igczqm24pu" -}}
+{{- else if eq .location "home" -}}
+{{- onepasswordDocument "k7m6spl3tzo6ppqsjm4vntuoga" -}}
+{{- end -}}

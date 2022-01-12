@@ -8,7 +8,7 @@ bootstrap.ps1
 .config/pip/pip.conf
 .ssh/id_devops_rsa
 .ssh/id_jgerber-bastion_rsa
-.ssh/id_jgerber-klockwork_rsa
+.ssh/id_jgerber-klocwork_rsa
 {{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 .config/fish/conf.d/brew.fish
