@@ -1,23 +1,17 @@
 README.md
 bootstrap.sh
 bootstrap.ps1
-.config/fish/conf.d/docker.fish
 {{- if ne .location "work" }}
-.config/fish/conf.d/iar.fish
 .config/fish/conf.d/java.fish
 .config/fish/conf.d/vault.fish
 .config/pip/pip.conf
 .ssh/id_devops_rsa
+.ssh/id_devops-aws-micro_rsa
 .ssh/id_jgerber-bastion_rsa
 .ssh/id_jgerber-klocwork_rsa
 {{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 .config/fish/conf.d/brew.fish
-{{- end }}
-{{- if eq .chezmoi.os "linux" -}}
-{{- if contains "WSL" .chezmoi.kernel.osrelease -}}
-!.config/fish/conf.d/docker.fish
-{{- end }}
 {{- end }}
 {{- if eq .chezmoi.os "windows" }}
 .config/homebrew/
