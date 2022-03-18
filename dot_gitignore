@@ -9,3 +9,6 @@ jsconfig.json
 .idea/
 # python virtual environments
 .venv/
+# snyk
+*.dcignore
+.iac-data/
