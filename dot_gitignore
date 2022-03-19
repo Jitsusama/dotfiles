@@ -10,5 +10,5 @@ jsconfig.json
 # python virtual environments
 .venv/
 # snyk
-*.dcignore
+.dcignore
 .iac-data/
