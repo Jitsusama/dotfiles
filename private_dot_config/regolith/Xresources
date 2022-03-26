@@ -1,0 +1,25 @@
+! i3 WM
+i3-wm.font: JetBrains Mono Medium 13
+i3-wm.gaps.inner.size: 8
+i3-wm.gaps.focus_follows_mouse: true
+
+! i3 Status Area
+i3xrocks.value.font: JetBrains Mono Medium 13
+i3xrocks.weather.format: %t
+
+! Gnome Terminal
+gnome.terminal.font: JetBrains Mono Medium 16
+gnome.terminal.use-transparent-background: true
+gnome.terminal.background-transparency-percent: 5
+
+! rofi Command Launcher
+rofi.font: JetBrains Mono Medium 13
+
+! X Windows
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+Xft.autohint: 1
+Xft.rgba: rgba
+!Xft.dpi: 96
