@@ -5,10 +5,6 @@ bootstrap.ps1
 .config/fish/conf.d/java.fish
 .config/fish/conf.d/vault.fish
 .config/pip/pip.conf
-.ssh/id_devops_rsa
-.ssh/id_devops-aws-micro_rsa
-.ssh/id_jgerber-bastion_rsa
-.ssh/id_jgerber-klocwork_rsa
 {{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 .config/fish/conf.d/brew.fish
