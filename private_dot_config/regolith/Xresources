@@ -9,7 +9,7 @@ i3xrocks.value.font: JetBrains Mono Medium 13
 i3xrocks.weather.format: %t
 
 ! Gnome Terminal
-gnome.terminal.font: JetBrains Mono Medium 16
+gnome.terminal.font: Victor Mono Regular 16
 gnome.terminal.use-transparent-background: true
 gnome.terminal.background-transparency-percent: 5
 
