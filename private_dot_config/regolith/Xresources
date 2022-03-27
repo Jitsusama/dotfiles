@@ -3,6 +3,7 @@ i3-wm.font: JetBrains Mono Medium 13
 i3-wm.gaps.inner.size: 8
 i3-wm.gaps.focus_follows_mouse: true
 i3-wm.program.1: 1password --silent
+i3-wm.program.2: jetbrains-toolbox
 
 ! i3 Status Area
 i3xrocks.value.font: JetBrains Mono Medium 13
