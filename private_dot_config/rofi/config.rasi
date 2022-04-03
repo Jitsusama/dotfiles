@@ -1,0 +1,11 @@
+configuration {
+	font: "Victor Mono 14";
+	theme: "~/.cache/wal/colors-rofi-dark.rasi";
+	show-icons: true;
+
+	modi: "window,drun,ssh,combi";
+	combi-modi: "window,drun,ssh";
+
+	terminal: "kitty";
+	ssh-client: "kitty +kitten ssh";
+}

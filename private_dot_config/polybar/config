@@ -1,0 +1,70 @@
+[bar/base]
+	background = ${xrdb:color2}
+	#background = #000f0f0f
+	foreground = ${xrdb:color7}
+
+	padding = 2
+	module-margin = 1
+
+	font-0 = Victor Mono:size=11;1
+	font-1 = Symbola:size=12;1
+
+	modules-left = workspaces
+	modules-center = date
+	modules-right = volume battery backlight
+
+[module/window]
+	type = internal/xwindow
+	format = <label>
+	label-maxlen = 50
+	format-padding = 4
+
+[module/date]
+	type = internal/date
+	interval = 1.0
+	time = "%I:%M %p"
+	label = "%time%"
+	format = <label>
+
+[module/battery]
+	type = internal/battery
+	battery = BAT0
+	adapter = AC
+	format-charging = 🔌 <label-charging>
+	format-discharging = 🔋 <label-discharging>
+
+[module/volume]
+	type = internal/pulseaudio
+	use-ui-max = false
+	format-volume = <ramp-volume> <label-volume>
+	label-muted = 🔇
+	ramp-volume-0 = 🔈
+	ramp-volume-1 = 🔉
+	ramp-volume-2 = 🔊
+
+[module/backlight]
+	type = internal/backlight
+	card = intel_backlight
+	format = <ramp> <label>
+	ramp-0 = 🌕
+	ramp-1 = 🌔
+	ramp-2 = 🌓
+	ramp-3 = 🌒
+	ramp-4 = 🌑
+
+[module/workspaces]
+	type = internal/i3
+	format = <label-state> <label-mode>
+	index-sort = true
+	wrapping-scroll = false
+	pin-workspaces = true
+	label-focused = %name%
+	label-focused-padding = 1
+	label-focused-background = ${xrdb:color15}
+	label-focused-foreground = ${xrdb:color0}
+	label-unfocused = %name%
+	label-unfocused-padding = 1
+	label-visible = %name%
+	label-visible-padding = 1
+	label-urgent = %name%
+	label-urgent-padding = 1
