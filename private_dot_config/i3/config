@@ -64,17 +64,19 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
-mode "resize" {
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+set $mode_resize resize: <Left> <Up> <Down> <Right> (c)ancel
+bindsym $mod+r mode "$mode_resize"
+mode "$mode_resize" {
+	bindsym Left resize shrink width 2 px or 2 ppt
+	bindsym Down resize grow height 2 px or 2 ppt
+	bindsym Up resize shrink height 2 px or 2 ppt
+	bindsym Right resize grow width 2 px or 2 ppt
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym c mode "default"
+	bindsym $mod+r mode "default"
 }
-bindsym $mod+r mode "resize"
 
 #
 # Workspace Controls
@@ -115,19 +117,41 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 #
 # i3 Controls
 #
-bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+set $mode_i3 i3: (e)xit re(l)oad re(s)tart (c)ancel
+bindsym $mod+Shift+i mode "$mode_i3"
+mode "$mode_i3" {
+	bindsym e exit, mode "default"
+	bindsym l reload, mode "default"
+	bindsym s restart, mode "default"
+	bindsym c mode "default"
+	bindsym Escape mode "default"
+}
 
-bar {
-	mode invisible
+#
+# Session Controls
+#
+set $mode_session session: (l)ock log(o)ut (r)eboot (s)uspend (p)oweroff (c)ancel
+bindsym $mod+Shift+p mode "$mode_session"
+mode "$mode_session" {
+	bindsym l exec --no-startup-id xset s activate, mode "default"
+	bindsym o exit, mode "default"
+	bindsym r exec --no-startup-id systemctl reboot, mode "default"
+	bindsym s exec --no-startup-id systemctl suspend, mode "default"
+	bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+	bindsym c mode "default"
+	bindsym Escape mode "default"
 }
 
 #
 # Auto Launch
 #
+exec_always --no-startup-id dunst
+# Configure nVidia Graphics Card
+exec --no-startup-id nvidia-settings --load-config-only
 # Visual Effects
 exec --no-startup-id picom
+# Status Bar (Replace i3's Bar Completely)
+exec --no-startup-id polybar base -r
 # Lock Screen
 exec --no-startup-id xss-lock --transfer-sleep-lock -- env XSECURELOCK_FONT="Victor Mono" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_SHOW_HOSTNAME=0 XSECURELOCK_SAVER=saver_mpv XSECURELOCK_LIST_VIDEOS_COMMAND="cat ~/.cache/wal/wal" XSECURELOCK_IMAGE_DURATION_SECONDS=10000000 xsecurelock
 # Hides Mouse on Keyboard Input
@@ -141,12 +165,15 @@ exec --no-startup-id 1password --silent
 # Custom Bindings
 #
 
-# Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# Adjust Sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Adjust Brightness
+bindsym XF86BrightnessUp exec --no-startup-id xbacklight -inc 10
+bindsym XF86BrightnessDown exec --no-startup-id xbacklight -dec 10
 
 # Launch Terminal
 bindsym $mod+Return exec kitty
@@ -154,4 +181,4 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+Return exec gtk-launch $(xdg-settings get default-web-browser)
 
 # Load Launch Menu
-bindsym $mod+Shift+space exec "rofi -modi drun,window,ssh -show drun -theme ~/.cache/wal/colors-rofi-dark.rasi"
+bindsym $mod+Shift+space exec "rofi -show combi"
