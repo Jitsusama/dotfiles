@@ -12,3 +12,5 @@ jsconfig.json
 # snyk
 .dcignore
 .iac-data/
+# vim
+*.swp
