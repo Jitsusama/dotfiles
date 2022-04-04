@@ -151,7 +151,7 @@ exec --no-startup-id nvidia-settings --load-config-only
 # Visual Effects
 exec --no-startup-id picom
 # Status Bar (Replace i3's Bar Completely)
-exec --no-startup-id polybar base -r
+exec_always --no-startup-id polybar base -r
 # Lock Screen
 exec --no-startup-id xss-lock --transfer-sleep-lock -- env XSECURELOCK_FONT="Victor Mono" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_SHOW_HOSTNAME=0 XSECURELOCK_SAVER=saver_mpv XSECURELOCK_LIST_VIDEOS_COMMAND="cat ~/.cache/wal/wal" XSECURELOCK_IMAGE_DURATION_SECONDS=10000000 xsecurelock
 # Hides Mouse on Keyboard Input
