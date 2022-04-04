@@ -12,6 +12,8 @@ param(
     [Parameter(Position = 1)][string]$GithubUsername
 )
 
+# TODO - Replace with Ansible script, or something analogous?
+
 $ONEP_VERSION = "v1.12.3"
 $ONEP_HOST = "my.1password.ca"
 
