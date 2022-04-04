@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO - Replace this with Ansible Script
+
 $ONEP_VERSION = "v1.12.3"
 $ONEP_HOST = "my.1password.ca"
 
