@@ -2,8 +2,6 @@ set guioptions-=T
 set guioptions-=m
 set guioptions-=r
 set cursorline
-{{- if eq .location "home" }}
-set guifont=Menlo-Regular:h18
-{{- else }}
+{{- if eq .chezmoi.os "linux" }}
 set guifont=Victor\ Mono\ Regular\ 12
 {{- end }}
