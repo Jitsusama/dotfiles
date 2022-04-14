@@ -143,6 +143,8 @@ mode "$mode_session" {
 #
 # Auto Launch
 #
+# Policy Kit Agent
+exec_always --no-startup-id /usr/lib/x86_64-linux-gnu/polkit-mate/polkit-mate-authentication-agent-1
 # Notification System
 exec_always --no-startup-id dunst
 # Configure nVidia Graphics Card
