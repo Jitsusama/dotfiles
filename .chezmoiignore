@@ -10,7 +10,17 @@ bootstrap.ps1
 .config/fish/conf.d/brew.fish
 {{- end }}
 {{- if eq .chezmoi.os "windows" }}
-.config/homebrew/
-.config/omf/
+.config/dunst/
 .config/fish/
+.config/gtk-3.0/
+.config/gtk-4.0/
+.config/homebrew/
+.config/i3/
+.config/kitty/
+.config/omf/
+.config/polybar/
+.config/rofi/
+.local/
+.xsessionrc
+.Xresources
 {{- end }}
