@@ -5,6 +5,10 @@
 $ONEP_VERSION = "v1.12.3"
 $ONEP_HOST = "my.1password.ca"
 
+function setup_keyboard {
+	localectl set-x11-keymap us,us,gr pc104 colemak_dh,, grp:ctrls_toggle,compose:caps
+}
+
 function setup_homebrew {
     $URI = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
     /bin/bash -c "$(curl -fsSL $URI)"
@@ -31,6 +35,7 @@ function print_usage {
 
 ## main <1PASSWORD_EMAIL> <GITHUB_USERNAME>
 function main {
+    setup_keyboard
     setup_homebrew
     setup_onepassword $1
     # TODO - setup vault
