@@ -8,8 +8,6 @@ set $mod Mod4
 # Looks
 #
 font pango:Victor Mono 8
-gaps inner 7
-gaps outer 3
 
 set_from_resource $blp i3wm.color0  #ff0000
 set_from_resource $bla i3wm.color8  #ff0000
@@ -145,9 +143,12 @@ mode "$mode_session" {
 #
 # Auto Launch
 #
+# Notification System
 exec_always --no-startup-id dunst
 # Configure nVidia Graphics Card
 exec --no-startup-id nvidia-settings --load-config-only
+# Auto Adjust Colour Temperature
+exec --no-startup-id gammastep.sh
 # Visual Effects
 exec --no-startup-id picom
 # Status Bar (Replace i3's Bar Completely)
@@ -179,6 +180,8 @@ bindsym XF86BrightnessDown exec --no-startup-id xbacklight -dec 10
 bindsym $mod+Return exec kitty
 # Launch Browser
 bindsym $mod+Shift+Return exec gtk-launch $(xdg-settings get default-web-browser)
+# Launch Ranger (File Browser)
+bindsym $mod+Shift+n exec kitty ranger
 
 # Load Launch Menu
 bindsym $mod+Shift+space exec "rofi -show combi"
