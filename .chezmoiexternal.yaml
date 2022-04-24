@@ -1,8 +1,9 @@
+# Vim Plugins &etc.
 .vim/pack/vim-sensible/start/vim-sensible:
   type: archive
   url: https://github.com/tpope/vim-sensible/archive/master.tar.gz
   stripComponents: 1
-# File Navigation/Version Control
+## File Navigation/Version Control
 .vim/pack/scrooloose/start/nerdtree:
   type: archive
   url: https://github.com/scrooloose/nerdtree/archive/master.tar.gz
@@ -15,7 +16,7 @@
   type: archive
   url: https://github.com/tpope/vim-fugitive/archive/master.tar.gz
   stripComponents: 1
-# Color Schemes
+## Color Schemes
 .vim/pack/morhetz/opt/gruvbox:
   type: archive
   url: https://github.com/morhetz/gruvbox/archive/master.tar.gz
@@ -27,4 +28,10 @@
 .vim/pack/rakr/opt/vim-one:
   type: archive
   url: https://github.com/rakr/vim-one/archive/master.tar.gz
+  stripComponents: 1
+
+# Ranger Plugins
+.config/ranger/plugins/ranger_devicons:
+  type: archive
+  url: https://github.com/alexanderjeurissen/ranger_devicons/archive/master.tar.gz
   stripComponents: 1
