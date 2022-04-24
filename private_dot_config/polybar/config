@@ -6,13 +6,49 @@ module-margin = 1
 padding = 2
 height = 27
 
-font-0 = Victor Mono:size=12;1
-font-1 = Symbola:size=12;1
-font-2 = FontAwesome:size=12;1
+font-0 = VictorMono Nerd Font:size=12;1
+font-1 = Emoji One:scale=12:size=2;1
 
 modules-left = workspaces
-modules-center = date
-modules-right = volume battery backlight
+modules-center = date weather
+modules-right = network_wifi volume keyboard backlight battery
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+enable-scroll = true
+format = <ramp> <label>
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+ramp-5 = 
+ramp-6 = 
+ramp-7 = 
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC
+format-full =  <label-full>
+format-charging = <ramp-capacity>ﮣ <label-charging>
+format-discharging = <ramp-capacity>ﮤ <label-discharging>
+format-low = <animation-low> <label-low>
+format-low-foreground = ${xrdb:color1}
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-5 = 
+ramp-capacity-6 = 
+ramp-capacity-7 = 
+ramp-capacity-8 = 
+ramp-capacity-9 = 
+animation-low-0 = 
+animation-low-1 = 
+animation-low-framerate = 200
 
 [module/date]
 type = internal/date
@@ -22,48 +58,32 @@ time = %H:%M
 label = %date%, %time%
 format = <label>
 
-[module/battery]
-type = internal/battery
-battery = BAT0
-adapter = AC
-format-full =  <label-full>
-format-charging = <animation-charging> <label-charging>
-format-discharging = <ramp-capacity> <label-discharging>
-format-low = <animation-low> <label-low>
-format-low-foreground = ${xrdb:color1}
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-low-0 = 
-animation-low-1 = 
-animation-low-framerate = 200
+[module/keyboard]
+type = internal/xkeyboard
+format = <label-layout>
+label-layout =  %layout%
+
+[module/network_wifi]
+type = internal/network
+interface = wlp0s20f3
+interface_type = wireless
+format-connected = 直 <label-connected>
+label-connected = %essid%
+format-disconnected = 睊
 
 [module/volume]
 type = internal/pulseaudio
 use-ui-max = false
 format-volume = <ramp-volume> <label-volume>
-label-muted = 🔇
-ramp-volume-0 = 🔈
-ramp-volume-1 = 🔉
-ramp-volume-2 = 🔊
+label-muted = ﱝ
+ramp-volume-0 = 奄
+ramp-volume-1 = 奔
+ramp-volume-2 = 墳
 
-[module/backlight]
-type = internal/backlight
-card = intel_backlight
-enable-scroll = true
-format = <ramp> <label>
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
+[module/weather]
+type = custom/script
+exec = ~/.config/polybar/scripts/weather.sh
+click-left = xdg-open https://wttr.in
 
 [module/workspaces]
 type = internal/i3
@@ -74,9 +94,9 @@ pin-workspaces = true
 label-mode-background = #af0f0f0f
 label-mode-padding = 2
 label-mode-underline = ${xrdb:color1}
-label-focused = ⚫
+label-focused = 
 label-focused-padding = 1
-label-unfocused = ⚪
+label-unfocused = 
 label-unfocused-padding = 1
 label-visible = %name%
 label-visible-padding = 1

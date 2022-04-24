@@ -1,5 +1,5 @@
 # automatically set keyboard layout
-setxkbmap -model pc104 -layout us,us,gr -variant colemak_dh,, -option grp:ctrls_toggle -option compose:caps
+setxkbmap -model pc104 -layout us,gr -variant colemak_dh, -option grp:lctrl_lwin_toggle -option compose:caps
 
 # automatically configure DPI
 xlayoutdisplay
