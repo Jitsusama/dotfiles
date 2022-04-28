@@ -189,3 +189,16 @@ bindsym $mod+Shift+n exec kitty ranger
 
 # Load Launch Menu
 bindsym $mod+Shift+space exec "rofi -show combi"
+
+#
+# Custom Window Configuration
+#
+
+# Zoom
+for_window [class="zoom"] floating enable
+for_window [class="zoom" title="Zoom - Licensed Account"] floating disable
+for_window [class="zoom" title="Zoom Meeting"] floating disable
+for_window [class="zoom" title="Zoom"] floating disable
+
+# Microsoft Edge
+for_window [title="Ozone X11"] floating enable
