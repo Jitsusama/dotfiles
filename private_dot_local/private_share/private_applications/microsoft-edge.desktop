@@ -1,0 +1,21 @@
+[Desktop Entry]
+Version=1.0
+Name=Microsoft Edge
+GenericName=Web Browser
+Comment=Access the Internet
+Exec=/usr/bin/microsoft-edge-stable --high-dpi-support=1 --force-device-scale-factor=1.3 %U
+StartupNotify=true
+Terminal=false
+Icon=microsoft-edge
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=/usr/bin/microsoft-edge-stable --high-dpi-support=1 --force-device-scale-factor=1.3
+
+[Desktop Action new-private-window]
+Name=New InPrivate Window
+Exec=/usr/bin/microsoft-edge-stable --high-dpi-support=1 --force-device-scale-factor=1.3 --inprivate
