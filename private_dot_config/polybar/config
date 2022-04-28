@@ -79,6 +79,7 @@ label-muted = ﱝ
 ramp-volume-0 = 奄
 ramp-volume-1 = 奔
 ramp-volume-2 = 墳
+click-right = kitty pulsemixer
 
 [module/weather]
 type = custom/script
