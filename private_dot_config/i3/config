@@ -159,6 +159,8 @@ exec_always --no-startup-id polybar base -r
 exec --no-startup-id xss-lock --transfer-sleep-lock -- env XSECURELOCK_FONT="Victor Mono" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_SHOW_HOSTNAME=0 XSECURELOCK_SAVER=saver_mpv XSECURELOCK_LIST_VIDEOS_COMMAND="cat ~/.cache/wal/wal" XSECURELOCK_IMAGE_DURATION_SECONDS=10000000 xsecurelock
 # Hides Mouse on Keyboard Input
 exec --no-startup-id xbanish
+# Disables Screensaver During Zoom Calls
+exec --no-startup-id xssproxy
 # Sets Wallpaper & Color Schemes
 exec --no-startup-id wal -R
 # Password Manager
