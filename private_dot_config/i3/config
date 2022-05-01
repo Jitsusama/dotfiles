@@ -7,6 +7,8 @@ set $mod Mod4
 #
 # Looks
 #
+default_border normal 1
+
 font pango:Victor Mono 8
 
 set_from_resource $blp i3wm.color0  #ff0000
