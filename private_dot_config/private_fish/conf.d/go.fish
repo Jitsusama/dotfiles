@@ -1,4 +1,4 @@
-set _desired_go_version 1.17.6
+set _desired_go_version 1.19
 
 if which go$_desired_go_version >/dev/null 2>&1
     set -x GOROOT (go$_desired_go_version env GOROOT)
