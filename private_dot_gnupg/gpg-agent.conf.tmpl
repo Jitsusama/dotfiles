@@ -3,7 +3,11 @@
 pinentry-program /mnt/c/Users/{{ .chezmoi.group }}/AppData/Local/Programs/Gpg4win/bin/pinentry.exe
 {{- end }}
 {{- else if eq .chezmoi.os "darwin" -}}
+{{- if eq .location "work" -}}
+pinentry-program /opt/homebrew/bin/pinentry-mac
+{{- else -}}
 pinentry-program /usr/local/bin/pinentry-mac
+{{- end }}
 {{- end }}
 
 # TTL of cached GPG credentials
