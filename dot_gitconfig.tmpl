@@ -29,7 +29,11 @@
 
 [gpg]
 {{- if eq .chezmoi.os "darwin" }}
+{{- if eq .location "work" }}
+	program = /opt/homebrew/bin/gpg
+{{- else }}
 	program = /usr/local/bin/gpg
+{{- end }}
 {{- else if eq .chezmoi.os "windows" }}
 	program = {{ .chezmoi.homeDir | replace "\\" "/" }}/AppData/Local/Programs/GnuPG/bin/gpg.exe
 {{- end }}
