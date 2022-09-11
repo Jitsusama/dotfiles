@@ -2,7 +2,7 @@
 .python-version
 # visual studio code configuration
 jsconfig.json
-.vscode
+.vscode/
 *.code-workspace
 # jetbrains IDE files
 *.iml
