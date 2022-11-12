@@ -1,3 +1,4 @@
+let &t_ut=''
 set bg=dark
 set nowrap
 set colorcolumn=80
