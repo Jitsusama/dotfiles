@@ -1,0 +1,35 @@
+#- Fonts ----------------------------------------------------------------------
+{{- if eq .chezmoi.os "linux" }}
+font_family Victor Mono
+{{- else }}
+font_family FiraCode Nerd Font Mono
+{{- end }}
+font_size 14.0
+font_features none
+disable_ligatures never
+
+#- Colour ---------------------------------------------------------------------
+{{- if eq .chezmoi.os "linux" }}
+background_opacity 0.90
+include ~/.cache/wal/colors-kitty.conf
+{{- else }}
+background_opacity 1
+# BEGIN_KITTY_THEME
+# 1984 Orwellian
+include current-theme.conf
+# END_KITTY_THEME
+{{- end }}
+
+#- Mouse ----------------------------------------------------------------------
+mouse_hide_wait -1.0
+focus_follows_mouse true
+
+#- Window ---------------------------------------------------------------------
+window_padding_width 8
+tab_bar_style powerline
+tab_powerline_style slanted
+cursor_shape block
+
+#- Sound ----------------------------------------------------------------------
+enable_audio_bell no
+visual_bell_duration 0.2
