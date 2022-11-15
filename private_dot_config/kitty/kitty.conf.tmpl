@@ -4,9 +4,10 @@ font_family Victor Mono
 {{- else }}
 font_family FiraCode Nerd Font Mono
 {{- end }}
-font_size 13.0
+font_size 13.5
 font_features none
 disable_ligatures never
+macos_thicken_font 0.75
 
 #- Colour ---------------------------------------------------------------------
 {{- if eq .chezmoi.os "linux" }}
@@ -14,6 +15,7 @@ background_opacity 0.90
 include ~/.cache/wal/colors-kitty.conf
 {{- else }}
 background_opacity 1
+macos_colorspace default
 # BEGIN_KITTY_THEME
 include current-theme.conf
 # END_KITTY_THEME
@@ -27,6 +29,7 @@ focus_follows_mouse true
 window_padding_width 8 12
 tab_bar_style powerline
 tab_powerline_style slanted
+macos_show_window_title_in menubar
 
 #- Sound ----------------------------------------------------------------------
 enable_audio_bell no
