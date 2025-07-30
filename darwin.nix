@@ -2,7 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Add system-wide packages here
+    # Fonts
+    (nerdfonts.override { fonts = [ "FiraCode" "VictorMono" ]; })
   ];
 
   # Nix package manager settings
