@@ -1,6 +1,0 @@
-# Added by Toolbox App
-export PATH="$PATH:/Users/jitsusama/Library/Application Support/JetBrains/Toolbox/scripts"
-export PATH="/Users/jitsusama/.local/bin:$PATH"
-
-eval $(/opt/homebrew/bin/brew shellenv)
-eval "$(pyenv init -)"

@@ -1,0 +1,19 @@
+# Nix build results
+result
+result-*
+
+# Nix development shell
+.direnv/
+
+# Lock files (optional - some prefer to commit these)
+# flake.lock
+
+# macOS
+.DS_Store
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,7 +1,0 @@
-{{- $location := "" -}}
-{{- if hasKey . "location" }}{{- $location = .location -}}
-{{- else -}}{{- $location := promptString "location" -}}
-{{- end -}}
-
-data:
-  location: {{ $location }}
