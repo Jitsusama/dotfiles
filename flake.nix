@@ -38,7 +38,8 @@
         inherit system pkgs;
         modules = [
           core.nix-darwin
-          ./darwin.nix
+          ./modules/nix-darwin
+          ./hosts/methuselah/nix-darwin
         ];
         specialArgs = { inherit username; };
       };
@@ -47,7 +48,8 @@
         inherit pkgs;
         modules = [
           core.home-manager
-          ./home.nix
+          ./modules/home-manager
+          ./hosts/methuselah/home-manager
         ];
         extraSpecialArgs = { inherit username homeDirectory; };
       };

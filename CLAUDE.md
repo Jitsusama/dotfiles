@@ -14,10 +14,14 @@ Core Dependencies: nix-darwin, home-manager, core.nix library
 
 ## FILE STRUCTURE & ROLES
 ```
-├── flake.nix      → ORCHESTRATES: inputs, outputs, dev shell
-├── darwin.nix     → SYSTEM: minimal macOS config + core.nix import  
-├── home.nix       → USER: packages + programs + core.nix import
-└── nixpkgs.nix    → PACKAGES: overlays, allowUnfree, platform
+├── flake.nix                     → ORCHESTRATES: inputs, outputs, dev shell
+├── nixpkgs.nix                   → PACKAGES: overlays, allowUnfree, platform
+├── modules/                      → PERSONAL SHARED: configs for all personal machines
+│   ├── nix-darwin/default.nix    → SYSTEM: personal macOS preferences  
+│   └── home-manager/default.nix  → USER: personal packages + programs
+└── hosts/methuselah/             → HOST-SPECIFIC: overrides for this machine
+    ├── nix-darwin/default.nix    → SYSTEM: methuselah-specific overrides
+    └── home-manager/default.nix  → USER: methuselah-specific overrides
 ```
 
 ## DECISION TREE: Configuration Placement
@@ -26,11 +30,14 @@ Core Dependencies: nix-darwin, home-manager, core.nix library
 NEW CONFIGURATION REQUEST →
 ├── Is it sharable across work/personal?
 │   ├── YES → Stage locally, test, then promote to core.nix
-│   └── NO → Add to local files permanently
-├── Where to place locally?
-│   ├── System-level → darwin.nix
-│   ├── User packages/programs → home.nix  
-│   └── Package overrides → nixpkgs.nix
+│   └── NO → Determine scope and placement
+├── Is it shared across personal machines?
+│   ├── YES → Add to modules/ (personal shared)
+│   └── NO → Add to hosts/methuselah/ (host-specific)
+├── Where to place in chosen scope?
+│   ├── System-level → nix-darwin module
+│   ├── User packages/programs → home-manager module
+│   └── Package overrides → nixpkgs.nix (root level)
 └── Has programs.* support?
     ├── YES → Use programs.* (preferred)
     └── NO → Add to packages list
@@ -40,8 +47,8 @@ NEW CONFIGURATION REQUEST →
 
 ### Development Shell
 ```bash
-nix develop                           # Enter management shell with darwin-rebuild and home-manager available
-nix develop -c <command>              # Run command in development shell environment
+nix develop               # Enter management shell with darwin-rebuild and home-manager available
+nix develop -c <command>  # Run command in development shell environment
 ```
 
 ### Apply Configurations
@@ -64,6 +71,7 @@ When adding packages, determine placement:
 
 **Testing changes:**
 ```bash
+git add .                                       # REQUIRED: Stage changes for flake to see them
 sudo darwin-rebuild build --flake .#methuselah  # After darwin.nix changes
 home-manager build --flake .#jitsusama          # After home.nix changes
 ```
@@ -110,6 +118,7 @@ When asked to:
 1. **Stage locally** for testing:
    ```bash
    # Add new configuration to local files (darwin.nix or home.nix)
+   git add .                                        # REQUIRED: Stage changes for flake
    # Test the changes
    sudo darwin-rebuild switch --flake .#methuselah  # for system changes
    home-manager switch --flake .#jitsusama          # for user changes
@@ -167,7 +176,7 @@ sudo darwin-rebuild switch --flake .#methuselah
 # User changes (home.nix modifications)  
 home-manager switch --flake .#jitsusama
 
-# Test without applying
+# Test without applying (REQUIRES: git add . first)
 sudo darwin-rebuild build --flake .#methuselah
 home-manager build --flake .#jitsusama
 
@@ -193,7 +202,7 @@ IF user requests new package:
   2. Determine scope: Sharable or personal-only?
      SHARABLE → Stage locally, test, promote to core.nix
      PERSONAL → Commit to local repo
-  3. Test: home-manager switch --flake .#jitsusama
+  3. Stage and test: git add . && home-manager switch --flake .#jitsusama
   4. If staging → DO NOT COMMIT, follow core.nix workflow
 ```
 
@@ -203,7 +212,7 @@ IF user requests system settings:
   1. Check: Already handled by core.nix?
      YES → Override in darwin.nix if needed
      NO → Add to darwin.nix
-  2. Test: sudo darwin-rebuild switch --flake .#methuselah
+  2. Stage and test: git add . && sudo darwin-rebuild switch --flake .#methuselah
   3. Determine if sharable → follow promotion workflow if yes
 ```
 
@@ -211,7 +220,7 @@ IF user requests system settings:
 ```
 WHEN configuration should be shared:
   1. Stage in local files (darwin.nix OR home.nix)
-  2. Test locally with appropriate switch command
+  2. Stage and test locally: git add . && appropriate switch command
   3. VERIFY functionality
   4. cd ~/src/github.com/jitsusama/core.nix/
   5. git checkout -b feature/descriptive-name
@@ -219,7 +228,7 @@ WHEN configuration should be shared:
   7. git commit + push + create PR
   8. After merge: nix flake update core (in ~/.config/nix/)
   9. Apply: darwin-rebuild/home-manager switch
-  10. Clean local staging files
+  10. Clean local staging files (git restore --staged . if needed)
 ```
 
 ## SCOPE CLASSIFICATION
@@ -231,16 +240,27 @@ WHEN configuration should be shared:
 - macOS system defaults and preferences
 - Universal packages used across environments
 
-### BELONGS IN LOCAL (this repository)
-- Personal credentials (email, SSH keys, signing)
+### BELONGS IN LOCAL modules/ (shared across personal machines)
+- Personal-specific packages and programs
+- Personal email, SSH keys, signing configurations
+- Personal program preferences (themes, settings)
+- Personal development tools and language servers
+
+### BELONGS IN LOCAL hosts/methuselah/ (host-specific only)
 - Machine-specific hostnames and identifiers
-- Personal preferences that don't apply to work
+- Hardware-specific configurations
+- Performance tuning for this specific machine
 - Local development environment overrides
-- Temporary staging for testing (DO NOT COMMIT)
+
+### TEMPORARY STAGING (DO NOT COMMIT)
+- Configurations being tested before promotion to core.nix
+- Experimental settings and packages
+- Work-in-progress configurations
 
 ## ERROR PREVENTION
 
 ### CRITICAL CHECKS
+- **ALWAYS `git add .` before testing** - flakes only see committed/staged files
 - Always use correct hostnames: `methuselah` (system) | `jitsusama` (user)
 - Never commit staging configurations to this repository
 - Always test locally before promoting to core.nix
@@ -248,6 +268,7 @@ WHEN configuration should be shared:
 - Use `programs.*` when available, fallback to packages
 
 ### COMMON MISTAKES TO AVOID  
+- **Forgetting `git add .` before testing** - causes "path does not exist" errors
 - Committing shared configs locally instead of promoting
 - Wrong hostname in commands (causes build failures)
 - Adding packages without checking programs.* support
