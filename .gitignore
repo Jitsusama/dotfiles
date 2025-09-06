@@ -1,19 +1,19 @@
-# Nix build results
+# Nix Build Results
 result
 result-*
 
-# Nix development shell
+# Nix Development Shell
 .direnv/
 
 # macOS
 .DS_Store
 
-# Editor/IDE files
+# Editor/IDE Files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Claude Code files
+# Claude Code Files
 .claude/settings.local.json
