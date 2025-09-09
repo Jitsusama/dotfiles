@@ -17,3 +17,6 @@ result-*
 
 # Claude Code Files
 .claude/settings.local.json
+
+# Throwaway Clones
+vendor/
