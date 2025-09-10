@@ -74,17 +74,8 @@
         };
       };
     };
-
-    bat = {
-      config = {
-        theme = "TwoDark";
-        style = "changes";
-      };
-    };
-
     go = {
       enable = true;
     };
   };
 }
-
