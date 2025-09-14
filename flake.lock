@@ -2,11 +2,11 @@
   "nodes": {
     "core": {
       "locked": {
-        "lastModified": 1757467856,
-        "narHash": "sha256-ApP3jmHVkPNlUCcqOy99G4J/tA8q11m1OLen6idnNf0=",
+        "lastModified": 1757889363,
+        "narHash": "sha256-g88r0LOx4FdMj8n/ERnGjjc6N9ea1Bwegd/W1ivGYec=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "cf6168001f053598a9a119ed3580415e65889225",
+        "rev": "630bc1a34a83d1082359494650e6e9caccee81bf",
         "type": "github"
       },
       "original": {
