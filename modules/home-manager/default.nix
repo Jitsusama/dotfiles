@@ -56,8 +56,8 @@
       lychee
 
       # Security & DevOps Tools
-      ansible
-      ansible-lint
+      # ansible  # TODO: Re-enable when nixpkgs hash mismatch is fixed
+      # ansible-lint
       hadolint
       kics
       trivy
