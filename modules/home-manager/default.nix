@@ -13,34 +13,47 @@
 
     packages = with pkgs; [
       # Development Tools
-      glab
-      nodejs
-      python3
-      poetry
-      pipx
-      gradle
       delve
+      exercism
+      glab
+      gradle
+      mise
+      nodejs
+      pipx
+      poetry
+      python3
+      usage
 
       # Language Servers & Formatters
+      bash-language-server
+      black
+      dockerfile-language-server
+      golangci-lint
+      golangci-lint-langserver
+      gopls
+      helm-ls
+      marksman
+      python312Packages.python-lsp-server
+      shfmt
+      taplo
       terraform
       terraform-ls
       typescript
       typescript-language-server
       yaml-language-server
-      marksman
-      golangci-lint
-      black
-      shfmt
+      yamllint
 
       # System Utilities
-      watch
       coreutils
+      exiftool
       ffmpeg
       minicom
+      watch
 
       # Network & Security
       awscli
-      vault
+      gitleaks
+      lychee
 
       # Security & DevOps Tools
       ansible
