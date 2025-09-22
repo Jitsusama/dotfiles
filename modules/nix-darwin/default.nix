@@ -21,17 +21,14 @@
       "balenaetcher"
       "claude"
       "docker-desktop"
-      "drawio"
       "logitech-g-hub"
       "musescore"
       "obs"
-      "openemu"
       "openvpn-connect"
       "postman"
       "racket"
       "sonic-pi"
       "swiftformat-for-xcode"
-      "warp"
       "zoom"
     ];
   };
@@ -43,4 +40,3 @@
     primaryUser = username;
   };
 }
-

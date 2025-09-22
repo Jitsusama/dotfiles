@@ -36,9 +36,7 @@
       python312Packages.python-lsp-server
       shfmt
       taplo
-      terraform
       terraform-ls
-      typescript
       typescript-language-server
       yaml-language-server
       yamllint
@@ -48,6 +46,7 @@
       exiftool
       ffmpeg
       minicom
+      nethack
       watch
 
       # Network & Security
@@ -87,8 +86,8 @@
         };
       };
     };
-    go = {
-      enable = true;
+    neovim = {
+      extraLuaConfig = builtins.readFile ./neovim/rust-lsp.lua;
     };
   };
 }
