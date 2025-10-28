@@ -12,6 +12,7 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wallpapers.url = "github:Jitsusama/wallpapers.nix";
   };
 
   outputs =
@@ -20,6 +21,7 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      wallpapers,
       ...
     }:
     let
@@ -51,7 +53,7 @@
           ./modules/home-manager
           ./hosts/methuselah/home-manager
         ];
-        extraSpecialArgs = { inherit username homeDirectory; };
+        extraSpecialArgs = { inherit username homeDirectory wallpapers; };
       };
 
       devShells.${system}.default = pkgs.mkShell {

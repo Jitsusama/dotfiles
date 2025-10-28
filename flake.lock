@@ -1,12 +1,15 @@
 {
   "nodes": {
     "core": {
+      "inputs": {
+        "wallpapers": "wallpapers"
+      },
       "locked": {
-        "lastModified": 1758805522,
-        "narHash": "sha256-BUIqvIV4OFPN87GMr+azRPZFCFSdj2MeYnYdHv9we/U=",
+        "lastModified": 1761586870,
+        "narHash": "sha256-g0GbWwNaDAdB2bCBMDwmnfPhbY6uAkAjy52WbDx5S6k=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "f5bba8dc6ac1bbc990a7a697e990c6f738c3679a",
+        "rev": "64b533c8edfdf231a0be2d5b87a83d8930cc85ed",
         "type": "github"
       },
       "original": {
@@ -22,11 +25,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759702766,
-        "narHash": "sha256-011pCUbIq/fhCiZ20AzqJYNjLzQ1oYkzYEgzcUYVTBg=",
+        "lastModified": 1761666354,
+        "narHash": "sha256-fHr+tIYBJccNF8QWqgowfRmEAtAMSt1deZIRNKL8A7c=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "5b45dcf4790bb94fec7e550d2915fc2540a3cdd6",
+        "rev": "ca2ab1d877a24d5a437dad62f56b8b2c02e964e9",
         "type": "github"
       },
       "original": {
@@ -42,11 +45,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758805352,
-        "narHash": "sha256-BHdc43Lkayd+72W/NXRKHzX5AZ+28F3xaUs3a88/Uew=",
+        "lastModified": 1761339987,
+        "narHash": "sha256-IUaawVwItZKi64IA6kF6wQCLCzpXbk2R46dHn8sHkig=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "c48e963a5558eb1c3827d59d21c5193622a1477c",
+        "rev": "7cd9aac79ee2924a85c211d21fafd394b06a38de",
         "type": "github"
       },
       "original": {
@@ -57,11 +60,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1759632233,
-        "narHash": "sha256-krgZxGAIIIKFJS+UB0l8do3sYUDWJc75M72tepmVMzE=",
+        "lastModified": 1761594641,
+        "narHash": "sha256-sImk6SJQASDLQo8l+0zWWaBgg7TueLS6lTvdH5pBZpo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d7f52a7a640bc54c7bb414cca603835bf8dd4b10",
+        "rev": "1666250dbe4141e4ca8aaf89b40a3a51c2e36144",
         "type": "github"
       },
       "original": {
@@ -76,7 +79,38 @@
         "core": "core",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "wallpapers": "wallpapers_2"
+      }
+    },
+    "wallpapers": {
+      "locked": {
+        "lastModified": 1759889113,
+        "narHash": "sha256-jzfSApNJ/64BuRZpOHHJDogWPm1Zyff4ipNF3NfBRBo=",
+        "owner": "Jitsusama",
+        "repo": "wallpapers.nix",
+        "rev": "9a4c725e3a1c8be6dd30768512b6a3684a260f3c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "repo": "wallpapers.nix",
+        "type": "github"
+      }
+    },
+    "wallpapers_2": {
+      "locked": {
+        "lastModified": 1759889113,
+        "narHash": "sha256-jzfSApNJ/64BuRZpOHHJDogWPm1Zyff4ipNF3NfBRBo=",
+        "owner": "Jitsusama",
+        "repo": "wallpapers.nix",
+        "rev": "9a4c725e3a1c8be6dd30768512b6a3684a260f3c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "repo": "wallpapers.nix",
+        "type": "github"
       }
     }
   },

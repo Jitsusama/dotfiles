@@ -55,8 +55,8 @@
       lychee
 
       # Security & DevOps Tools
-      # ansible  # TODO: Re-enable when nixpkgs hash mismatch is fixed
-      # ansible-lint
+      ansible
+      ansible-lint
       hadolint
       kics
       trivy
@@ -69,13 +69,13 @@
 
   programs = {
     git = {
-      userEmail = "joel@grrbrr.ca";
       lfs.enable = true;
       signing = {
         key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu";
         signByDefault = true;
       };
-      extraConfig = {
+      settings = {
+        user.email = "joel@grrbrr.ca";
         commit.template = "~/.config/git/commit-template";
         gpg = {
           format = "ssh";
