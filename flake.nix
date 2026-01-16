@@ -25,49 +25,79 @@
       ...
     }:
     let
-      username = "jitsusama";
-      homeDirectory = "/Users/${username}";
-
-      system = "aarch64-darwin";
-      pkgs = import nixpkgs (
-        import ./nixpkgs.nix {
-          inherit system;
-        }
-      );
+      darwinPkgs = import nixpkgs (import ./nixpkgs.nix { system = "aarch64-darwin"; });
+      linuxPkgs = import nixpkgs (import ./nixpkgs.nix { system = "x86_64-linux"; });
     in
     {
       darwinConfigurations."methuselah" = nix-darwin.lib.darwinSystem {
-        inherit system pkgs;
+        system = "aarch64-darwin";
+        pkgs = darwinPkgs;
         modules = [
           core.nix-darwin
           ./modules/nix-darwin
           ./hosts/methuselah/nix-darwin
         ];
-        specialArgs = { inherit username; };
+        specialArgs = {
+          username = "jitsusama";
+        };
       };
 
-      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      nixosConfigurations."penelope" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        pkgs = linuxPkgs;
         modules = [
-          core.home-manager
-          ./modules/home-manager
-          ./hosts/methuselah/home-manager
+          # TODO: Add core.nixos when available in core.nix
+          ./modules/nixos
+          ./hosts/penelope/nixos
         ];
-        extraSpecialArgs = { inherit username homeDirectory wallpapers; };
+        specialArgs = {
+          username = "jitsusama";
+        };
       };
 
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = [
-          home-manager.packages.${system}.home-manager
-          nix-darwin.packages.${system}.darwin-rebuild
-        ];
-        shellHook = ''
-          echo "Commands:"
-          echo "  sudo darwin-rebuild switch --flake ."
-          echo "  home-manager switch --flake ."
-          echo "  home-manager news --flake ."
-          echo "  nix flake update"
-        '';
+      homeConfigurations = {
+        "jitsusama@methuselah" = home-manager.lib.homeManagerConfiguration {
+          pkgs = darwinPkgs;
+          modules = [
+            core.home-manager
+            ./modules/home-manager
+            ./hosts/methuselah/home-manager
+          ];
+          extraSpecialArgs = {
+            inherit wallpapers;
+            username = "jitsusama";
+            homeDirectory = "/Users/jitsusama";
+          };
+        };
+
+        "jitsusama@penelope" = home-manager.lib.homeManagerConfiguration {
+          pkgs = linuxPkgs;
+          modules = [
+            core.home-manager
+            ./modules/home-manager
+            ./hosts/penelope/home-manager
+          ];
+          extraSpecialArgs = {
+            inherit wallpapers;
+            username = "jitsusama";
+            homeDirectory = "/home/jitsusama";
+          };
+        };
+      };
+
+      devShells = {
+        "aarch64-darwin".default = darwinPkgs.mkShell {
+          buildInputs = [
+            home-manager.packages."aarch64-darwin".home-manager
+            nix-darwin.packages."aarch64-darwin".darwin-rebuild
+          ];
+        };
+
+        "x86_64-linux".default = linuxPkgs.mkShell {
+          buildInputs = [
+            home-manager.packages."x86_64-linux".home-manager
+          ];
+        };
       };
     };
 }
