@@ -3,11 +3,11 @@
     "agentic-harness-pi": {
       "flake": false,
       "locked": {
-        "lastModified": 1786331152,
-        "narHash": "sha256-WkfrMeOvCDevJUmQMxe1++xhc+6vuKmsP+XmBRXss7c=",
+        "lastModified": 1787097152,
+        "narHash": "sha256-/L6M9nC5iNUIldmJf/kv5T/l+x/mkxJ/LIrPHtWEZDc=",
         "owner": "Jitsusama",
         "repo": "agentic-harness.pi",
-        "rev": "6c74f85a19b00f6212eca83ef63fe4bff813f153",
+        "rev": "837db64bd092c8d602227c4f03cfe9cafbd28a91",
         "type": "github"
       },
       "original": {
