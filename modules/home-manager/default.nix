@@ -69,7 +69,6 @@
 
   programs = {
     git = {
-      lfs.enable = true;
       signing = {
         key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu";
         signByDefault = true;
@@ -87,7 +86,8 @@
       };
     };
     neovim = {
-      extraLuaConfig = builtins.readFile ./neovim/rust-lsp.lua;
+      withPython3 = true;
+      initLua = builtins.readFile ./neovim/rust-lsp.lua;
     };
   };
 }

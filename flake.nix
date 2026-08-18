@@ -67,6 +67,7 @@
             inherit wallpapers;
             username = "jitsusama";
             homeDirectory = "/Users/jitsusama";
+            neovim-pi = core.neovim-pi;
           };
         };
 
@@ -81,6 +82,7 @@
             inherit wallpapers;
             username = "jitsusama";
             homeDirectory = "/home/jitsusama";
+            neovim-pi = core.neovim-pi;
           };
         };
       };
