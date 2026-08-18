@@ -13,6 +13,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wallpapers.url = "github:Jitsusama/wallpapers.nix";
+    agentic-harness-pi = {
+      # TEMPORARY: pointed at the core-substrate dev branch while
+      # agentic-harness.core is extracted. Revert to the default
+      # branch (drop the /core-substrate suffix) once that work lands.
+      url = "github:Jitsusama/agentic-harness.pi/core-substrate";
+      flake = false;
+    };
   };
 
   outputs =
@@ -22,6 +29,7 @@
       home-manager,
       nix-darwin,
       wallpapers,
+      agentic-harness-pi,
       ...
     }:
     let
@@ -64,7 +72,7 @@
             ./hosts/methuselah/home-manager
           ];
           extraSpecialArgs = {
-            inherit wallpapers;
+            inherit wallpapers agentic-harness-pi;
             username = "jitsusama";
             homeDirectory = "/Users/jitsusama";
             neovim-pi = core.neovim-pi;
@@ -79,7 +87,7 @@
             ./hosts/penelope/home-manager
           ];
           extraSpecialArgs = {
-            inherit wallpapers;
+            inherit wallpapers agentic-harness-pi;
             username = "jitsusama";
             homeDirectory = "/home/jitsusama";
             neovim-pi = core.neovim-pi;

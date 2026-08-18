@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "agentic-harness-pi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786331152,
+        "narHash": "sha256-WkfrMeOvCDevJUmQMxe1++xhc+6vuKmsP+XmBRXss7c=",
+        "owner": "Jitsusama",
+        "repo": "agentic-harness.pi",
+        "rev": "6c74f85a19b00f6212eca83ef63fe4bff813f153",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "ref": "core-substrate",
+        "repo": "agentic-harness.pi",
+        "type": "github"
+      }
+    },
     "core": {
       "inputs": {
         "neovim-pi": "neovim-pi",
@@ -93,6 +110,7 @@
     },
     "root": {
       "inputs": {
+        "agentic-harness-pi": "agentic-harness-pi",
         "core": "core",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
