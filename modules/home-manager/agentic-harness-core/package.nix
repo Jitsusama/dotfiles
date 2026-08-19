@@ -10,7 +10,7 @@ buildNpmPackage {
 
   src = agentic-harness-core;
 
-  npmDepsHash = "sha256-4jc+KSbHDsTb/1amRCq03/wxHtOlP4EUpceGdwMx9hg=";
+  npmDepsHash = "sha256-VPPedaSzSGwQkaONhJ+EbE7rV424lZqPW/z0LYYITho=";
 
   meta = {
     description = "Pi-agnostic business logic for agentic-harness (state machines, guardian decisions, quest/TDD domain model), exposed as a CLI";
