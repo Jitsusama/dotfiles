@@ -20,3 +20,6 @@ result-*
 
 # Throwaway Clones
 vendor/
+
+# agentic-harness-core CLI state (tdd loop, quest state)
+.agentic-harness/
