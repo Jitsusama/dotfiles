@@ -20,6 +20,14 @@
       url = "github:Jitsusama/agentic-harness.pi/core-substrate";
       flake = false;
     };
+    agentic-harness-core = {
+      url = "github:Jitsusama/agentic-harness.core";
+      flake = false;
+    };
+    agentic-harness-claude = {
+      url = "github:Jitsusama/agentic-harness.claude";
+      flake = false;
+    };
   };
 
   outputs =
@@ -30,6 +38,8 @@
       nix-darwin,
       wallpapers,
       agentic-harness-pi,
+      agentic-harness-core,
+      agentic-harness-claude,
       ...
     }:
     let
@@ -72,7 +82,7 @@
             ./hosts/methuselah/home-manager
           ];
           extraSpecialArgs = {
-            inherit wallpapers agentic-harness-pi;
+            inherit wallpapers agentic-harness-pi agentic-harness-core agentic-harness-claude;
             username = "jitsusama";
             homeDirectory = "/Users/jitsusama";
             neovim-pi = core.neovim-pi;
@@ -87,7 +97,7 @@
             ./hosts/penelope/home-manager
           ];
           extraSpecialArgs = {
-            inherit wallpapers agentic-harness-pi;
+            inherit wallpapers agentic-harness-pi agentic-harness-core agentic-harness-claude;
             username = "jitsusama";
             homeDirectory = "/home/jitsusama";
             neovim-pi = core.neovim-pi;

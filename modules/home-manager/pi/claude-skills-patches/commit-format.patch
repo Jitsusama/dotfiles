@@ -1,0 +1,29 @@
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -93,9 +93,7 @@
+ 
+ ## Getting the Message Into Git
+ 
+-Prefer the `work record` tool, which takes the subject and body as
+-arguments and needs no quoting at all. When committing through a
+-shell, pass the message on stdin with a quoted heredoc delimiter:
++Pass the message on stdin with a quoted heredoc delimiter:
+ 
+ ```bash
+ git commit -F- <<'EOF'
+@@ -115,11 +113,8 @@
+ ...`). Chaining a second reviewable command is not: each `git
+ commit`, `gh pr create` and `gh issue create` gets its own bash
+ call, and so does any state change like `git push` or `git
+-checkout`. Guardians rewrite the command they are reviewing, and a
+-compound call risks losing the parts that were not the target.
++checkout`. Keeping them separate keeps each command reviewable
++on its own before it runs.
+ 
+-Never `--amend`. It is refused outright rather than reviewed: a
+-new commit is cleaner and keeps the work trail. This used to be
+-documented in a skill that also carried an `--amend` example, which
+-is how a rule and its counterexample lived three files apart for
+-months.
++Never `--amend` on a commit that may already be reviewed or
++shared. A new commit is cleaner and keeps the work trail.

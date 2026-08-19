@@ -1,5 +1,37 @@
 {
   "nodes": {
+    "agentic-harness-claude": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787097840,
+        "narHash": "sha256-tROE2SYODxpKw1ev4Vt1IlBlJN7rcxaBXn0ltN18Jqo=",
+        "owner": "Jitsusama",
+        "repo": "agentic-harness.claude",
+        "rev": "51f0023b958c0c55aeafdcbae0ed74f3591253e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "repo": "agentic-harness.claude",
+        "type": "github"
+      }
+    },
+    "agentic-harness-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787096534,
+        "narHash": "sha256-pHzrFYfj3g9tSc6l+M3vIXlUY2HWY9kPnpc5gPlmSG0=",
+        "owner": "Jitsusama",
+        "repo": "agentic-harness.core",
+        "rev": "a792b500470046c0e3dfd835914e1f276e5c1606",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "repo": "agentic-harness.core",
+        "type": "github"
+      }
+    },
     "agentic-harness-pi": {
       "flake": false,
       "locked": {
@@ -110,6 +142,8 @@
     },
     "root": {
       "inputs": {
+        "agentic-harness-claude": "agentic-harness-claude",
+        "agentic-harness-core": "agentic-harness-core",
         "agentic-harness-pi": "agentic-harness-pi",
         "core": "core",
         "home-manager": "home-manager",

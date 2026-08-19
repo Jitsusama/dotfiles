@@ -2,6 +2,9 @@
   pkgs,
   username,
   homeDirectory,
+  agentic-harness-pi,
+  agentic-harness-core,
+  agentic-harness-claude,
   ...
 }:
 {
@@ -19,6 +22,8 @@
       gradle
       mise
       nodejs
+      (callPackage ./pi/package.nix { })
+      (callPackage ./agentic-harness-core/package.nix { inherit agentic-harness-core; })
       pipx
       poetry
       python3
@@ -65,6 +70,29 @@
       kubernetes-helm
       kustomize
     ];
+
+    file.".pi/agent/settings.json".text = builtins.toJSON {
+      defaultProvider = "anthropic";
+      defaultModel = "claude-sonnet-5";
+      packages = [
+        "git:github.com/Jitsusama/agentic-harness.pi"
+      ];
+    };
+
+    # agentic-harness.pi's skills follow the Agent Skills standard, the same
+    # format Claude Code loads. Most skills assume a pi extension is present
+    # to back a tool they instruct the model to call, so only the portable
+    # subset ships here (see pi/claude-skills.nix for the allowlist and the
+    # small patches that strip pi-specific tooling from a few of them).
+    file.".claude/skills/agentic-harness-pi".source =
+      pkgs.callPackage ./pi/claude-skills.nix { inherit agentic-harness-pi; };
+
+    # A Claude Code plugin in a skills-directory subfolder auto-loads with
+    # no marketplace or install step: agentic-harness.claude's own
+    # .claude-plugin/plugin.json is enough. It calls the
+    # agentic-harness-core CLI above (on PATH) for the same domain logic
+    # agentic-harness.pi drives through pi's extension API.
+    file.".claude/skills/agentic-harness-claude".source = agentic-harness-claude;
   };
 
   programs = {

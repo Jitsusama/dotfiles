@@ -1,0 +1,47 @@
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -4,9 +4,9 @@
+   Issue body structure and narrative. The closed three-section
+   body (Situation, Outcome, Acceptance), URI indexing and title
+   conventions. Use when writing or editing a GitHub issue.
+-  Pairs with github-cli-convention for command syntax and
+-  markdown-standard for markdown structure. Follow the user's
+-  writing voice and prose style guides for issue text.
++  Pairs with markdown-standard for markdown structure. Follow
++  the user's writing voice and prose style guides for issue
++  text.
+ ---
+ 
+ # Issue Writing
+@@ -18,15 +18,15 @@
+ 
+ This skill governs the shape and prose of an issue body. Follow
+ `prose-standard` for voice and `markdown-standard` for markdown
+-structure; see `github-cli-convention` for the command surface.
++structure.
+ 
+ ## Title
+ 
++- Use Title Case, not lowercase or sentence case.
+ - Describe the outcome, not the task.
++- Aim for 50 to 72 characters. Formula: `[Action] [What] [For
++  What Purpose]`.
+ 
+-See `github-cli-convention` for title formatting rules
+-(Title Case, length, formula).
+-
+ ## Body Structure
+ 
+ An issue body has exactly three sections, in this order. Each
+@@ -119,11 +119,6 @@
+ 
+ This is not optional. Every issue must have an assignee.
+ 
+-## CLI Format
+-
+-See `github-cli-convention` for command syntax: heredoc
+-patterns, `--body-file -` and metadata in separate commands.
+-
+ ## What Not to Do
+ 
+ - Don't add sections beyond the three. The set is closed:
