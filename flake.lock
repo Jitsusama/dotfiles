@@ -19,11 +19,11 @@
     "agentic-harness-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1787100154,
-        "narHash": "sha256-ujmcClUe7Gn/FdW/QaEIXcR7HTb1j+WiXmKLpMwVouU=",
+        "lastModified": 1787103520,
+        "narHash": "sha256-lhUmxdd3kNp257wQklJd1J4GNhQGGY4DuPu6ZVYxnNA=",
         "owner": "Jitsusama",
         "repo": "agentic-harness.core",
-        "rev": "66e9250309a0c8e018bcf59e67b969c21ff73627",
+        "rev": "7e3a7bd98bac4272dd132e7666b20f66879697b7",
         "type": "github"
       },
       "original": {
