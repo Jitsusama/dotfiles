@@ -14,10 +14,7 @@
     };
     wallpapers.url = "github:Jitsusama/wallpapers.nix";
     agentic-harness-pi = {
-      # TEMPORARY: pointed at the core-substrate dev branch while
-      # agentic-harness.core is extracted. Revert to the default
-      # branch (drop the /core-substrate suffix) once that work lands.
-      url = "github:Jitsusama/agentic-harness.pi/core-substrate";
+      url = "github:Jitsusama/agentic-harness.pi";
       flake = false;
     };
     agentic-harness-core = {

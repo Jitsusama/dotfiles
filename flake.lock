@@ -44,7 +44,6 @@
       },
       "original": {
         "owner": "Jitsusama",
-        "ref": "core-substrate",
         "repo": "agentic-harness.pi",
         "type": "github"
       }
