@@ -3,11 +3,11 @@
     "agentic-harness-claude": {
       "flake": false,
       "locked": {
-        "lastModified": 1787240628,
-        "narHash": "sha256-Brdr7QcSglCUodMCTdAWqbPEpPyylxDH46ZBzSQW/AY=",
+        "lastModified": 1787243641,
+        "narHash": "sha256-i3JLMY/y3AGngfpg+r7FZ1Y6SmB0E25ZOJfS6sphPtA=",
         "owner": "Jitsusama",
         "repo": "agentic-harness.claude",
-        "rev": "68e6378d9e3e4874c303aaa989cdf9f96739c912",
+        "rev": "094a81793547d99d19ad13402d164f3cb7d4f477",
         "type": "github"
       },
       "original": {
@@ -19,11 +19,11 @@
     "agentic-harness-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1787240553,
-        "narHash": "sha256-pKUOcccGi8psI/IpGQjpS0U1WXkBIkzto1YDRvRFAPg=",
+        "lastModified": 1787243581,
+        "narHash": "sha256-LV2Ohsayhcg15lOekr2NhmbcksyfO/vmkA/Mz6PioRc=",
         "owner": "Jitsusama",
         "repo": "agentic-harness.core",
-        "rev": "ce7395f73907724521e26a2ae952fc321a21fdc1",
+        "rev": "09eaf796c100205c4c99182d36384a92e803efaf",
         "type": "github"
       },
       "original": {
