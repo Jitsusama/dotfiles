@@ -19,8 +19,8 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 # Bootstrap System Configuration
 nix develop -c sudo darwin-rebuild switch --flake .#methuselah
 
-# Apply User Configuration  
-nix develop -c home-manager switch --flake .#jitsusama
+# Apply User Configuration
+nix develop -c home-manager switch --flake .#jitsusama@methuselah
 ```
 
 ## References
