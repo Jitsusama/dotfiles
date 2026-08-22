@@ -20,6 +20,7 @@
       exercism
       glab
       gradle
+      lima
       mise
       nodejs
       (callPackage ./pi/package.nix { })
