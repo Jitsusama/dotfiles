@@ -1,3 +1,12 @@
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local found = vim.fs.find(".nvim.lua", { upward = true, path = vim.fn.expand("%:p:h") })[1]
+    if found and vim.secure.read(found) then
+      dofile(found)
+    end
+  end,
+})
+
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
