@@ -274,3 +274,7 @@ WHEN configuration should be shared:
 - Adding packages without checking programs.* support
 - Not testing before promotion to core.nix
 - Creating new files instead of editing existing ones 
+
+## Commit signing
+Architecture and open questions: @docs/commit-signing-spec.md
+Rationale behind each decision (read before deviating): @docs/commit-signing-rationale.md

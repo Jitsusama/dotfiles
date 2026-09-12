@@ -20,8 +20,10 @@
   programs = {
     ghostty.enable = true;
 
-    git.settings = {
-      gpg.ssh.program = lib.mkForce "${pkgs._1password-gui}/share/1password/op-ssh-sign";
+    git = {
+      # Set here now that the shared module no longer picks a signer.
+      signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu";
+      settings.gpg.ssh.program = lib.mkForce "${pkgs._1password-gui}/share/1password/op-ssh-sign";
     };
 
     ssh.extraConfig = ''
