@@ -1,4 +1,4 @@
 { ... }:
 {
-  # Currently no methuselah-specific user overrides needed
+  programs.omniwm.enable = true;
 }
