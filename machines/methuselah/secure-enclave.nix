@@ -10,12 +10,13 @@
 # calling the real ssh-keygen (op-ssh-sign silently breaks
 # gpg.ssh.revocationFile, reporting every commit as a bad signature).
 {
+  config,
   pkgs,
   lib,
-  homeDirectory,
   ...
 }:
 let
+  homeDirectory = config.home.homeDirectory;
   provider = "/usr/lib/ssh-keychain.dylib";
 
   # Which identity signs this user's commits. Flip to "onepassword" and rebuild
@@ -59,7 +60,13 @@ let
   ];
 
   identityArgs = lib.concatMapStringsSep " " (
-    i: lib.escapeShellArgs [ i.label i.protection i.cn i.email ]
+    i:
+    lib.escapeShellArgs [
+      i.label
+      i.protection
+      i.cn
+      i.email
+    ]
   ) identities;
 
   se-keys = pkgs.writeShellApplication {

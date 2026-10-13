@@ -1,19 +1,23 @@
+# What every personal machine adds to core.nix's roles in Joel's account, on
+# macOS and Linux alike: the personal identity, the tools he uses outside
+# work, pi and its skills, and git's personal settings. Each machine's own
+# account settings, its signing included, are in machines/.
 {
-  pkgs,
-  username,
-  homeDirectory,
+  core,
   agentic-harness-pi,
   agentic-harness-core,
   agentic-harness-claude,
-  ...
 }:
+{ pkgs, ... }:
 {
+  imports = [
+    # Where the identity this layer sets is declared.
+    core.homeModules.identity
+  ];
+
+  jitsusama.identity.email = "joel@grrbrr.ca";
+
   home = {
-    stateVersion = "24.05";
-
-    username = username;
-    homeDirectory = homeDirectory;
-
     packages = with pkgs; [
       # Development Tools
       delve
@@ -23,8 +27,8 @@
       lima
       mise
       nodejs
-      (callPackage ./pi/package.nix { })
-      (callPackage ./agentic-harness-core/package.nix { inherit agentic-harness-core; })
+      (callPackage ../../modules/pi/package.nix { })
+      (callPackage ../../modules/agentic-harness-core/package.nix { inherit agentic-harness-core; })
       pipx
       poetry
       python3
@@ -39,7 +43,7 @@
       gopls
       helm-ls
       marksman
-      python312Packages.python-lsp-server
+      python3Packages.python-lsp-server
       shfmt
       taplo
       terraform-ls
@@ -86,7 +90,8 @@
     # subset ships here (see pi/claude-skills.nix for the allowlist and the
     # small patches that strip pi-specific tooling from a few of them).
     file.".claude/skills/agentic-harness-pi".source =
-      pkgs.callPackage ./pi/claude-skills.nix { inherit agentic-harness-pi; };
+      pkgs.callPackage ../../modules/pi/claude-skills.nix
+        { inherit agentic-harness-pi; };
 
     # A Claude Code plugin in a skills-directory subfolder auto-loads with
     # no marketplace or install step: agentic-harness.claude's own
@@ -118,11 +123,10 @@
 
   programs = {
     git = {
-      # signing.key and gpg.ssh.program are host-specific: methuselah signs from
-      # its Secure Enclave, penelope through 1Password. Set in hosts/*.
+      # Which key signs is each machine's: methuselah's Secure Enclave
+      # (machines/methuselah), and penelope's TPM, through core's signing.
       signing.signByDefault = true;
       settings = {
-        user.email = "joel@grrbrr.ca";
         commit.template = "~/.config/git/commit-template";
 
         # Reclaimed from a hand-written ~/.gitconfig that had been shadowing
@@ -143,7 +147,7 @@
     };
     neovim = {
       withPython3 = true;
-      initLua = builtins.readFile ./neovim/rust-lsp.lua;
+      initLua = builtins.readFile ../../modules/neovim/rust-lsp.lua;
     };
   };
 }
