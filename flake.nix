@@ -1,18 +1,10 @@
 {
-  description = "Flake w/Home Manager and Nix Darwin Support";
+  description = "Joel's personal machines, built on core.nix";
 
   inputs = {
     core.url = "github:Jitsusama/core.nix";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    wallpapers.url = "github:Jitsusama/wallpapers.nix";
+    nixpkgs.follows = "core/nixpkgs";
+    nix-darwin.follows = "core/nix-darwin";
     agentic-harness-pi = {
       url = "github:Jitsusama/agentic-harness.pi";
       flake = false;
@@ -29,92 +21,63 @@
 
   outputs =
     {
+      self,
       core,
       nixpkgs,
-      home-manager,
       nix-darwin,
-      wallpapers,
       agentic-harness-pi,
       agentic-harness-core,
       agentic-harness-claude,
-      ...
     }:
     let
-      darwinPkgs = import nixpkgs (import ./nixpkgs.nix { system = "aarch64-darwin"; });
-      linuxPkgs = import nixpkgs (import ./nixpkgs.nix { system = "x86_64-linux"; });
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      forEachSystem = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+
+      # A module file that takes this flake's inputs as an outer function, as
+      # core.nix's own do.
+      moduleFrom = file: given: {
+        key = toString file;
+        imports = [ (nixpkgs.lib.modules.importApply file given) ];
+      };
     in
     {
-      darwinConfigurations."methuselah" = nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        pkgs = darwinPkgs;
+      homeModules.personal = moduleFrom ./layers/personal/home.nix {
+        inherit
+          core
+          agentic-harness-pi
+          agentic-harness-core
+          agentic-harness-claude
+          ;
+      };
+      darwinModules.personal = moduleFrom ./layers/personal/darwin.nix { inherit (self) homeModules; };
+      nixosModules.personal = moduleFrom ./layers/personal/nixos.nix { inherit (self) homeModules; };
+
+      darwinConfigurations.methuselah = nix-darwin.lib.darwinSystem {
         modules = [
-          core.nix-darwin
-          ./modules/nix-darwin
-          ./hosts/methuselah/nix-darwin
+          core.darwinModules.workstation
+          core.darwinModules.graphical
+          self.darwinModules.personal
+          ./machines/methuselah/darwin.nix
         ];
-        specialArgs = {
-          username = "jitsusama";
-        };
       };
 
-      nixosConfigurations."penelope" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        pkgs = linuxPkgs;
+      nixosConfigurations.penelope = nixpkgs.lib.nixosSystem {
         modules = [
-          # TODO: Add core.nixos when available in core.nix
-          ./modules/nixos
-          ./hosts/penelope/nixos
+          core.nixosModules.workstation
+          core.nixosModules.graphical
+          core.nixosModules.laptop
+          self.nixosModules.personal
+          ./machines/penelope/nixos.nix
         ];
-        specialArgs = {
-          username = "jitsusama";
-        };
       };
 
-      homeConfigurations = {
-        "jitsusama@methuselah" = home-manager.lib.homeManagerConfiguration {
-          pkgs = darwinPkgs;
-          modules = [
-            core.home-manager
-            ./modules/home-manager
-            ./hosts/methuselah/home-manager
-          ];
-          extraSpecialArgs = {
-            inherit wallpapers agentic-harness-pi agentic-harness-core agentic-harness-claude;
-            username = "jitsusama";
-            homeDirectory = "/Users/jitsusama";
-            neovim-pi = core.neovim-pi;
-          };
-        };
+      formatter = forEachSystem (pkgs: pkgs.nixfmt-tree);
 
-        "jitsusama@penelope" = home-manager.lib.homeManagerConfiguration {
-          pkgs = linuxPkgs;
-          modules = [
-            core.home-manager
-            ./modules/home-manager
-            ./hosts/penelope/home-manager
-          ];
-          extraSpecialArgs = {
-            inherit wallpapers agentic-harness-pi agentic-harness-core agentic-harness-claude;
-            username = "jitsusama";
-            homeDirectory = "/home/jitsusama";
-            neovim-pi = core.neovim-pi;
-          };
-        };
-      };
-
-      devShells = {
-        "aarch64-darwin".default = darwinPkgs.mkShell {
-          buildInputs = [
-            home-manager.packages."aarch64-darwin".home-manager
-            nix-darwin.packages."aarch64-darwin".darwin-rebuild
-          ];
-        };
-
-        "x86_64-linux".default = linuxPkgs.mkShell {
-          buildInputs = [
-            home-manager.packages."x86_64-linux".home-manager
-          ];
-        };
-      };
+      devShells = forEachSystem (pkgs: {
+        default = pkgs.mkShell { packages = [ pkgs.nixfmt-tree ]; };
+      });
     };
 }
