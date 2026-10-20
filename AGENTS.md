@@ -72,6 +72,8 @@ CI runs it.
   until it is.
 - A promise the machines make, such as penelope booting under its own
   Secure Boot keys, gets a `holds` check with a message saying what broke.
+- Evaluating never runs anything, so what only fails when it runs needs a
+  check that builds it, as `neovim-loads` starts penelope's Neovim.
 - Before trusting a new check, break what it covers and watch it fail.
 
 ## penelope

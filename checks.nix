@@ -4,7 +4,8 @@
 # bare machine of both classes, as core.nix's checks do for core's, so a
 # module that quietly depends on another fails here rather than on a machine.
 # Then come the personal layer on each class, the machines themselves and the
-# promises they make. Evaluating builds nothing, so every check takes seconds.
+# promises they make. Evaluating builds nothing, so most checks take seconds;
+# neovim-loads starts Neovim once.
 {
   self,
   core,
@@ -138,6 +139,13 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
         && lib.hasPrefix "/dev/disk/by-id/nvme-" jitsusama.disk.device
         && boot.initrd.luks.devices ? ${jitsusama.disk.name}
       );
+
+  # penelope's Neovim starts with every plugin and the personal layer's Lua
+  # without an error: core's index of the plugins is written by starting it
+  # once and loading each, and fails on the first error. The personal Lua
+  # once broke here by requiring a plugin core now loads only when wanted.
+  neovim-loads =
+    penelope.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
 
   # Both machines commit as Joel outside work, and sign every commit.
   one-personal-git =
