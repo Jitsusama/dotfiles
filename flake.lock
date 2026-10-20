@@ -279,6 +279,10 @@
         "nixpkgs": [
           "core",
           "nixpkgs"
+        ],
+        "treefmt-nix": [
+          "core",
+          "treefmt-nix"
         ]
       }
     },

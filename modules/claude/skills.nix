@@ -50,6 +50,6 @@ runCommand "agentic-harness-pi-claude-skills"
     ${lib.concatMapStringsSep "\n" (name: ''
       cp -r ${agentic-harness-pi}/skills/${name} "$out/${name}"
       chmod -R u+w "$out/${name}"
-      patch -p1 -d "$out/${name}" < ${./claude-skills-patches + "/${name}.patch"}
+      patch -p1 -d "$out/${name}" < ${./skills-patches + "/${name}.patch"}
     '') patched}
   ''

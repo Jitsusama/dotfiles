@@ -1,6 +1,6 @@
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    local found = vim.fs.find(".nvim.lua", { upward = true, path = vim.fn.expand("%:p:h") })[1]
+    local found = vim.fs.find('.nvim.lua', { upward = true, path = vim.fn.expand('%:p:h') })[1]
     if found and vim.secure.read(found) then
       dofile(found)
     end
@@ -13,7 +13,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 lspconfig.rust_analyzer.setup({
   capabilities = capabilities,
   settings = {
-    ["rust-analyzer"] = {
+    ['rust-analyzer'] = {
       cargo = {
         allFeatures = true,
         loadOutDirsFromCheck = true,
@@ -22,15 +22,15 @@ lspconfig.rust_analyzer.setup({
       checkOnSave = true,
       check = {
         allFeatures = true,
-        command = "clippy",
-        extraArgs = { "--no-deps" },
+        command = 'clippy',
+        extraArgs = { '--no-deps' },
       },
       procMacro = {
         enable = true,
         ignored = {
-          ["async-trait"] = { "async_trait" },
-          ["napi-derive"] = { "napi" },
-          ["async-recursion"] = { "async_recursion" },
+          ['async-trait'] = { 'async_trait' },
+          ['napi-derive'] = { 'napi' },
+          ['async-recursion'] = { 'async_recursion' },
         },
       },
     },
