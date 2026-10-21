@@ -34,12 +34,18 @@ steps for the installed machine, which are still to be built.
    there, as yourself. It names the stick, asks for a recovery passphrase for
    the stick's vault twice (keep it in 1Password), asks for an administrator's
    password once to open the stick, and writes penelope's whole install onto
-   it.
-2. The guide makes penelope new Secure Boot keys, which its firmware only
-   takes in setup mode. Hold volume-up, press and release power, and keep
-   holding until Surface UEFI opens; under Security, set Secure Boot to
-   None. Other Surfaces enter setup mode then, but this model hasn't been
-   seen to; if it doesn't, the guide says so before it changes anything.
+   it. Either YubiKey and its PIN, or the passphrase, opens it on penelope.
+2. Its firmware enforces Secure Boot with penelope's own keys, so the stick
+   needs them, or the firmware cleared:
+   - With a copy of penelope's `/var/lib/sbctl`, run `nix run .#guide --
+     --secure-boot-keys` and that directory instead. The stick carries the
+     keys sealed in its vault, is signed with them so the firmware boots it,
+     and the guide puts them back, so the firmware is never visited.
+   - Otherwise the guide makes new keys, which the firmware only takes in
+     setup mode. Hold volume-up, press and release power, and keep holding
+     until Surface UEFI opens; under Security, set Secure Boot to None.
+     Other Surfaces enter setup mode then, but this model hasn't been seen
+     to; if it doesn't, the guide says so before it changes anything.
 3. To boot the stick, hold volume-down, press and release power, and keep
    holding volume-down until the Surface logo has gone. The guide asks for
    the recovery passphrase, has `penelope` typed back before it wipes the
