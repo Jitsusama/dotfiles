@@ -37,10 +37,14 @@ steps for the installed machine, which are still to be built.
    it. Either YubiKey and its PIN, or the passphrase, opens it on penelope.
 2. Its firmware enforces Secure Boot with penelope's own keys, so the stick
    needs them, or the firmware cleared:
-   - With a copy of penelope's `/var/lib/sbctl`, run `nix run .#guide --
-     --secure-boot-keys` and that directory instead. The stick carries the
-     keys sealed in its vault, is signed with them so the firmware boots it,
-     and the guide puts them back, so the firmware is never visited.
+   - With penelope's rescue bundle, run `nix run .#guide -- --rescue-bundle`
+     and the bundle's file instead. It asks for either YubiKey's PIN and a
+     touch, or the bundle's recovery passphrase, and holds the keys only in
+     memory. The stick is signed with penelope's own db key, so the firmware
+     boots it, and carries the keys sealed in its vault, so the guide puts
+     them back and the firmware is never visited. Penelope makes the bundle
+     itself, as root, with `guide seal-keys`; it's ciphertext only, so keep
+     it in 1Password and on the other machines.
    - Otherwise the guide makes new keys, which the firmware only takes in
      setup mode. Hold volume-up, press and release power, and keep holding
      until Surface UEFI opens; under Security, set Secure Boot to None.
