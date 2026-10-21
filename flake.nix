@@ -106,6 +106,19 @@
         }
       );
 
+      # `nix run .#guide` writes penelope's stick on any x86-64 Linux machine:
+      # its whole install, sealed in the vault, for the guide on the stick to
+      # install with no network. The Nano is enrolled first, since it's the
+      # one almost always plugged in.
+      packages.x86_64-linux.guide = core.lib.guide {
+        inherit (self.nixosConfigurations.penelope) config;
+        yubikeys = [
+          "the Nano"
+          "the 5Ci"
+        ];
+        account = "jitsusama";
+      };
+
       formatter = forEachSystem (pkgs: (treefmt pkgs).config.build.wrapper);
 
       # The formatter on the path, for editors and for running it by hand.

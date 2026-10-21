@@ -9,6 +9,9 @@
     device = "/dev/disk/by-id/nvme-eui.ace42e0005506bd1";
     # As much as its 8 GB of memory, so it can hibernate.
     swapSize = "8G";
+    # The guide lays the disk out with a first key it holds in memory, and
+    # takes it off once the YubiKeys and the recovery key are enrolled.
+    installKey = "/run/guide/install-key";
   };
 
   # Its earlier install ran with this, and why wasn't written down. It puts
