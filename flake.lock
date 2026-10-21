@@ -59,16 +59,17 @@
         "nixpkgs": "nixpkgs",
         "printf": "printf",
         "qmk": "qmk",
+        "rust-overlay": "rust-overlay",
         "spicetify-nix": "spicetify-nix",
         "treefmt-nix": "treefmt-nix",
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1791862091,
-        "narHash": "sha256-bWmuB6cVoQE8Rvp5hkfhQQhhec2xccedF+cQ2mgaMfI=",
+        "lastModified": 1792543073,
+        "narHash": "sha256-7sV5S7H7YgU3+uaactAR5m9NtmxiVJ+1Rqu3VS8xTuo=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "2bb2e7584b51d0c127ee6818e461e2f63fdb1667",
+        "rev": "d807ac460c1207b921a0ec7bf29bba32a2610c8f",
         "type": "github"
       },
       "original": {
@@ -145,7 +146,10 @@
         "pre-commit": [
           "core"
         ],
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": [
+          "core",
+          "rust-overlay"
+        ]
       },
       "locked": {
         "lastModified": 1791455435,
@@ -290,7 +294,6 @@
       "inputs": {
         "nixpkgs": [
           "core",
-          "lanzaboote",
           "nixpkgs"
         ]
       },
