@@ -106,6 +106,27 @@
         }
       );
 
+      # `nix run .#guide` writes penelope's stick on any x86-64 Linux machine:
+      # its whole install, sealed in the vault, for the guide on the stick to
+      # install with no network. The Nano is enrolled first, since it's the
+      # one almost always plugged in. Each key's age recipient, which
+      # age-plugin-fido2-hmac made for it, lets that key open the vault; they
+      # are public halves, and the same as quest-backup seals to.
+      packages.x86_64-linux.guide = core.lib.guide {
+        inherit (self.nixosConfigurations.penelope) config;
+        yubikeys = [
+          {
+            name = "the Nano";
+            recipient = "age1fido2-hmac1qqpft42hf3garzhh4rfe522mlqfs7jrgdtza0pw78y0jvmssznxqxlgp4f25ln9fep0a4p9s27ly90tkwqyjv7jvznnl8ekm4pvzyvfytxmauuuqfs9hr0kxy294ewuamfpr8xjnvmxujgr096srshrkk2n03fqt7e058huhuh36ah0khr26x79a535v0xwtqzkhynkwm0phdlghuqlmkwhs";
+          }
+          {
+            name = "the 5Ci";
+            recipient = "age1fido2-hmac1qqp8s9hcznqx90l0tvjkuagna43sn3fe2nwq9fdwjvlsc9l7fkrm2pgpkuhnjmknjsdkvemqs8fh0unp7g7ye0mhl2c56xqm49a4g3d5f8y9ues92htqju8q2zjxuq38ejflr9hcqkxhpyd457fc5mr2t3r763574kf0r7tjv8r54lpgw7e2q4p62x4d6s08zzsj73z78j5rzjskqgj8vwz5";
+          }
+        ];
+        account = "jitsusama";
+      };
+
       formatter = forEachSystem (pkgs: (treefmt pkgs).config.build.wrapper);
 
       # The formatter on the path, for editors and for running it by hand.
