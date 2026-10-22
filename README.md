@@ -53,8 +53,8 @@ Taking core's latest is one input: `nix flake update core`.
 `nix flake check --keep-going` evaluates each module on its own on a bare
 NixOS machine and a bare Mac, the personal layer on each, both machines, and
 the promises they make: penelope installs onto core's encrypted disk and
-boots under its own Secure Boot keys, and both machines commit as Joel and
-sign every commit. It builds nothing, so it takes seconds.
+boots under its own Secure Boot keys, then finishes itself with core's guide,
+and both machines commit as Joel and sign every commit. It builds nothing, so it takes seconds.
 
 [core]: https://github.com/Jitsusama/core.nix
 [machines]: https://github.com/Jitsusama/core.nix/blob/main/docs/machines.md

@@ -87,6 +87,7 @@
           core.nixosModules.microsoft-surface-laptop-4-1958
           core.nixosModules.disko
           core.nixosModules.lanzaboote
+          core.nixosModules.guide
           self.nixosModules.personal
           ./machines/penelope/nixos.nix
         ];
