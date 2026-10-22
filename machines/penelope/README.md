@@ -27,8 +27,9 @@ home.nix    # Joel's account: Chrome
 
 The guide installs it from a USB stick: core's encrypted disk on its NVMe
 drive, Secure Boot with its own keys, and the disk opened by either YubiKey or
-the recovery key. Sealing it to the TPM with a PIN comes with the guide's
-steps for the installed machine, which are still to be built.
+the recovery key. Once it's installed, the guide seals the disk to the TPM
+with a PIN and hands on penelope's rescue bundle: its Secure Boot keys,
+sealed, which a later stick needs.
 
 1. With the stick plugged into an x86-64 Linux machine, run `nix run .#guide`
    there, as yourself. It names the stick, asks for a recovery passphrase for
@@ -39,12 +40,13 @@ steps for the installed machine, which are still to be built.
    needs them, or the firmware cleared:
    - With penelope's rescue bundle, run `nix run .#guide -- --rescue-bundle`
      and the bundle's file instead. It asks for either YubiKey's PIN and a
-     touch, or the bundle's recovery passphrase, and holds the keys only in
-     memory. The stick is signed with penelope's own db key, so the firmware
-     boots it, and carries the keys sealed in its vault, so the guide puts
-     them back and the firmware is never visited. Penelope makes the bundle
-     itself, as root, with `guide seal-keys`; it's ciphertext only, so keep
-     it in 1Password and on the other machines.
+     touch, or what it names: the recovery key of the install that made the
+     bundle, or the passphrase `guide seal-keys` was given. It holds the
+     keys only in memory. The stick is signed with penelope's own db key, so
+     the firmware boots it, and carries the keys sealed in its vault, so the
+     guide puts them back and the firmware is never visited. Every install
+     makes the bundle, and step 5 hands it on; an install from before the
+     guide makes one, as root, with `guide seal-keys`.
    - Otherwise the guide makes new keys, which the firmware only takes in
      setup mode. Hold volume-up, press and release power, and keep holding
      until Surface UEFI opens; under Security, set Secure Boot to None.
@@ -60,6 +62,12 @@ steps for the installed machine, which are still to be built.
    a security token PIN, so type a YubiKey's PIN and touch the key. The
    first boot enrols the keys the guide made and restarts once with Secure
    Boot on.
+5. Sign in and run `guide installed`. It asks for a PIN for the TPM twice,
+   then a YubiKey's PIN and a touch, and seals the disk to the TPM. It
+   copies the rescue bundle to `~/penelope-rescue-bundle.json`: keep it in
+   1Password and on the other machines, which it asks once for each new
+   bundle. It's sealed, so it's safe anywhere. Restart, and the disk asks
+   for the TPM's PIN from then on.
 
 Its install from before has a plain ext4 disk that `nixos.nix` doesn't
 describe, so it can't switch to this. It stays as it is until the guide

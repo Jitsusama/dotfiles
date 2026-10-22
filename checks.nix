@@ -140,6 +140,16 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
         && boot.initrd.luks.devices ? ${jitsusama.disk.name}
       );
 
+  # Installed, penelope finishes itself with core's guide, which seals its
+  # disk to the TPM and hands on the rescue bundle a later stick needs.
+  penelope-finishes-with-the-guide =
+    holds "penelope-finishes-with-the-guide"
+      "penelope has no guide to seal its disk to the TPM and hand on its rescue bundle."
+      (
+        penelope.config.environment.etc ? "guide/machine.json"
+        && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
+      );
+
   # penelope's Neovim starts with every plugin and the personal layer's Lua
   # without an error: core's index of the plugins is written by starting it
   # once and loading each, and fails on the first error. The personal Lua
