@@ -141,10 +141,9 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
       );
 
   # Installed, penelope finishes itself with core's guide, which seals its
-  # disk to the TPM and hands on the rescue bundle a later stick needs.
+  # disk to the TPM.
   penelope-finishes-with-the-guide =
-    holds "penelope-finishes-with-the-guide"
-      "penelope has no guide to seal its disk to the TPM and hand on its rescue bundle."
+    holds "penelope-finishes-with-the-guide" "penelope has no guide to seal its disk to the TPM."
       (
         penelope.config.environment.etc ? "guide/machine.json"
         && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages

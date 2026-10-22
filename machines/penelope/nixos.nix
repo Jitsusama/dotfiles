@@ -14,11 +14,6 @@
     installKey = "/run/guide/install-key";
   };
 
-  # Its earlier install ran with this, and why wasn't written down. It puts
-  # the clock on HPET, which costs every read of the time, so it stays only
-  # until a boot without it has been measured.
-  boot.kernelParams = [ "tsc=unstable" ];
-
   # penelope is the machine the guide is proven on, wiped and installed again
   # and again from optimus, which reaches it over SSH: Joel with his own key
   # and his agents with theirs, both sealed in optimus's TPM.
