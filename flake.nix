@@ -44,7 +44,15 @@
         "aarch64-darwin"
       ];
       forEachSystem = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
-      treefmt = pkgs: treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+      # The linters core holds itself to, and what only this repository has.
+      treefmt =
+        pkgs:
+        treefmt-nix.lib.evalModule pkgs {
+          imports = [
+            core.treefmtModules.treefmt
+            ./treefmt.nix
+          ];
+        };
 
       # The module a file makes once it's given what it takes from here, as
       # core.nix makes its own. The key gives it the identity a path import

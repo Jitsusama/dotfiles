@@ -36,12 +36,14 @@ zero cost.
 - Agent socket:
   `~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh`
 
-### Known trap
+### Known trap: which public key
+
 Take the public key from `ssh-add -L` **after** exporting `SSH_AUTH_SOCK`.
 The value shown in Secretive's UI differs and produces signatures that
 verify nowhere.
 
-### Known trap
+### Known trap: an inherited socket
+
 Long-lived processes inherit `SSH_AUTH_SOCK` from process start. An agent
 session started before a config change will not see the new value. Prefer a
 stable symlink (`~/.ssh/agent.sock`) that gets repointed, over changing the
@@ -65,7 +67,7 @@ Get this right the first time.
 | 9c   | always    | always       | My commit signing |
 | 9d   | once      | never        | Agent commit signing |
 
-```
+```sh
 ykman piv keys generate --pin-policy ALWAYS --touch-policy ALWAYS 9c /tmp/9c.pem
 ykman piv keys generate --pin-policy ONCE  --touch-policy NEVER  9d /tmp/9d.pem
 ykman piv certificates generate -s "joel-signing"  9c /tmp/9c.pem
@@ -90,7 +92,7 @@ gate was considered and rejected as not worth the maintenance.
 ssh-agent's PKCS#11 support does not hotplug, so every replug requires
 re-adding the module, which is where the PIN prompt lands:
 
-```
+```sh
 ssh-add -e /opt/homebrew/lib/libykcs11.dylib   # on pull
 ssh-add -s /opt/homebrew/lib/libykcs11.dylib   # on insert -> PIN prompt
 ```
@@ -106,6 +108,7 @@ overnight while agents run, so a sleep hook never fires when it matters.
 - Linux: `Lock` / `Unlock` signals on `org.freedesktop.login1.Session`.
 
 Requirements for the hook script:
+
 - Both verbs idempotent — these signals fire more than once in practice.
 - `SSH_ASKPASS` + `SSH_ASKPASS_REQUIRE=force` so the PIN prompt can appear
   with no TTY. Without this, unattended unlock cannot work.
@@ -122,7 +125,7 @@ Requirements for the hook script:
 Signature format is **SSH**, not OpenPGP, not x509. This is the only format
 that verifies across all four targets.
 
-```
+```sh
 git config --global gpg.format ssh
 git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git config --global commit.gpgsign true
@@ -131,19 +134,20 @@ git config --global commit.gpgsign true
 `user.signingkey` takes a `key::` literal for agent-held keys with no
 private file on disk:
 
-```
+```sh
 git config --global user.signingkey "key::ecdsa-sha2-nistp256 AAAA..."
 ```
 
 `~/.ssh/allowed_signers` is the local source of truth. No network, no CA.
 Check it into repos where collaborators need to verify.
 
-```
+```text
 joel@example.com  namespaces="git" ecdsa-sha2-nistp256 AAAA...
 agent@example.com namespaces="git" ecdsa-sha2-nistp256 AAAA...
 ```
 
 Forge registration:
+
 - GitHub: add with key type **Signing Key** (not Authentication). The
   committer email must match a verified email on the account.
 - GitLab: usage type Signing.
