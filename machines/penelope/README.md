@@ -33,8 +33,18 @@ an iPhone with the Camera's Live Text, then has typed back off the phone. The
 install leaves the stick as penelope's own: it carries penelope's Secure
 Boot keys, sealed, and boots under them.
 
-1. With the stick plugged into an x86-64 Linux machine, run `nix run .#guide`
-   there, as yourself. It names the stick, gives the seven words of the
+1. With the stick plugged into an x86-64 Linux machine that has Nix, run
+   this there, as yourself:
+
+   ```bash
+   nix run --refresh git+https://github.com/Jitsusama/dotfiles#guide
+   ```
+
+   It fetches this repository over git, so it always runs the writer last
+   merged. A `github:` reference asks GitHub's API instead, which limits
+   requests without a sign-in, and past that limit Nix quietly runs the
+   writer it fetched before. From a checkout, `nix run .#guide` is the
+   same. It names the stick, gives the seven words of the
    stick's passphrase to keep, asks for an administrator's password once to
    open the stick, and writes penelope's whole install onto it. Either
    YubiKey and its PIN, or the passphrase, opens it on penelope.
