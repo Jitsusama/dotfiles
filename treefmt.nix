@@ -1,12 +1,13 @@
 # How `nix fmt` formats and lints this repository, and what the formatting
-# check holds it to: core.nix's own tools and settings for Nix and Lua. Lines
-# stop at 100 characters.
+# check holds it to: core.nix's own tools and settings for Nix and Lua, and
+# shellcheck for shell. Lines stop at 100 characters.
 {
   projectRootFile = "flake.nix";
 
   programs = {
     deadnix.enable = true;
     nixfmt.enable = true;
+    shellcheck.enable = true;
     statix.enable = true;
     stylua = {
       enable = true;
