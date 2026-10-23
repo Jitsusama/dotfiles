@@ -1,22 +1,5 @@
 # How `nix fmt` formats and lints this repository, and what the formatting
-# check holds it to: core.nix's own tools and settings for Nix and Lua, and
-# shellcheck for shell. Lines stop at 100 characters.
-{
-  projectRootFile = "flake.nix";
-
-  programs = {
-    deadnix.enable = true;
-    nixfmt.enable = true;
-    shellcheck.enable = true;
-    statix.enable = true;
-    stylua = {
-      enable = true;
-      settings = {
-        column_width = 100;
-        indent_type = "Spaces";
-        indent_width = 2;
-        quote_style = "AutoPreferSingle";
-      };
-    };
-  };
-}
+# check holds it to: core.nix's linters, with its settings, so code here
+# meets the same bar as core's (core.treefmtModules.treefmt, given beside
+# this in flake.nix). This repository adds nothing of its own yet.
+_: { }

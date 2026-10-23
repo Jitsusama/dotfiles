@@ -146,6 +146,7 @@ Killed by: no PIN session. You get either a prompt per commit or no PIN
 gate at all — purely possession-based. That loses the daily-PIN property.
 
 Two gotchas if you use them anyway:
+
 - A *resident* sk key without `-O verify-required` means anyone holding the
   device can run `ssh-keygen -K`, extract the handle, and authenticate.
   Resident + no verify-required is genuinely "possession is everything."
