@@ -156,14 +156,18 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
   neovim-loads =
     penelope.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
 
-  # Both machines commit as Joel outside work, and sign every commit.
+  # Both machines commit as Joel outside work, and sign every commit, as
+  # core's signing tells git in the include it writes last.
   one-personal-git =
     holds "one-personal-git" "A personal machine's git has another email or doesn't sign."
       (
         lib.all
           (
             machine:
-            (git machine).settings.user.email == "joel@grrbrr.ca" && (git machine).signing.signByDefault
+            let
+              signing = lib.findFirst (include: include ? contents.gpg.format) { } (git machine).includes;
+            in
+            (git machine).settings.user.email == "joel@grrbrr.ca" && (signing.contents.commit.gpgSign or false)
           )
           [
             penelope
