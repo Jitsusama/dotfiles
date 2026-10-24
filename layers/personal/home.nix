@@ -10,6 +10,9 @@
   imports = [
     # Where the identity this layer sets is declared.
     core.homeModules.identity
+    # Where the signers this layer lists are declared; the roles bring the
+    # hardware that signs.
+    core.homeModules.signing
     homeModules.agentic-harness-core
     homeModules.claude
     ../../modules/neovim/home.nix
