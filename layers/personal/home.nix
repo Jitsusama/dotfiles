@@ -1,9 +1,11 @@
 # What every personal machine adds to core.nix's roles in Joel's account, on
 # macOS and Linux alike: the personal identity, the tools he uses outside
-# work, pi and Claude Code's skills, and git's personal settings. Each
-# machine's own account settings, its signing included, are in machines/.
+# work, pi and Claude Code's skills, git's personal settings, and every key
+# that may sign. core.nix's roles sign every commit, with the TPM on Linux
+# and the Secure Enclave on a Mac. Each machine's own account settings are
+# in machines/.
 { core, homeModules }:
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     # Where the identity this layer sets is declared.
@@ -77,25 +79,24 @@
   # valid-before="YYYYMMDD" to its line, never by deleting the line, since
   # git checks those bounds against the commit's own time rather than the
   # clock's, so everything signed earlier stays verifiable.
-  home.file.".config/git/gpg-ssh-allowed-signers".text = ''
-    # 1Password-held ed25519. Still live: it is the rollback target.
-    joel@grrbrr.ca namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu
-    # methuselah Secure Enclave, identity joel-signing (-t bio).
-    joel@grrbrr.ca namespaces="git" sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBP/+4vmV9jofa+NC1HONKq//dKeeLk5BGswU6Jod45hIkac0NHyXwaYSO/Js7h34ceJfQB2ReQrE+BGcQPcGH60AAAAEc3NoOg==
-    # methuselah Secure Enclave, identity agent-signing (-t none). Listed
-    # under joel@grrbrr.ca because a forge only renders Verified when the
-    # committer email is a verified address on the account, and that is the
-    # only such address. Attribution therefore lives in the committer name
-    # and in the signing key fingerprint, not in the email. The key remains
-    # separately revocable: valid-before, a GitLab revoke and a GitHub delete
-    # all act per key, not per principal.
-    joel@grrbrr.ca namespaces="git" sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBNBQUgGis2mignI9aGhDFOi7MMHjIgFCN7abqcsquQDsnjnYGAn7YyHtQPkg/0GDDyx994qyzJ7tSqea0x/hBxEAAAAEc3NoOg==
-  '';
+  #
+  # Every key is listed under joel@grrbrr.ca, the agents' too, because a
+  # forge only renders Verified when the committer email is a verified
+  # address on the account, and that is the only such address. Attribution
+  # lives in the committer name and the key's fingerprint instead, and each
+  # key stays revocable on its own: valid-before, a GitLab revoke and a
+  # GitHub delete all act per key, not per principal.
+  jitsusama.signing.allowedSigners =
+    map (key: ''${config.jitsusama.identity.email} namespaces="git" ${key}'')
+      [
+        # 1Password-held ed25519, which signed before the Secure Enclave did.
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu"
+        # methuselah's Secure Enclave: joel-signing (Touch ID), then agent-signing.
+        "sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBP/+4vmV9jofa+NC1HONKq//dKeeLk5BGswU6Jod45hIkac0NHyXwaYSO/Js7h34ceJfQB2ReQrE+BGcQPcGH60AAAAEc3NoOg=="
+        "sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBNBQUgGis2mignI9aGhDFOi7MMHjIgFCN7abqcsquQDsnjnYGAn7YyHtQPkg/0GDDyx994qyzJ7tSqea0x/hBxEAAAAEc3NoOg=="
+      ];
 
   programs.git = {
-    # Which key signs is each machine's: methuselah's Secure Enclave
-    # (machines/methuselah), and penelope's TPM, through core's signing.
-    signing.signByDefault = true;
     settings = {
       commit.template = "~/.config/git/commit-template";
 
@@ -109,10 +110,6 @@
       };
       diff.tool = "nvimdiff";
       merge.tool = "nvimdiff";
-      gpg = {
-        format = "ssh";
-        ssh.allowedSignersFile = "~/.config/git/gpg-ssh-allowed-signers";
-      };
     };
   };
 }
