@@ -95,7 +95,10 @@ let
     agentic-harness-core = [ self.homeModules.agentic-harness-core ];
     claude = [ self.homeModules.claude ];
     neovim = [ ./modules/neovim/home.nix ];
-    pi = [ ./modules/pi/home.nix ];
+    pi = [
+      ./modules/pi/home.nix
+      core.homeModules.pi
+    ];
   };
 
   unchecked = lib.subtractLists (lib.attrNames homeOnBoth) (
@@ -160,6 +163,28 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
       machine = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
     in
     machine.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
+
+  # Both machines leave pi's settings file pi's, declaring their own settings
+  # through core's option: a link to the file in the store is replaced by
+  # core's merge, and the next switch refuses to clobber what's there.
+  pi-settings-stay-pis =
+    holds "pi-settings-stay-pis"
+      "A personal machine links pi's settings file, or doesn't declare its model through core."
+      (
+        lib.all
+          (
+            machine:
+            let
+              home = machine.config.home-manager.users.jitsusama;
+            in
+            !(home.home.file ? ".pi/agent/settings.json")
+            && home.jitsusama.pi.settings.defaultModel or null == "claude-sonnet-5"
+          )
+          [
+            penelope
+            methuselah
+          ]
+      );
 
   # Both machines' git reads the ignores home-manager writes, core's among
   # them, which an excludes file of their own would stop it reading, and
