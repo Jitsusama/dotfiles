@@ -149,12 +149,38 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
         && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
       );
 
-  # penelope's Neovim starts with every plugin and the personal layer's Lua
-  # without an error: core's index of the plugins is written by starting it
-  # once and loading each, and fails on the first error. The personal Lua
-  # once broke here by requiring a plugin core now loads only when wanted.
+  # The machine of this system's Neovim starts with every plugin and the
+  # personal layer's Lua without an error: core's index of the plugins is
+  # written by starting it once and loading each, and fails on the first
+  # error. The personal Lua once broke here by requiring a plugin core now
+  # loads only when wanted. Each system starts its own machine's, so a Mac
+  # checks methuselah's without a Linux builder.
   neovim-loads =
-    penelope.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
+    let
+      machine = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
+    in
+    machine.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
+
+  # Both machines' git reads the ignores home-manager writes, core's among
+  # them, which an excludes file of their own would stop it reading, and
+  # names no commit template, which git refuses a commit for when it's gone.
+  git-reads-cores-ignores =
+    holds "git-reads-cores-ignores"
+      "A personal machine's git names its own excludes file or a commit template."
+      (
+        lib.all
+          (
+            machine:
+            let
+              inherit ((git machine)) settings;
+            in
+            !(settings ? core.excludesFile) && !(settings ? commit.template)
+          )
+          [
+            penelope
+            methuselah
+          ]
+      );
 
   # Both machines commit as Joel outside work, and sign every commit, as
   # core's signing tells git in the include it writes last.

@@ -28,7 +28,8 @@ jitsusama.identity.email = "joel@grrbrr.ca";
 `nixosSystem`, from:
 
 1. core.nix's roles: `workstation` and `graphical`, plus `laptop` and the
-   machine's hardware on NixOS
+   machine's hardware on NixOS, and for a machine the guide installs,
+   `disko`, `lanzaboote` and `guide`
 2. the personal layer, `layers/personal/`, which imports this repository's
    modules
 3. `machines/<machine>/`, settings for that one machine

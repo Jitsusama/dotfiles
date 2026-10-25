@@ -1,3 +1,5 @@
+# pi, the coding agent, built from its npm release with the lock file
+# beside this, for home.nix to install.
 {
   lib,
   buildNpmPackage,

@@ -120,7 +120,7 @@
       # install with no network. The Nano is enrolled first, since it's the
       # one almost always plugged in. Each key's age recipient, which
       # age-plugin-fido2-hmac made for it, lets that key open the vault; they
-      # are public halves, and the same as quest-backup seals to.
+      # are public halves.
       packages.x86_64-linux.guide = core.lib.guide {
         inherit (self.nixosConfigurations.penelope) config;
         yubikeys = [

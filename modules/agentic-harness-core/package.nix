@@ -1,3 +1,5 @@
+# agentic-harness.core's command line, built from the flake's pinned source,
+# for home.nix to install.
 {
   lib,
   buildNpmPackage,

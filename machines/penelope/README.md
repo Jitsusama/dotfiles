@@ -18,8 +18,8 @@ again often, and nothing on it is dear.
 ## 📁 Where Things Live
 
 ```text
-nixos.nix   # penelope as the guide installs it: its disk, its kernel's clock,
-            # SSH from optimus, and the account
+nixos.nix   # penelope as the guide installs it: its disk, SSH from optimus,
+            # and the account
 home.nix    # Joel's account: Chrome
 ```
 
