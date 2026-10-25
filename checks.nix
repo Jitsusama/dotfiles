@@ -95,10 +95,7 @@ let
     agentic-harness-core = [ self.homeModules.agentic-harness-core ];
     claude = [ self.homeModules.claude ];
     neovim = [ ./modules/neovim/home.nix ];
-    pi = [
-      ./modules/pi/home.nix
-      core.homeModules.pi
-    ];
+    pi = [ self.homeModules.pi ];
   };
 
   unchecked = lib.subtractLists (lib.attrNames homeOnBoth) (

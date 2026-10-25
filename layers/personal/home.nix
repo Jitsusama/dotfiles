@@ -13,12 +13,10 @@
     # Where the signers this layer lists are declared; the roles bring the
     # hardware that signs.
     core.homeModules.signing
-    # Where the settings this layer's pi module gives pi are declared.
-    core.homeModules.pi
     homeModules.agentic-harness-core
     homeModules.claude
+    homeModules.pi
     ../../modules/neovim/home.nix
-    ../../modules/pi/home.nix
   ];
 
   jitsusama.identity.email = "joel@grrbrr.ca";
