@@ -12,7 +12,9 @@
     nix-darwin.follows = "core/nix-darwin";
     treefmt-nix.follows = "core/treefmt-nix";
     # Joel's agent harness: pi's package of it, the CLI holding its logic,
-    # and Claude Code's plugin of it. Each is read as files.
+    # and Claude Code's plugin of it. Each is read as files. pi itself loads
+    # its package from git, unpinned (modules/pi), so this pin is only what
+    # Claude Code's skills are built from, and updating it moves pi nowhere.
     agentic-harness-pi = {
       url = "github:Jitsusama/agentic-harness.pi";
       flake = false;

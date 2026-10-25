@@ -1,10 +1,3 @@
-{
-  lib,
-  runCommand,
-  patch,
-  agentic-harness-pi,
-}:
-
 # Claude Code loads skills using the same Agent Skills standard pi does,
 # so agentic-harness.pi's skills are largely reusable, but several assume
 # a pi extension (quest-workflow, tdd-workflow, review-integration, etc.)
@@ -14,7 +7,12 @@
 # tooling, plus a few with a small patch stripping the parts that assume
 # one. The patches are diffed against upstream at build time, so an
 # upstream change big enough to invalidate one fails the build instead of
-# silently shipping stale advice.
+# silently shipping stale advice. skills.sh copies and patches them.
+{
+  runCommand,
+  patch,
+  agentic-harness-pi,
+}:
 let
   unpatched = [
     "code-review-standard"
@@ -36,20 +34,9 @@ let
     "prose-standard"
   ];
 in
-runCommand "agentic-harness-pi-claude-skills"
-  {
-    nativeBuildInputs = [ patch ];
-  }
-  ''
-    mkdir -p "$out"
-
-    ${lib.concatMapStringsSep "\n" (name: ''
-      cp -r ${agentic-harness-pi}/skills/${name} "$out/${name}"
-    '') unpatched}
-
-    ${lib.concatMapStringsSep "\n" (name: ''
-      cp -r ${agentic-harness-pi}/skills/${name} "$out/${name}"
-      chmod -R u+w "$out/${name}"
-      patch -p1 -d "$out/${name}" < ${./skills-patches + "/${name}.patch"}
-    '') patched}
-  ''
+runCommand "agentic-harness-pi-claude-skills" {
+  nativeBuildInputs = [ patch ];
+  source = agentic-harness-pi;
+  patches = ./skills-patches;
+  inherit unpatched patched;
+} (builtins.readFile ./skills.sh)

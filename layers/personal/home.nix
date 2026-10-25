@@ -13,6 +13,8 @@
     # Where the signers this layer lists are declared; the roles bring the
     # hardware that signs.
     core.homeModules.signing
+    # Where the settings this layer's pi module gives pi are declared.
+    core.homeModules.pi
     homeModules.agentic-harness-core
     homeModules.claude
     ../../modules/neovim/home.nix
