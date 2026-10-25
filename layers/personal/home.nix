@@ -101,16 +101,10 @@
 
   programs.git = {
     settings = {
-      commit.template = "~/.config/git/commit-template";
-
-      # Reclaimed from a hand-written ~/.gitconfig that had been shadowing
-      # this file since January. Its editor and diff and merge tools were VS
-      # Code, which fought the rest of the environment, where EDITOR is
-      # already nvim; nvimdiff is built into git, so no cmd lines are needed.
-      core = {
-        excludesFile = "~/.config/git/core-excludes";
-        editor = "nvim";
-      };
+      # nvimdiff is built into git, so no cmd lines are needed. git's editor
+      # is nvim through EDITOR, and its ignores are home-manager's
+      # ~/.config/git/ignore, core's patterns among them, which any
+      # core.excludesFile set here would stop git reading.
       diff.tool = "nvimdiff";
       merge.tool = "nvimdiff";
     };

@@ -54,7 +54,8 @@ Taking core's latest is one input: `nix flake update core`.
 NixOS machine and a bare Mac, the personal layer on each, both machines, and
 the promises they make: penelope installs onto core's encrypted disk and
 boots under its own Secure Boot keys, then finishes itself with core's guide,
-and both machines commit as Joel and sign every commit. It builds nothing, so it takes seconds.
+and both machines commit as Joel and sign every commit. Evaluating builds
+nothing, so most checks take seconds; `neovim-loads` starts Neovim once.
 
 [core]: https://github.com/Jitsusama/core.nix
 [machines]: https://github.com/Jitsusama/core.nix/blob/main/docs/machines.md
