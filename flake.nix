@@ -76,6 +76,7 @@
         claude = moduleFrom ./modules/claude/home.nix {
           inherit agentic-harness-pi agentic-harness-claude;
         };
+        pi = moduleFrom ./modules/pi/home.nix { inherit core; };
       };
       darwinModules.personal = moduleFrom ./layers/personal/darwin.nix { inherit (self) homeModules; };
       nixosModules.personal = moduleFrom ./layers/personal/nixos.nix { inherit (self) homeModules; };
