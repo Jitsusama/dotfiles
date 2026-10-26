@@ -3,7 +3,7 @@
 # Each of this repository's modules is added, on its own, to an account on a
 # bare machine of both classes, as core.nix's checks do for core's, so a
 # module that quietly depends on another fails here rather than on a machine.
-# Then come the personal layer on each class, the machines themselves and the
+# Then come the personal modules on each class, the machines themselves and the
 # promises they make. Evaluating builds nothing, so most checks take seconds;
 # neovim-loads starts Neovim once. Last, every check's name is held to the
 # glossary of the core this repository locks, as core's own names are.
@@ -198,14 +198,14 @@ let
           "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"
           (unchecked == [ ]);
 
-      # The personal layer on each class of machine, as the machines use it.
+      # The personal modules on each class of machine, as the machines use them.
       nixos-personal = evaluates "nixos-personal" (bareNixos [ self.nixosModules.personal ]);
       darwin-personal = evaluates "darwin-personal" (bareDarwin [ self.darwinModules.personal ]);
 
       penelope = evaluates "penelope" penelope;
       methuselah = evaluates "methuselah" methuselah;
 
-      # penelope installs onto core's encrypted disk on its own NVMe drive, and
+      # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.
       penelope-boots-under-its-own-keys =
@@ -213,7 +213,7 @@ let
           inherit (penelope.config) boot jitsusama;
         in
         holds "penelope-boots-under-its-own-keys"
-          "penelope doesn't install onto core's disk on its NVMe drive, or doesn't boot through lanzaboote with its own keys."
+          "penelope doesn't install onto its NVMe disk as core lays it out, or doesn't boot through lanzaboote with its own keys."
           (
             boot.lanzaboote.enable
             && !boot.loader.systemd-boot.enable
@@ -246,7 +246,7 @@ let
           );
 
       # The machine of this system's Neovim starts with every plugin and the
-      # personal layer's Lua without an error: core's index of the plugins is
+      # personal modules' Lua without an error: core's index of the plugins is
       # written by starting it once and loading each, and fails on the first
       # error. The personal Lua once broke here by requiring a plugin core now
       # loads only when wanted. Each system starts its own machine's, so a Mac

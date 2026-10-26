@@ -1,5 +1,5 @@
-# penelope, Joel's personal Surface Laptop 4, as the guide installs it: core's
-# encrypted disk on its NVMe drive, Secure Boot with its own keys, and the
+# penelope, Joel's personal Surface Laptop 4, as the guide installs it: its
+# NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
 # account. The hardware, niri, greetd and networking come from core.nix, and
 # README.md says why the install it runs today can't switch to this.
 {

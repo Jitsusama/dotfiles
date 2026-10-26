@@ -1,5 +1,5 @@
 # Joel's personal machines, built on core.nix. This is the index: it names
-# every machine, the personal layer and the modules that take an input, and
+# every machine, the personal modules and the tools' modules that take an input, and
 # gives each file what it takes. To see how any file fits, find its path here.
 {
   description = "Joel's personal machines, built on core.nix";
@@ -56,15 +56,15 @@
     in
     {
       homeModules = {
-        personal = moduleFrom ./layers/personal/home.nix {
+        personal = moduleFrom ./personal/home.nix {
           inherit core;
           inherit (self) homeModules;
         };
         claude = moduleFrom ./modules/claude/home.nix { inherit agentic-harness-pi; };
         pi = moduleFrom ./modules/pi/home.nix { inherit core; };
       };
-      darwinModules.personal = moduleFrom ./layers/personal/darwin.nix { inherit (self) homeModules; };
-      nixosModules.personal = moduleFrom ./layers/personal/nixos.nix { inherit (self) homeModules; };
+      darwinModules.personal = moduleFrom ./personal/darwin.nix { inherit (self) homeModules; };
+      nixosModules.personal = moduleFrom ./personal/nixos.nix { inherit (self) homeModules; };
 
       darwinConfigurations.methuselah = nix-darwin.lib.darwinSystem {
         modules = [

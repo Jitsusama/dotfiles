@@ -8,7 +8,7 @@ personal.
 ## 🏗️ How It Fits
 
 A machine here is a stock `darwinSystem` or `nixosSystem` call in `flake.nix`
-that imports the roles it plays from core.nix, the personal layer, and its
+that imports the roles it plays from core.nix, the personal modules, and its
 own directory, as core's [machines guide][machines] lays out. home-manager
 runs inside the system, so one switch applies the machine and Joel's account
 together.
@@ -21,14 +21,13 @@ together.
 ## 📁 Layout
 
 ```text
-flake.nix                 # the index: the machines, the layer and its modules
+flake.nix                 # the index: the machines and the repository's own modules
 checks.nix                # what `nix flake check` runs
 treefmt.nix               # how the formatter formats and lints
-layers/                   # holds personal/, alone for now
-└── personal/             # what every personal machine adds
-    ├── darwin.nix        #   for macOS: the apps Homebrew installs
-    ├── nixos.nix         #   for NixOS
-    └── home.nix          #   for the account: identity, tools and git
+personal/                 # what every personal machine adds
+├── darwin.nix            #   for macOS: the apps Homebrew installs
+├── nixos.nix             #   for NixOS
+└── home.nix              #   for the account: identity, tools and git
 modules/                  # one folder per tool: claude, neovim, pi
 machines/                 # one folder per machine, its README saying more
 ├── methuselah/           #   the MacBook
@@ -53,7 +52,7 @@ Taking core's latest is one input: `nix flake update core`.
 ## 🔬 Checking It
 
 `nix flake check --keep-going` evaluates each module on its own on a bare
-NixOS machine and a bare Mac, the personal layer on each, both machines, and
+NixOS machine and a bare Mac, the personal modules on each, both machines, and
 the promises they make: penelope installs onto core's encrypted disk and
 boots under its own Secure Boot keys, then finishes itself with core's guide,
 and both machines commit as Joel and sign every commit. Evaluating builds

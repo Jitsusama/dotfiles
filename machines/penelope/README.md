@@ -11,7 +11,7 @@ again often, and nothing on it is dear.
 | Model    | Surface Laptop 4, 13.5" with AMD: `microsoft-surface-laptop-4-1958` |
 | CPU      | AMD Ryzen 5 Microsoft Surface Edition, six Zen 2 cores             |
 | Memory   | 8 GB                                                               |
-| Drive    | SK hynix HFM128GDGTNG-87A0A, 128 GB, `nvme-eui.ace42e0005506bd1`   |
+| Disk     | SK hynix HFM128GDGTNG-87A0A, 128 GB, `nvme-eui.ace42e0005506bd1`   |
 | TPM      | a discrete Nuvoton TPM 2.0                                         |
 | Keyboard | Colemak Mod-DH on the built-in keyboard, the disk's prompt too     |
 
@@ -25,8 +25,8 @@ home.nix    # Joel's account: Chrome
 
 ## 🚀 Installing It
 
-The guide installs it from a USB stick: core's encrypted disk on its NVMe
-drive, Secure Boot with its own keys, and the disk opened by either YubiKey or
+The guide installs it from a USB stick: its NVMe disk encrypted as core lays
+it out, Secure Boot with its own keys, and the disk opened by either YubiKey or
 the recovery key. Every secret to keep is seven words the guide makes and
 shows alone on the screen, after the steps for saving them in 1Password on
 an iPhone with the Camera's Live Text, then has typed back off the phone. The
@@ -65,13 +65,13 @@ Boot keys, sealed, and boots under them.
      `guide seal-keys`.
    - Otherwise the guide makes new keys, which the firmware only takes in
      setup mode. Hold volume-up, press and release power, and keep holding
-     until Surface UEFI opens; under Security, set Secure Boot to None.
+     until the firmware's settings open; under Security, set Secure Boot to None.
      Other Surfaces enter setup mode then, but this model hasn't been seen
      to; if it doesn't, the guide says so before it changes anything.
 3. To boot the stick, hold volume-down, press and release power, and keep
    holding volume-down until the Surface logo has gone. The guide asks for
    the stick's passphrase, has `penelope` typed back before it wipes the
-   drive, enrols the Nano and then the 5Ci, each with its PIN, gives the
+   disk, enrols the Nano and then the 5Ci, each with its PIN, gives the
    recovery key's seven words to keep, installs, asks for the account's
    password twice, and makes the stick penelope's own.
 4. It shuts down. Take the stick out and turn penelope on: the disk asks for
@@ -90,4 +90,4 @@ wipes it.
 
 Commits are signed with keys sealed in its TPM, as core's signing module
 says; until they're made there, git can't sign, and their public halves join
-the signers in `layers/personal/home.nix`.
+the signers in `personal/home.nix`.
