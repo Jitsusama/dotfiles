@@ -86,6 +86,9 @@
           core.nixosModules.guide
           self.nixosModules.personal
           ./machines/penelope/nixos.nix
+          # While the freeze of 2026-10-26 is chased; freeze-capture.nix says why.
+          core.nixosModules.disk-loss-panic
+          ./machines/penelope/freeze-capture.nix
         ];
       };
 

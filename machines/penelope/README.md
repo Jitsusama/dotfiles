@@ -18,9 +18,11 @@ again often, and nothing on it is dear.
 ## 📁 Where Things Live
 
 ```text
-nixos.nix   # penelope as the guide installs it: its disk, SSH from optimus,
-            # and the account
-home.nix    # Joel's account: Chrome
+nixos.nix           # penelope as the guide installs it: its disk, SSH from
+                    # optimus, and the account
+home.nix            # Joel's account: Chrome
+freeze-capture.nix  # while a freeze is chased: the kernel panics once the
+                    # disk stops answering, so pstore keeps its log
 ```
 
 ## 🚀 Installing It
