@@ -107,6 +107,73 @@ let
   inherit (self.darwinConfigurations) methuselah;
   git = machine: machine.config.home-manager.users.jitsusama.programs.git;
 
+  # What only a Shopify machine reaches for: devx, the proxy and LLM gateway
+  # it signs in to, and the tec toolchain it installs. A word is looked for
+  # by replacing it rather than with lib.hasInfix, whose regular expression
+  # overflows the stack on a file as long as some of these.
+  namesShopify =
+    text:
+    lib.any (word: builtins.replaceStrings [ word ] [ "" ] text != text) [
+      "devx"
+      "shopify-proxy"
+      "llm-gateway"
+      "tec/toolchain"
+    ];
+
+  # Everything a machine and its account set that could name a program: the
+  # environment, the paths, the files written, the packages, the shells'
+  # startup, pi's settings and its Ask row, and the services.
+  whatItSets =
+    machine:
+    let
+      system = machine.config;
+      home = system.home-manager.users.jitsusama;
+      asJson = value: (builtins.tryEval (builtins.toJSON value)).value or "";
+      written = files: lib.mapAttrsToList (target: file: target + toString (file.text or null)) files;
+      named = packages: map lib.getName packages;
+      # A service is read for what it runs and the environment it runs in,
+      # not whole, since some of what modules derive from one fails to
+      # evaluate for a service it doesn't suit.
+      runs = pick: services: lib.mapAttrsToList (_: service: asJson (pick service)) services;
+      systemdRuns = service: {
+        script = service.script or "";
+        path = service.path or [ ];
+        environment = service.environment or { };
+        exec = service.serviceConfig.ExecStart or null;
+      };
+      launchdRuns = service: {
+        script = service.script or "";
+        path = service.path or [ ];
+        environment = service.environment or { };
+        config = service.serviceConfig or service.config or { };
+      };
+    in
+    [
+      (asJson home.home.sessionVariables)
+      (asJson home.home.sessionPath)
+      (asJson home.home.shellAliases)
+      (asJson home.jitsusama.pi.settings)
+      (asJson home.jitsusama.pi.ask)
+      (home.programs.zsh.envExtra or "")
+      (home.programs.zsh.profileExtra or "")
+      (home.programs.zsh.loginExtra or "")
+      (home.programs.zsh.initContent or "")
+      (home.programs.bash.profileExtra or "")
+      (home.programs.bash.bashrcExtra or "")
+      (home.programs.bash.initExtra or "")
+      (asJson system.environment.variables)
+      (system.environment.extraInit or "")
+    ]
+    ++ runs (service: service.config) (home.launchd.agents or { })
+    ++ runs (service: service.Service or { }) (home.systemd.user.services or { })
+    ++ runs launchdRuns (system.launchd.user.agents or { })
+    ++ runs systemdRuns (system.systemd.services or { })
+    ++ runs systemdRuns (system.systemd.user.services or { })
+    ++ written home.home.file
+    ++ written system.environment.etc
+    ++ named home.home.packages
+    ++ named system.environment.systemPackages;
+
   checks =
     checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBoth
     // checkEach "home-on-darwin" (modules: bareDarwin [ (inAccount modules) ]) homeOnBoth
@@ -227,6 +294,20 @@ let
                 penelope
                 methuselah
               ]
+          );
+
+      # Nothing on a personal machine needs devx or a Shopify sign-in: no
+      # setting, file, package, path or service names devx, Shopify's proxy,
+      # its LLM gateway or its tec toolchain. Generated files are read as
+      # their settings write them, not as built, so this builds nothing.
+      no-devx-for-personal-work =
+        holds "no-devx-for-personal-work"
+          "A personal machine's configuration names devx, shopify-proxy, the llm-gateway or the tec toolchain."
+          (
+            lib.all (machine: !(lib.any namesShopify (whatItSets machine))) [
+              penelope
+              methuselah
+            ]
           );
 
       # Both machines' git reads the ignores home-manager writes, core's among
