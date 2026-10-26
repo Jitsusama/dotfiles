@@ -1,6 +1,7 @@
 # Joel's account on penelope: Chrome, and the home-manager release it was
 # set up with. Commits are signed with keys sealed in its TPM, as core's
-# signing module says; until they're made there, git can't sign.
+# signing module says, which the guide made at its first start; the
+# personal layer lists them among the allowed signers.
 { pkgs, ... }:
 {
   home.packages = [ pkgs.google-chrome ];
