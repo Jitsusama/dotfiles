@@ -197,6 +197,29 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
           ]
       );
 
+  # Both machines have one pi, on Joel's own Claude plan through Claude
+  # Code's login, with no pi-claude beside it and no other login named.
+  one-pi-on-the-plan =
+    holds "one-pi-on-the-plan"
+      "A personal machine's pi isn't on the Claude plan, or keeps pi-claude or a login folder of its own."
+      (
+        lib.all
+          (
+            machine:
+            let
+              home = machine.config.home-manager.users.jitsusama;
+            in
+            home.jitsusama.pi.plan == "claude"
+            && home.jitsusama.pi.settings.defaultProvider or null == "claude-code"
+            && !(lib.any (package: lib.getName package == "pi-claude") home.home.packages)
+            && !(home.home.sessionVariables ? PI_CLAUDE_CONFIG_DIR)
+          )
+          [
+            penelope
+            methuselah
+          ]
+      );
+
   # Both machines' git reads the ignores home-manager writes, core's among
   # them, which an excludes file of their own would stop it reading, and
   # names no commit template, which git refuses a commit for when it's gone.

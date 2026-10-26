@@ -6,7 +6,7 @@ Joel's personal MacBook, on core.nix's Mac roles.
 
 ```text
 darwin.nix          # the Mac: its name, Nix's settings and build group, the account
-home.nix            # Joel's account: the agents' committer name, pi-claude's login
+home.nix            # Joel's account: the agents' committer name
 ```
 
 ## 🚀 Applying It

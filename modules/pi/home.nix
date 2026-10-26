@@ -1,7 +1,8 @@
 # pi, the coding agent, outside work, with agentic-harness.pi as its one
 # package. core.nix gives pi its theme and keys, and merges the settings
 # below into the file pi keeps, beside its own; the package is built here,
-# from the tarball pi publishes.
+# from the tarball pi publishes. It runs on Joel's own Claude plan, through
+# Claude Code's login on the machine, as the one pi there is.
 { core }:
 { pkgs, ... }:
 {
@@ -10,9 +11,8 @@
 
   home.packages = [ (pkgs.callPackage ./package.nix { }) ];
 
-  jitsusama.pi.settings = {
-    defaultProvider = "anthropic";
-    defaultModel = "claude-sonnet-5";
-    packages = [ "git:github.com/Jitsusama/agentic-harness.pi" ];
-  };
+  # The plan picks pi's provider and model, and never draws on extra usage.
+  jitsusama.pi.plan = "claude";
+
+  jitsusama.pi.settings.packages = [ "git:github.com/Jitsusama/agentic-harness.pi" ];
 }
