@@ -7,11 +7,10 @@
 # the disk stops answering. systemd-pstore copies the record to
 # /var/lib/systemd/pstore at the next boot and clears the variable. This
 # file and that import come out once the freeze's cause is fixed.
+# The console stays at its usual level: every kernel message on it, tried
+# for the restart sitting of 2026-10-26, filled the disk prompt with noise,
+# and the panic's log reaches pstore whatever the console shows.
 { config, ... }:
 {
   jitsusama.diskLossPanic.disk = config.jitsusama.disk.device;
-
-  # Every kernel message reaches the text console, so a freeze that never
-  # panics still shows nvme's warnings on Ctrl+Alt+F2 for a photo.
-  boot.consoleLogLevel = 7;
 }
