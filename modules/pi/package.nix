@@ -8,14 +8,14 @@
 
 buildNpmPackage rec {
   pname = "pi-coding-agent";
-  version = "0.84.2";
+  version = "1.4.0";
 
   # Pi publishes a self-contained tarball (prebuilt `dist/`, no monorepo
   # build tooling required), so we fetch it straight from the registry
   # instead of building the earendil-works/pi monorepo from source.
   src = fetchurl {
     url = "https://registry.npmjs.org/@earendil-works/pi-coding-agent/-/pi-coding-agent-${version}.tgz";
-    hash = "sha256-lbiZzXsaDB8BdMe/M6tCdDXjVTp9H0dWZhqpx/Gmj/o=";
+    hash = "sha256-0VXBbvb6AJYPv1iykRU26AsF8zcA4LFPvQiWft4MdCg=";
   };
 
   # The published npm-shrinkwrap.json omits integrity hashes for the sibling
@@ -27,7 +27,7 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-x19UPXNlD/aYZdg8gaAjqKZot28UDOfbnP7HY8HqmGU=";
+  npmDepsHash = "sha256-npDQwvrXeoxvoK/ItLeB4q5UGEbslZ9onOlgclM8IcI=";
 
   dontNpmBuild = true;
 
