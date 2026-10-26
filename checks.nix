@@ -187,6 +187,13 @@ let
         exempt = [ ];
       };
 
+      # Every folder says what it holds, as core's do: in a README, the opening
+      # comment of its entry file, a line of its parent's README opening with
+      # its name, or for a top folder a line of the README's map.
+      every-folder-says-what-it-holds = core.lib.everyFolderSaysWhatItHolds pkgs {
+        src = self;
+      };
+
       every-module-is-checked =
         holds "every-module-is-checked"
           "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"

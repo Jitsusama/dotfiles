@@ -24,13 +24,15 @@ together.
 flake.nix                 # the index: the machines, the layer and its modules
 checks.nix                # what `nix flake check` runs
 treefmt.nix               # how the formatter formats and lints
-layers/personal/          # the personal layer: what every personal machine adds
-├── darwin.nix            #   for macOS: the apps Homebrew installs
-├── nixos.nix             #   for NixOS
-└── home.nix              #   for the account: identity, tools and git
-modules/<tool>/           # one tool: agentic-harness-core, claude, neovim, pi
-machines/methuselah/      # the MacBook; its README says more
-machines/penelope/        # the Surface Laptop 4; its README says more
+layers/                   # holds personal/, alone for now
+└── personal/             # what every personal machine adds
+    ├── darwin.nix        #   for macOS: the apps Homebrew installs
+    ├── nixos.nix         #   for NixOS
+    └── home.nix          #   for the account: identity, tools and git
+modules/                  # one folder per tool: agentic-harness-core, claude, neovim, pi
+machines/                 # one folder per machine, its README saying more
+├── methuselah/           #   the MacBook
+└── penelope/             #   the Surface Laptop 4
 docs/                     # how methuselah's commits are signed
 ```
 
