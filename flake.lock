@@ -1,37 +1,5 @@
 {
   "nodes": {
-    "agentic-harness-claude": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1787614228,
-        "narHash": "sha256-ODRT/UtGbnA9Bqlf0Cfe3V7Us9i5I36t9L3Qoyf25lE=",
-        "owner": "Jitsusama",
-        "repo": "agentic-harness.claude",
-        "rev": "b0cc8bb76f8b04f78367f79b402391f3fe883a27",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Jitsusama",
-        "repo": "agentic-harness.claude",
-        "type": "github"
-      }
-    },
-    "agentic-harness-core": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1787606357,
-        "narHash": "sha256-0pPN0OCW6I39MGbjH54h9Zim4RAOSFaCGyjZodje/ps=",
-        "owner": "Jitsusama",
-        "repo": "agentic-harness.core",
-        "rev": "41a9d1a860fc5e6f1ed28d99ce4f7e9ab39ab164",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Jitsusama",
-        "repo": "agentic-harness.core",
-        "type": "github"
-      }
-    },
     "agentic-harness-pi": {
       "flake": false,
       "locked": {
@@ -272,8 +240,6 @@
     },
     "root": {
       "inputs": {
-        "agentic-harness-claude": "agentic-harness-claude",
-        "agentic-harness-core": "agentic-harness-core",
         "agentic-harness-pi": "agentic-harness-pi",
         "core": "core",
         "nix-darwin": [
