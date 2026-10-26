@@ -149,6 +149,20 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
         && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
       );
 
+  # penelope signs in as optimus does: Joel's account by itself after the
+  # disk unlocks, and core's greeter in his look after a logout, rather
+  # than tuigreet alone, which is what a machine naming no account gets.
+  penelope-greets-in-joels-look =
+    holds "penelope-greets-in-joels-look"
+      "penelope's greeter is tuigreet alone, or Joel's account doesn't sign in by itself."
+      (
+        let
+          inherit (penelope.config.services.greetd) settings;
+        in
+        (settings.initial_session.user or null) == "jitsusama"
+        && !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)))
+      );
+
   # The machine of this system's Neovim starts with every plugin and the
   # personal layer's Lua without an error: core's index of the plugins is
   # written by starting it once and loading each, and fails on the first
