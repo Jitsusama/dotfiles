@@ -279,6 +279,29 @@ let
               ]
           );
 
+      # Both machines' pi names each package once, so the harness loads from
+      # the version pi-packages swaps in and not a second time from git.
+      pi-loads-each-package-once =
+        holds "pi-loads-each-package-once"
+          "A personal machine's pi names a package twice, or the harness other than first."
+          (
+            lib.all
+              (
+                machine:
+                let
+                  home = machine.config.home-manager.users.jitsusama;
+                  inherit (home.jitsusama.pi.settings) packages;
+                in
+                lib.allUnique packages
+                && !(lib.any (lib.hasPrefix "git:") packages)
+                && lib.hasSuffix "/github.com/Jitsusama/agentic-harness.pi/current" (lib.head packages)
+              )
+              [
+                penelope
+                methuselah
+              ]
+          );
+
       # Both machines have one pi, on Joel's own Claude plan through Claude
       # Code's login, with no pi-claude beside it and no other login named.
       one-pi-on-the-plan =
