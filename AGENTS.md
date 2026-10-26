@@ -1,7 +1,7 @@
 # Working on Joel's Personal Machines
 
-This repository is the personal layer on top of [core.nix][core]. Read the
-[README](README.md) for what it holds and how it's applied.
+This repository holds Joel's personal machines on top of [core.nix][core].
+Read the [README](README.md) for what it holds and how it's applied.
 
 ## The One Rule
 
@@ -18,7 +18,7 @@ repository sets it:
 ```nix
 # core.nix declares jitsusama.identity.email and git reads it
 
-# here, in layers/personal/home.nix
+# here, in personal/home.nix
 jitsusama.identity.email = "joel@grrbrr.ca";
 ```
 
@@ -30,13 +30,13 @@ jitsusama.identity.email = "joel@grrbrr.ca";
 1. core.nix's roles: `workstation` and `graphical`, plus `laptop` and the
    machine's hardware on NixOS, and for a machine the guide installs,
    `disko`, `lanzaboote` and `guide`
-2. the personal layer, `layers/personal/`, which imports this repository's
-   modules
+2. the personal modules, `personal/`, which import the tools' modules in
+   `modules/`
 3. `machines/<machine>/`, settings for that one machine
 
 A file that needs a flake input takes it as an outer function, and
 `flake.nix` gives it with `moduleFrom`, as core.nix gives its roles theirs:
-the layer's `home.nix` takes `core` and this repository's `homeModules`,
+`personal/home.nix` takes `core` and this repository's `homeModules`,
 `modules/claude` takes the input it reads, and `modules/pi` takes `core`
 for the module declaring its settings. Nothing goes through `specialArgs`.
 

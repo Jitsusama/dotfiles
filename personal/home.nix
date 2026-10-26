@@ -8,14 +8,14 @@
 { config, pkgs, ... }:
 {
   imports = [
-    # Where the identity this layer sets is declared.
+    # Where the identity these modules set is declared.
     core.homeModules.identity
-    # Where the signers this layer lists are declared; the roles bring the
+    # Where the signers these modules list are declared; the roles bring the
     # hardware that signs.
     core.homeModules.signing
     homeModules.claude
     homeModules.pi
-    ../../modules/neovim/home.nix
+    ../modules/neovim/home.nix
   ];
 
   jitsusama.identity.email = "joel@grrbrr.ca";
