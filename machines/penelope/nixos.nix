@@ -30,6 +30,11 @@
   home-manager.users.jitsusama.imports = [ ./home.nix ];
   nix.settings.trusted-users = [ "jitsusama" ];
 
+  # The machine's own account: the greeter wears its look and asks for it
+  # first, and since unlocking the disk already proved it's Joel, niri
+  # starts without asking again. Without it the greeter is tuigreet alone.
+  jitsusama.login.account = "jitsusama";
+
   # The release it was first installed with by the guide; read the release
   # notes before changing it.
   system.stateVersion = "26.05";
