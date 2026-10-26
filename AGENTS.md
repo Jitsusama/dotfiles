@@ -75,6 +75,10 @@ CI runs it.
   Secure Boot keys, gets a `holds` check with a message saying what broke.
 - Evaluating never runs anything, so what only fails when it runs needs a
   check that builds it, as `neovim-loads` starts penelope's Neovim.
+- A doc names only what exists: `docs-name-what-exists`, core's, fails on a
+  link or a backticked path that names nothing, so a move or a rename fixes
+  its mentions in the same change. A mention of something deliberately
+  elsewhere, such as a file in core.nix, is listed in its `exempt` with why.
 - Before trusting a new check, break what it covers and watch it fail.
 
 ## penelope
