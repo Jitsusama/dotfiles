@@ -111,6 +111,13 @@ checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBot
 // {
   inherit formatting;
 
+  # Every doc names only what exists, as core's do: a link or a backticked
+  # path from one of this repository's top folders that names nothing fails.
+  docs-name-what-exists = core.lib.docsNameWhatExists pkgs {
+    src = self;
+    exempt = [ ];
+  };
+
   every-module-is-checked =
     holds "every-module-is-checked"
       "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"
