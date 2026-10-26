@@ -79,6 +79,10 @@ CI runs it.
   link or a backticked path that names nothing, so a move or a rename fixes
   its mentions in the same change. A mention of something deliberately
   elsewhere, such as a file in core.nix, is listed in its `exempt` with why.
+- A check's name says core.nix's glossary's words: `no-name-says-a-replaced-word`,
+  core's, fails on one saying a name the glossary replaces. A name using such
+  a word in another sense, or waiting on a rename, goes in its `otherSenses`
+  or `waiting` with why.
 - Before trusting a new check, break what it covers and watch it fail.
 
 ## penelope

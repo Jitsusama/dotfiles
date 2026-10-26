@@ -5,7 +5,8 @@
 # module that quietly depends on another fails here rather than on a machine.
 # Then come the personal layer on each class, the machines themselves and the
 # promises they make. Evaluating builds nothing, so most checks take seconds;
-# neovim-loads starts Neovim once.
+# neovim-loads starts Neovim once. Last, every check's name is held to the
+# glossary of the core this repository locks, as core's own names are.
 {
   self,
   core,
@@ -105,165 +106,175 @@ let
   inherit (self.nixosConfigurations) penelope;
   inherit (self.darwinConfigurations) methuselah;
   git = machine: machine.config.home-manager.users.jitsusama.programs.git;
-in
-checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBoth
-// checkEach "home-on-darwin" (modules: bareDarwin [ (inAccount modules) ]) homeOnBoth
-// {
-  inherit formatting;
 
-  # Every doc names only what exists, as core's do: a link or a backticked
-  # path from one of this repository's top folders that names nothing fails.
-  docs-name-what-exists = core.lib.docsNameWhatExists pkgs {
-    src = self;
-    exempt = [ ];
-  };
+  checks =
+    checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBoth
+    // checkEach "home-on-darwin" (modules: bareDarwin [ (inAccount modules) ]) homeOnBoth
+    // {
+      inherit formatting;
 
-  every-module-is-checked =
-    holds "every-module-is-checked"
-      "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"
-      (unchecked == [ ]);
+      # Every doc names only what exists, as core's do: a link or a backticked
+      # path from one of this repository's top folders that names nothing fails.
+      docs-name-what-exists = core.lib.docsNameWhatExists pkgs {
+        src = self;
+        exempt = [ ];
+      };
 
-  # The personal layer on each class of machine, as the machines use it.
-  nixos-personal = evaluates "nixos-personal" (bareNixos [ self.nixosModules.personal ]);
-  darwin-personal = evaluates "darwin-personal" (bareDarwin [ self.darwinModules.personal ]);
+      every-module-is-checked =
+        holds "every-module-is-checked"
+          "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"
+          (unchecked == [ ]);
 
-  penelope = evaluates "penelope" penelope;
-  methuselah = evaluates "methuselah" methuselah;
+      # The personal layer on each class of machine, as the machines use it.
+      nixos-personal = evaluates "nixos-personal" (bareNixos [ self.nixosModules.personal ]);
+      darwin-personal = evaluates "darwin-personal" (bareDarwin [ self.darwinModules.personal ]);
 
-  # penelope installs onto core's encrypted disk on its own NVMe drive, and
-  # boots through lanzaboote with Secure Boot keys of its own, so the guide
-  # that installs it and the firmware that enforces its keys agree.
-  penelope-boots-under-its-own-keys =
-    let
-      inherit (penelope.config) boot jitsusama;
-    in
-    holds "penelope-boots-under-its-own-keys"
-      "penelope doesn't install onto core's disk on its NVMe drive, or doesn't boot through lanzaboote with its own keys."
-      (
-        boot.lanzaboote.enable
-        && !boot.loader.systemd-boot.enable
-        && boot.lanzaboote.pkiBundle == "/var/lib/sbctl"
-        && lib.hasPrefix "/dev/disk/by-id/nvme-" jitsusama.disk.device
-        && boot.initrd.luks.devices ? ${jitsusama.disk.name}
-      );
+      penelope = evaluates "penelope" penelope;
+      methuselah = evaluates "methuselah" methuselah;
 
-  # Installed, penelope finishes itself with core's guide, which seals its
-  # disk to the TPM.
-  penelope-finishes-with-the-guide =
-    holds "penelope-finishes-with-the-guide" "penelope has no guide to seal its disk to the TPM."
-      (
-        penelope.config.environment.etc ? "guide/machine.json"
-        && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
-      );
-
-  # penelope signs in as optimus does: Joel's account by itself after the
-  # disk unlocks, and core's greeter in his look after a logout, rather
-  # than tuigreet alone, which is what a machine naming no account gets.
-  penelope-greets-in-joels-look =
-    holds "penelope-greets-in-joels-look"
-      "penelope's greeter is tuigreet alone, or Joel's account doesn't sign in by itself."
-      (
+      # penelope installs onto core's encrypted disk on its own NVMe drive, and
+      # boots through lanzaboote with Secure Boot keys of its own, so the guide
+      # that installs it and the firmware that enforces its keys agree.
+      penelope-boots-under-its-own-keys =
         let
-          inherit (penelope.config.services.greetd) settings;
+          inherit (penelope.config) boot jitsusama;
         in
-        (settings.initial_session.user or null) == "jitsusama"
-        && !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)))
-      );
-
-  # The machine of this system's Neovim starts with every plugin and the
-  # personal layer's Lua without an error: core's index of the plugins is
-  # written by starting it once and loading each, and fails on the first
-  # error. The personal Lua once broke here by requiring a plugin core now
-  # loads only when wanted. Each system starts its own machine's, so a Mac
-  # checks methuselah's without a Linux builder.
-  neovim-loads =
-    let
-      machine = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
-    in
-    machine.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
-
-  # Both machines leave pi's settings file pi's, declaring their own settings
-  # through core's option: a link to the file in the store is replaced by
-  # core's merge, and the next switch refuses to clobber what's there.
-  pi-settings-stay-pis =
-    holds "pi-settings-stay-pis"
-      "A personal machine links pi's settings file, or doesn't declare its model through core."
-      (
-        lib.all
+        holds "penelope-boots-under-its-own-keys"
+          "penelope doesn't install onto core's disk on its NVMe drive, or doesn't boot through lanzaboote with its own keys."
           (
-            machine:
-            let
-              home = machine.config.home-manager.users.jitsusama;
-            in
-            !(home.home.file ? ".pi/agent/settings.json")
-            && home.jitsusama.pi.settings.defaultModel or null == "claude-sonnet-5"
-          )
-          [
-            penelope
-            methuselah
-          ]
-      );
+            boot.lanzaboote.enable
+            && !boot.loader.systemd-boot.enable
+            && boot.lanzaboote.pkiBundle == "/var/lib/sbctl"
+            && lib.hasPrefix "/dev/disk/by-id/nvme-" jitsusama.disk.device
+            && boot.initrd.luks.devices ? ${jitsusama.disk.name}
+          );
 
-  # Both machines have one pi, on Joel's own Claude plan through Claude
-  # Code's login, with no pi-claude beside it and no other login named.
-  one-pi-on-the-plan =
-    holds "one-pi-on-the-plan"
-      "A personal machine's pi isn't on the Claude plan, or keeps pi-claude or a login folder of its own."
-      (
-        lib.all
+      # Installed, penelope finishes itself with core's guide, which seals its
+      # disk to the TPM.
+      penelope-finishes-with-the-guide =
+        holds "penelope-finishes-with-the-guide" "penelope has no guide to seal its disk to the TPM."
           (
-            machine:
-            let
-              home = machine.config.home-manager.users.jitsusama;
-            in
-            home.jitsusama.pi.plan == "claude"
-            && home.jitsusama.pi.settings.defaultProvider or null == "claude-code"
-            && !(lib.any (package: lib.getName package == "pi-claude") home.home.packages)
-            && !(home.home.sessionVariables ? PI_CLAUDE_CONFIG_DIR)
-          )
-          [
-            penelope
-            methuselah
-          ]
-      );
+            penelope.config.environment.etc ? "guide/machine.json"
+            && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
+          );
 
-  # Both machines' git reads the ignores home-manager writes, core's among
-  # them, which an excludes file of their own would stop it reading, and
-  # names no commit template, which git refuses a commit for when it's gone.
-  git-reads-cores-ignores =
-    holds "git-reads-cores-ignores"
-      "A personal machine's git names its own excludes file or a commit template."
-      (
-        lib.all
+      # penelope signs in as optimus does: Joel's account by itself after the
+      # disk unlocks, and core's greeter in his look after a logout, rather
+      # than tuigreet alone, which is what a machine naming no account gets.
+      penelope-greets-in-joels-look =
+        holds "penelope-greets-in-joels-look"
+          "penelope's greeter is tuigreet alone, or Joel's account doesn't sign in by itself."
           (
-            machine:
             let
-              inherit ((git machine)) settings;
+              inherit (penelope.config.services.greetd) settings;
             in
-            !(settings ? core.excludesFile) && !(settings ? commit.template)
-          )
-          [
-            penelope
-            methuselah
-          ]
-      );
+            (settings.initial_session.user or null) == "jitsusama"
+            && !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)))
+          );
 
-  # Both machines commit as Joel outside work, and sign every commit, as
-  # core's signing tells git in the include it writes last.
-  one-personal-git =
-    holds "one-personal-git" "A personal machine's git has another email or doesn't sign."
-      (
-        lib.all
+      # The machine of this system's Neovim starts with every plugin and the
+      # personal layer's Lua without an error: core's index of the plugins is
+      # written by starting it once and loading each, and fails on the first
+      # error. The personal Lua once broke here by requiring a plugin core now
+      # loads only when wanted. Each system starts its own machine's, so a Mac
+      # checks methuselah's without a Linux builder.
+      neovim-loads =
+        let
+          machine = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
+        in
+        machine.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
+
+      # Both machines leave pi's settings file pi's, declaring their own settings
+      # through core's option: a link to the file in the store is replaced by
+      # core's merge, and the next switch refuses to clobber what's there.
+      pi-settings-stay-pis =
+        holds "pi-settings-stay-pis"
+          "A personal machine links pi's settings file, or doesn't declare its model through core."
           (
-            machine:
-            let
-              signing = lib.findFirst (include: include ? contents.gpg.format) { } (git machine).includes;
-            in
-            (git machine).settings.user.email == "joel@grrbrr.ca" && (signing.contents.commit.gpgSign or false)
-          )
-          [
-            penelope
-            methuselah
-          ]
-      );
+            lib.all
+              (
+                machine:
+                let
+                  home = machine.config.home-manager.users.jitsusama;
+                in
+                !(home.home.file ? ".pi/agent/settings.json")
+                && home.jitsusama.pi.settings.defaultModel or null == "claude-sonnet-5"
+              )
+              [
+                penelope
+                methuselah
+              ]
+          );
+
+      # Both machines have one pi, on Joel's own Claude plan through Claude
+      # Code's login, with no pi-claude beside it and no other login named.
+      one-pi-on-the-plan =
+        holds "one-pi-on-the-plan"
+          "A personal machine's pi isn't on the Claude plan, or keeps pi-claude or a login folder of its own."
+          (
+            lib.all
+              (
+                machine:
+                let
+                  home = machine.config.home-manager.users.jitsusama;
+                in
+                home.jitsusama.pi.plan == "claude"
+                && home.jitsusama.pi.settings.defaultProvider or null == "claude-code"
+                && !(lib.any (package: lib.getName package == "pi-claude") home.home.packages)
+                && !(home.home.sessionVariables ? PI_CLAUDE_CONFIG_DIR)
+              )
+              [
+                penelope
+                methuselah
+              ]
+          );
+
+      # Both machines' git reads the ignores home-manager writes, core's among
+      # them, which an excludes file of their own would stop it reading, and
+      # names no commit template, which git refuses a commit for when it's gone.
+      git-reads-cores-ignores =
+        holds "git-reads-cores-ignores"
+          "A personal machine's git names its own excludes file or a commit template."
+          (
+            lib.all
+              (
+                machine:
+                let
+                  inherit ((git machine)) settings;
+                in
+                !(settings ? core.excludesFile) && !(settings ? commit.template)
+              )
+              [
+                penelope
+                methuselah
+              ]
+          );
+
+      # Both machines commit as Joel outside work, and sign every commit, as
+      # core's signing tells git in the include it writes last.
+      one-personal-git =
+        holds "one-personal-git" "A personal machine's git has another email or doesn't sign."
+          (
+            lib.all
+              (
+                machine:
+                let
+                  signing = lib.findFirst (include: include ? contents.gpg.format) { } (git machine).includes;
+                in
+                (git machine).settings.user.email == "joel@grrbrr.ca" && (signing.contents.commit.gpgSign or false)
+              )
+              [
+                penelope
+                methuselah
+              ]
+          );
+    };
+in
+checks
+// {
+  # No check's name says a name core's glossary replaces, so this
+  # repository's names are the words Joel reads everywhere else.
+  no-name-says-a-replaced-word = core.lib.namesSayTheGlossary pkgs {
+    names = lib.attrNames checks ++ [ "no-name-says-a-replaced-word" ];
+  };
 }
