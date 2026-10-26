@@ -33,11 +33,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1793030297,
-        "narHash": "sha256-NCDxN9l6uwg5CUJSeH97LUi5JQt25lsuOx/unorCq58=",
+        "lastModified": 1793034623,
+        "narHash": "sha256-iZanDy3zOYeMDCybvl8aO4FY2A32lcRP8ShFp1zFuAI=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "317bce9550fa9263a967289ab6ac5549486859bb",
+        "rev": "a209fe298724e8f18316e0003811394f6fc68ea2",
         "type": "github"
       },
       "original": {
