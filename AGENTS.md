@@ -37,8 +37,8 @@ jitsusama.identity.email = "joel@grrbrr.ca";
 A file that needs a flake input takes it as an outer function, and
 `flake.nix` gives it with `moduleFrom`, as core.nix gives its roles theirs:
 the layer's `home.nix` takes `core` and this repository's `homeModules`,
-`modules/claude` and `modules/agentic-harness-core` take the inputs they
-read, and `modules/pi` takes `core` for the module declaring its settings. Nothing goes through `specialArgs`.
+`modules/claude` takes the input it reads, and `modules/pi` takes `core`
+for the module declaring its settings. Nothing goes through `specialArgs`.
 
 This repository follows core.nix's [conventions][conventions] as they're
 written, and holds itself to core's [testing][testing] the same way: a

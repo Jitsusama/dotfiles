@@ -11,20 +11,12 @@
     nixpkgs.follows = "core/nixpkgs";
     nix-darwin.follows = "core/nix-darwin";
     treefmt-nix.follows = "core/treefmt-nix";
-    # Joel's agent harness: pi's package of it, the CLI holding its logic,
-    # and Claude Code's plugin of it. Each is read as files. pi itself loads
-    # its package from git, unpinned (modules/pi), so this pin is only what
-    # Claude Code's skills are built from, and updating it moves pi nowhere.
+    # Joel's agent harness, pi's package of it, read as files. pi itself
+    # loads its package from git, unpinned (modules/pi), so this pin is only
+    # what Claude Code's skills are built from, and updating it moves pi
+    # nowhere.
     agentic-harness-pi = {
       url = "github:Jitsusama/agentic-harness.pi";
-      flake = false;
-    };
-    agentic-harness-core = {
-      url = "github:Jitsusama/agentic-harness.core";
-      flake = false;
-    };
-    agentic-harness-claude = {
-      url = "github:Jitsusama/agentic-harness.claude";
       flake = false;
     };
   };
@@ -37,8 +29,6 @@
       nix-darwin,
       treefmt-nix,
       agentic-harness-pi,
-      agentic-harness-core,
-      agentic-harness-claude,
     }:
     let
       systems = [
@@ -70,12 +60,7 @@
           inherit core;
           inherit (self) homeModules;
         };
-        agentic-harness-core = moduleFrom ./modules/agentic-harness-core/home.nix {
-          inherit agentic-harness-core;
-        };
-        claude = moduleFrom ./modules/claude/home.nix {
-          inherit agentic-harness-pi agentic-harness-claude;
-        };
+        claude = moduleFrom ./modules/claude/home.nix { inherit agentic-harness-pi; };
         pi = moduleFrom ./modules/pi/home.nix { inherit core; };
       };
       darwinModules.personal = moduleFrom ./layers/personal/darwin.nix { inherit (self) homeModules; };

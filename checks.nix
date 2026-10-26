@@ -93,7 +93,6 @@ let
   # Every module in modules/, with whatever the account has to give it. Each
   # runs on both classes of machine.
   homeOnBoth = {
-    agentic-harness-core = [ self.homeModules.agentic-harness-core ];
     claude = [ self.homeModules.claude ];
     neovim = [ ./modules/neovim/home.nix ];
     pi = [ self.homeModules.pi ];

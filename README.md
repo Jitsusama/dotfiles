@@ -29,7 +29,7 @@ layers/                   # holds personal/, alone for now
     ├── darwin.nix        #   for macOS: the apps Homebrew installs
     ├── nixos.nix         #   for NixOS
     └── home.nix          #   for the account: identity, tools and git
-modules/                  # one folder per tool: agentic-harness-core, claude, neovim, pi
+modules/                  # one folder per tool: claude, neovim, pi
 machines/                 # one folder per machine, its README saying more
 ├── methuselah/           #   the MacBook
 └── penelope/             #   the Surface Laptop 4
