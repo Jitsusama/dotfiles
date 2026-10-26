@@ -79,6 +79,10 @@ CI runs it.
   link or a backticked path that names nothing, so a move or a rename fixes
   its mentions in the same change. A mention of something deliberately
   elsewhere, such as a file in core.nix, is listed in its `exempt` with why.
+- Every folder says what it holds: `every-folder-says-what-it-holds`, core's,
+  fails on one with no README, no entry file opening with a comment, no line
+  of its parent's README opening with its name and, at the top, no line of
+  the README's map. A new folder gets its note in the change that makes it.
 - A check's name says core.nix's glossary's words: `no-name-says-a-replaced-word`,
   core's, fails on one saying a name the glossary replaces. A name using such
   a word in another sense, or waiting on a rename, goes in its `otherSenses`
