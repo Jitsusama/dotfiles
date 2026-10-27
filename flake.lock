@@ -22,6 +22,7 @@
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
         "lufa": "lufa",
+        "mycelium": "mycelium",
         "neovim-pi": "neovim-pi",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
@@ -33,11 +34,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1793052401,
-        "narHash": "sha256-qbfhDZl0CSBgDPIbnezIM0vPmW0M6cN/vKfVLszRJp4=",
+        "lastModified": 1793061817,
+        "narHash": "sha256-EgLuRdOlq/xVfWhgfubyFPDEajc0K8kO/nqzehelX7w=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "59a5824c83d04158cafbb9d7d19d6547fd61f08e",
+        "rev": "3c67bf0a42075ffaf5687136c462759b1793c5a8",
         "type": "github"
       },
       "original": {
@@ -148,6 +149,27 @@
         "owner": "qmk",
         "repo": "lufa",
         "rev": "549b97320d515bfca2f95c145a67bd13be968faa",
+        "type": "github"
+      }
+    },
+    "mycelium": {
+      "inputs": {
+        "nixpkgs": [
+          "core",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793056930,
+        "narHash": "sha256-Oh/3Y5VSDMNerQf7QFPKf+OaCqkVbH0jmbScdtP4NrQ=",
+        "owner": "Jitsusama",
+        "repo": "mycelium",
+        "rev": "50f9f71a3e782ce2ca0163100f69123ef4e5b0ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jitsusama",
+        "repo": "mycelium",
         "type": "github"
       }
     },

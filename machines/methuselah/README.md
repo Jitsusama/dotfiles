@@ -6,6 +6,7 @@ Joel's personal MacBook, on core.nix's Mac roles.
 
 ```text
 darwin.nix          # the Mac: its name, Nix's settings and build group, the account
+                    # and penelope's key for mycelium's link
 home.nix            # Joel's account: the agents' committer name
 ```
 

@@ -28,6 +28,12 @@
     ];
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
+
+  # methuselah's own host key, which mycelium's link to it checks.
+  programs.ssh.knownHosts.methuselah = {
+    hostNames = [ "methuselah.local" ];
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPSbRSaae8/rtKXp4BAHE1JwCI7qwFU1plO3INqjssss";
+  };
   nix.settings.trusted-users = [ "jitsusama" ];
 
   # The machine's own account: the greeter wears its look and asks for it

@@ -1,9 +1,9 @@
 # What every personal machine adds to core.nix's roles in Joel's account, on
 # macOS and Linux alike: the personal identity, the tools he uses outside
-# work, pi and Claude Code's skills, git's personal settings, and every key
-# that may sign. core.nix's roles sign every commit, with the TPM on Linux
-# and the Secure Enclave on a Mac. Each machine's own account settings are
-# in machines/.
+# work, pi and Claude Code's skills, git's personal settings, mycelium's
+# personal realm, and every key that may sign. core.nix's roles sign every
+# commit, with the TPM on Linux and the Secure Enclave on a Mac. Each
+# machine's own account settings are in machines/.
 { core, homeModules }:
 { config, pkgs, ... }:
 {
@@ -13,12 +13,17 @@
     # Where the signers these modules list are declared; the roles bring the
     # hardware that signs.
     core.homeModules.signing
+    # Where the realm set below is declared.
+    core.homeModules.mycelium
     homeModules.claude
     homeModules.pi
     ../modules/neovim/home.nix
   ];
 
   jitsusama.identity.email = "joel@grrbrr.ca";
+
+  # The personal machines' nodes link with each other and never with work's.
+  jitsusama.mycelium.realm = "personal";
 
   home.packages = [
     # Development tools
