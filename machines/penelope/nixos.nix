@@ -34,6 +34,12 @@
     hostNames = [ "methuselah.local" ];
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPSbRSaae8/rtKXp4BAHE1JwCI7qwFU1plO3INqjssss";
   };
+  # The resolver answers a .local name with a link-local IPv6 address and
+  # no interface, which ssh can't connect to, so it asks for IPv4 alone.
+  programs.ssh.extraConfig = ''
+    Host methuselah.local
+      AddressFamily inet
+  '';
   nix.settings.trusted-users = [ "jitsusama" ];
 
   # The machine's own account: the greeter wears its look and asks for it
