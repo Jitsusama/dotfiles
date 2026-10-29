@@ -17,11 +17,8 @@ in
     optimise.automatic = true;
     settings.experimental-features = "nix-command flakes";
     # The builder may give the daemon derivations to build, which only a
-    # trusted user can.
-    settings.trusted-users = [
-      "root"
-      "builder"
-    ];
+    # trusted user can. nix-darwin keeps root beside it.
+    settings.trusted-users = [ "builder" ];
     # The Linux builder's line, after nix-darwin's empty `builders`, so it
     # counts.
     extraOptions = ''
@@ -51,7 +48,8 @@ in
   # Remote Login here admits only com.apple.access_ssh's members, a group
   # nix-darwin doesn't manage, so the builder is put in it at each switch.
   system.activationScripts.postActivation.text = ''
-    /usr/sbin/dseditgroup -o edit -a builder -t user com.apple.access_ssh
+    /usr/sbin/dseditgroup -o checkmember -m builder com.apple.access_ssh > /dev/null ||
+      /usr/sbin/dseditgroup -o edit -a builder -t user com.apple.access_ssh
   '';
 
   system.primaryUser = "jitsusama";
