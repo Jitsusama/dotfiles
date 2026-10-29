@@ -70,6 +70,7 @@
         modules = [
           core.darwinModules.workstation
           core.darwinModules.graphical
+          core.darwinModules.linux-builder
           self.darwinModules.personal
           ./machines/methuselah/darwin.nix
         ];
