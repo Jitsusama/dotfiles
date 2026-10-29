@@ -2,6 +2,7 @@
 # NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
 # account. The hardware, niri, greetd and networking come from core.nix, and
 # README.md says why the install it runs today can't switch to this.
+{ config, ... }:
 {
   networking.hostName = "penelope";
 
@@ -34,13 +35,35 @@
     hostNames = [ "methuselah.local" ];
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPSbRSaae8/rtKXp4BAHE1JwCI7qwFU1plO3INqjssss";
   };
+  # The dock on Joel's desk, its cable trusted as his Wi-Fi is, so penelope
+  # finds methuselah and optimus by their .local names over the link that
+  # holds its route, and is found there.
+  jitsusama.network.trustedCables = [ "d0:c1:b5:22:58:b9" ];
+
   # The resolver answers a .local name with a link-local IPv6 address and
   # no interface, which ssh can't connect to, so it asks for IPv4 alone.
   programs.ssh.extraConfig = ''
     Host methuselah.local
       AddressFamily inet
   '';
-  nix.settings.trusted-users = [ "jitsusama" ];
+  nix.settings.trusted-users = [
+    "jitsusama"
+    "builder"
+  ];
+
+  # penelope builds for optimus: optimus's nix-daemon logs in as builder with
+  # its own key and speaks Nix's protocol, and core's nix-daemon module keeps
+  # those builds below Joel's programs. The key can run nothing else, so a
+  # trusted store user is all it gets.
+  users.users.builder = {
+    isSystemUser = true;
+    group = "builder";
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [
+      ''restrict,command="${config.nix.package}/bin/nix-daemon --stdio" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRkdxraohorYagcirm3lEonh6at0F7DvFoLuEqBQajh optimus nix-daemon''
+    ];
+  };
+  users.groups.builder = { };
 
   # The machine's own account: the greeter wears its look and asks for it
   # first, and since unlocking the disk already proved it's Joel, niri
