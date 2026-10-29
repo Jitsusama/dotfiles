@@ -55,10 +55,12 @@ in
   system.primaryUser = "jitsusama";
   users.users.jitsusama = {
     home = "/Users/jitsusama";
-    # penelope's agents' key from its TPM, which asks nothing, so its
-    # mycelium node can link here without a prompt.
+    # Keys from TPMs that ask nothing, so mycelium's personal nodes link here
+    # without a prompt: penelope's agents' key, and optimus's personal link
+    # key, which signs nothing else.
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM= jitsusama@penelope agents"
+      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link"
     ];
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
