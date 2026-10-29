@@ -19,7 +19,9 @@ again often, and nothing on it is dear.
 
 ```text
 nixos.nix           # penelope as the guide installs it: its disk, SSH from
-                    # optimus, methuselah's host key, and the account
+                    # optimus, methuselah's host key, the dock it trusts,
+                    # the builder optimus's Nix builds through, and the
+                    # account
 home.nix            # Joel's account: Chrome, and mycelium's link to methuselah
 freeze-capture.nix  # while a freeze is chased: the kernel panics once the
                     # disk stops answering, so pstore keeps its log
