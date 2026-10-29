@@ -1,12 +1,15 @@
 # methuselah
 
-Joel's personal MacBook, on core.nix's Mac roles.
+Joel's personal MacBook, on core.nix's Mac roles. It's also a builder for
+optimus's Nix: aarch64-darwin itself, and Linux through core.nix's builder
+VM, at utility QoS so builds yield to Joel's own programs.
 
 ## 📁 Where Things Live
 
 ```text
 darwin.nix          # the Mac: its name, Nix's settings and build group, the account
-                    # and penelope's key for mycelium's link
+                    # and penelope's key for mycelium's link, and the builder
+                    # account optimus's Nix signs in as
 home.nix            # Joel's account: the agents' committer name
 ```
 
