@@ -8,8 +8,9 @@ VM, at utility QoS so builds yield to Joel's own programs.
 
 ```text
 darwin.nix          # the Mac: its name, Nix's settings and build group, the account
-                    # and penelope's key for mycelium's link, and the builder
-                    # account optimus's Nix signs in as
+                    # and the keys mycelium's links from penelope and optimus
+                    # sign in with, and the builder account optimus's Nix
+                    # signs in as
 home.nix            # Joel's account: the agents' committer name
 ```
 
