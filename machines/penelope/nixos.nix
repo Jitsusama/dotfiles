@@ -1,7 +1,6 @@
 # penelope, Joel's personal Surface Laptop 4, as the guide installs it: its
 # NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
-# account. The hardware, niri, greetd and networking come from core.nix, and
-# README.md says why the install it runs today can't switch to this.
+# account. The hardware, niri, greetd and networking come from core.nix.
 { config, ... }:
 {
   networking.hostName = "penelope";
@@ -54,6 +53,14 @@
     "jitsusama"
     "builder"
   ];
+
+  # penelope works for the personal realm with its lid shut. On a charger,
+  # the desk's monitor among them, a shut lid never puts it to sleep. On
+  # battery a shut lid sleeps it as on any laptop, unless something holds a
+  # block against that: the rule lets mycelium's node, a service of Joel's
+  # with no session, hold one while it runs work.
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
+  security.polkit.extraConfig = builtins.readFile ./node-holds-the-lid.rules;
 
   # penelope builds for optimus: optimus's nix-daemon logs in as builder with
   # its own key and speaks Nix's protocol, and core's nix-daemon module keeps
