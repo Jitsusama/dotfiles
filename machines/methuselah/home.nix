@@ -16,5 +16,10 @@
     '';
   };
 
+  # What work placed here can count on wherever the laptop goes, and the
+  # command a personal session starts with: pi, on Joel's Claude plan.
+  jitsusama.mycelium.declares.reach = [ "internet" ];
+  jitsusama.mycelium.agents.personal = "pi";
+
   home.stateVersion = "24.05";
 }
