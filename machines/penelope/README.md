@@ -87,9 +87,13 @@ Boot keys, sealed, and boots under them.
    a security token PIN, so type a YubiKey's PIN and touch the key. The
    first boot enrols the keys the guide made and restarts once with Secure
    Boot on.
-5. Sign in and run `guide installed`. It asks for a PIN for the TPM twice,
-   then a YubiKey's PIN and a touch, and seals the disk to the TPM. Restart,
-   and the disk asks for the TPM's PIN from then on.
+5. As it starts again, before the sign-in screen, the guide finishes
+   penelope by itself: a YubiKey's PIN and a touch open the disk this once,
+   it asks for a PIN for the TPM twice, which can be the account's password,
+   and seals the disk to it, then makes the SSH keys in the TPM. The disk
+   asks for the TPM's PIN from then on.
+6. Sign in, and once online type `guide finish` in a terminal. It adds
+   penelope's keys to GitHub, through a code typed on the phone.
 
 ## 🔑 Signing
 
