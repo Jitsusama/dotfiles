@@ -29,13 +29,14 @@ in
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPJqAsoQlLkci9Hi2MKEGpdyFPtNZLH1wYQa5ofTY2AH05qxHBjMh89kLS4ev+9T6DVTRQjQ7TR9BLY/DkZCheE= jitsusama@optimus"
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAXa4vhfKKZFJT7h88Yo70XedUORGkaxhdUkhzMw99qoWC5AKadmuY1K++B6/Bob9dcWOUJnoqkeLpLoAzua81Y= jitsusama@optimus agents"
-      # optimus's personal-realm node, with a key of its own in optimus's
-      # TPM, is pinned to mycelium's ssh: it may open the link in that realm
-      # or join a session held here, and mycelium takes its far end to be
-      # optimus, which the key proves. No shell and nothing forwarded; a
-      # terminal only for joining a session, which a person watches.
-      ''restrict,pty,command="/etc/profiles/per-user/jitsusama/bin/mycelium --realm personal ssh --from optimus" ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link''
     ];
+  };
+  # optimus's personal-realm node links here with a key of its own in
+  # optimus's TPM, which core pins to that realm's link or joining a session
+  # held here, as optimus: no shell, and nothing forwarded.
+  jitsusama.mycelium = {
+    account = "jitsusama";
+    linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
 
