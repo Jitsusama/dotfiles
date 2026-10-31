@@ -59,6 +59,13 @@ in
     "jitsusama"
     "builder"
   ];
+  # Two builds at once, each with three compilers, so a C++ build stays near
+  # six compilers and 1.5 GB in penelope's 7.2. At Nix's default, every
+  # thread at once, openvino-genai ran nine compilers beside rustc, took
+  # 10.8 GB of swap, and left Joel's session waiting on memory for 22% of
+  # a 10 s stretch (10-31).
+  nix.settings.cores = 3;
+  nix.settings.max-jobs = 2;
 
   # penelope works for the personal realm with its lid shut. On a charger,
   # the desk's monitor among them, a shut lid never puts it to sleep. On
