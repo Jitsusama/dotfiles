@@ -62,13 +62,17 @@ in
   system.primaryUser = "jitsusama";
   users.users.jitsusama = {
     home = "/Users/jitsusama";
-    # Keys from TPMs that ask nothing, so mycelium's personal nodes link here
-    # without a prompt: penelope's agents' key, and optimus's personal link
-    # key, which signs nothing else.
+    # penelope's agents' key, from a TPM that asks nothing, so its personal
+    # node links here without a prompt.
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM= jitsusama@penelope agents"
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link"
     ];
+  };
+  # optimus's personal link key, from its TPM, pinned to its end of a link or
+  # an attach as optimus, so it never runs a shell here.
+  jitsusama.mycelium = {
+    account = "jitsusama";
+    linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
 
