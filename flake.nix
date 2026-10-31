@@ -71,6 +71,7 @@
           core.darwinModules.workstation
           core.darwinModules.graphical
           core.darwinModules.linux-builder
+          core.darwinModules.update-to-main
           self.darwinModules.personal
           ./machines/methuselah/darwin.nix
         ];

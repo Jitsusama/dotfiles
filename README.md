@@ -27,7 +27,8 @@ treefmt.nix               # how the formatter formats and lints
 personal/                 # what every personal machine adds
 ├── darwin.nix            #   for macOS: the apps Homebrew installs
 ├── nixos.nix             #   for NixOS
-└── home.nix              #   for the account: identity, tools and git
+├── home.nix              #   for the account: identity, tools and git
+└── signers.nix           #   the keys that sign Joel's commits, his own and his agents'
 modules/                  # one folder per tool: claude, neovim, pi
 machines/                 # one folder per machine, its README saying more
 ├── methuselah/           #   the MacBook

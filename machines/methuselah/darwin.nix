@@ -7,6 +7,7 @@ let
   optimusOffload = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRkdxraohorYagcirm3lEonh6at0F7DvFoLuEqBQajh nix-offload";
   # Where the Linux VM's SSH answers, on this Mac's loopback.
   vmSsh = "127.0.0.1:${toString config.jitsusama.linux-builder.port}";
+  signers = import ../../personal/signers.nix;
 in
 {
   networking.hostName = "methuselah";
@@ -70,6 +71,23 @@ in
     ];
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
+
+  # methuselah updates itself to this repository's main when Joel's account
+  # asks, so no switch here waits on him at the Mac. main counts only when
+  # GitHub signed it, merging a change (its key, github-merges.asc, from
+  # github.com/web-flow.gpg), or Joel did with a key of his own; an agent's
+  # key alone never moves the Mac.
+  jitsusama.update-to-main = {
+    repository = "https://github.com/Jitsusama/dotfiles";
+    output = "darwinConfigurations.methuselah.system";
+    signers = {
+      openpgp = [ ./github-merges.asc ];
+      ssh = map (
+        key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
+      ) signers.joel;
+    };
+    askers = [ "jitsusama" ];
+  };
   # Read the changelog before changing it.
   system.stateVersion = 4;
 }
