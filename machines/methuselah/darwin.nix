@@ -1,10 +1,12 @@
 # methuselah, Joel's personal MacBook, and a builder for optimus's Nix: its
 # own aarch64-darwin, and Linux through core's builder VM.
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   # optimus's root key for sending builds out (its
   # /etc/nix/offload_ed25519.pub).
   optimusOffload = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRkdxraohorYagcirm3lEonh6at0F7DvFoLuEqBQajh nix-offload";
+  # Where the Linux VM's SSH answers, on this Mac's loopback.
+  vmSsh = "127.0.0.1:${toString config.jitsusama.linux-builder.port}";
 in
 {
   networking.hostName = "methuselah";
@@ -31,9 +33,13 @@ in
   # programs. Here nix-darwin runs Nix, so it's nix-darwin's daemon that
   # starts again to read the VM's line.
   jitsusama.linux-builder.nixDaemon = "org.nixos.nix-daemon";
+  # This daemon won't pass a build from optimus on to the VM, so optimus
+  # signs in to the VM itself, jumping through the builder account below.
+  jitsusama.linux-builder.authorizedKeys = [ optimusOffload ];
 
   # The account optimus's Nix signs in as to build here. Its key may only
-  # speak Nix's daemon protocol, never open a shell.
+  # speak Nix's daemon protocol, never open a shell, and forward only to
+  # the Linux VM's SSH.
   users.knownUsers = [ "builder" ];
   users.users.builder = {
     uid = 450;
@@ -42,7 +48,7 @@ in
     shell = "/bin/sh";
     isHidden = true;
     openssh.authorizedKeys.keys = [
-      ''restrict,command="/run/current-system/sw/bin/nix-daemon --stdio" ${optimusOffload}''
+      ''restrict,port-forwarding,permitopen="${vmSsh}",command="/run/current-system/sw/bin/nix-daemon --stdio" ${optimusOffload}''
     ];
   };
   # Remote Login here admits only com.apple.access_ssh's members, a group
