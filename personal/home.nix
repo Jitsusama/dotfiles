@@ -94,18 +94,12 @@
   # key stays revocable on its own: valid-before, a GitLab revoke and a
   # GitHub delete all act per key, not per principal.
   jitsusama.signing.allowedSigners =
-    map (key: ''${config.jitsusama.identity.email} namespaces="git" ${key}'')
-      [
-        # 1Password-held ed25519, which signed before the Secure Enclave did.
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/BMnlV4qQolgj1SVcNFkhVJfMPk/sbMcfAjZreUmeu"
-        # methuselah's Secure Enclave: joel-signing (Touch ID), then agent-signing.
-        "sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBP/+4vmV9jofa+NC1HONKq//dKeeLk5BGswU6Jod45hIkac0NHyXwaYSO/Js7h34ceJfQB2ReQrE+BGcQPcGH60AAAAEc3NoOg=="
-        "sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBNBQUgGis2mignI9aGhDFOi7MMHjIgFCN7abqcsquQDsnjnYGAn7YyHtQPkg/0GDDyx994qyzJ7tSqea0x/hBxEAAAAEc3NoOg=="
-        # penelope's TPM, made by core's guide on 2026-10-25: joel-signing
-        # (its PIN), then agent-signing.
-        "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBESjVkN/tSPAJweRv3fOrntjOA5oqCzUi6n9V7jqXSKPTPtfsqQgUjFpQPpedzShpgqRkbJKLwLTaY6g/X6vEIY="
-        "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM="
-      ];
+    let
+      signers = import ./signers.nix;
+    in
+    map (key: ''${config.jitsusama.identity.email} namespaces="git" ${key}'') (
+      signers.joel ++ signers.agents
+    );
 
   programs.git = {
     settings = {

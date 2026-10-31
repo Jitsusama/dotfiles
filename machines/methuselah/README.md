@@ -10,11 +10,23 @@ VM, at utility QoS so builds yield to Joel's own programs.
 darwin.nix          # the Mac: its name, Nix's settings and build group, the account
                     # and the keys mycelium's links from penelope and optimus
                     # sign in with, and the builder account optimus's Nix
-                    # signs in as
+                    # signs in as, and what it updates itself from
+github-merges.asc   # the key GitHub signs its merges with, which main's head carries
 home.nix            # Joel's account: the agents' committer name
 ```
 
 ## 🚀 Applying It
+
+methuselah updates itself to main with core.nix's `update-to-main`, asked
+from Joel's account here or through mycelium, with nobody at the Mac:
+
+```sh
+update-to-main ask
+```
+
+It builds main only when GitHub signed it merging a change, or Joel did with
+one of his own keys, and when it follows on from what the Mac runs. By hand,
+as before:
 
 ```sh
 darwin-rebuild build --flake .#methuselah
