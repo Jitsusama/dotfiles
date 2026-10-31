@@ -62,6 +62,14 @@
   services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
   security.polkit.extraConfig = builtins.readFile ./node-holds-the-lid.rules;
 
+  # Asleep on battery, penelope hibernates after an hour, or sooner if the
+  # battery falls below 5% first, so a night left unplugged never drains it
+  # flat. Its worn battery has about 37 Wh, and the node lets go at 20%, so
+  # what's left when it sleeps is little; how fast s2idle spends it here
+  # hasn't been measured.
+  services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
+  systemd.sleep.settings.Sleep.HibernateDelaySec = "1h";
+
   # penelope builds for optimus: optimus's nix-daemon logs in as builder with
   # its own key and speaks Nix's protocol, and core's nix-daemon module keeps
   # those builds below Joel's programs. The key can run nothing else, so a
