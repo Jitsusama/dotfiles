@@ -91,7 +91,6 @@ Boot keys, sealed, and boots under them.
    then a YubiKey's PIN and a touch, and seals the disk to the TPM. Restart,
    and the disk asks for the TPM's PIN from then on.
 
-
 ## 🔑 Signing
 
 Commits are signed with keys sealed in its TPM, as core's signing module
