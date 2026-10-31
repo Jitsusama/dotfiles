@@ -78,14 +78,14 @@ in
 
   # methuselah updates itself to this repository's main when Joel's account
   # asks, so no switch here waits on him at the Mac. main counts only when
-  # GitHub signed it, merging a change (its key, github-merges.asc, from
+  # GitHub signed it, merging a change (its key, personal/github-merges.asc, from
   # github.com/web-flow.gpg), or Joel did with a key of his own; an agent's
   # key alone never moves the Mac.
   jitsusama.update-to-main = {
     repository = "https://github.com/Jitsusama/dotfiles";
     output = "darwinConfigurations.methuselah.system";
     signers = {
-      openpgp = [ ./github-merges.asc ];
+      openpgp = [ ../../personal/github-merges.asc ];
       ssh = map (
         key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
       ) signers.joel;

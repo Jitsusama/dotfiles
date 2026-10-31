@@ -28,7 +28,8 @@ personal/                 # what every personal machine adds
 ├── darwin.nix            #   for macOS: the apps Homebrew installs
 ├── nixos.nix             #   for NixOS
 ├── home.nix              #   for the account: identity, tools and git
-└── signers.nix           #   the keys that sign Joel's commits, his own and his agents'
+├── signers.nix           #   the keys that sign Joel's commits, his own and his agents'
+└── github-merges.asc     #   the key GitHub signs its merges with, which main's head carries
 modules/                  # one folder per tool: claude, neovim, pi
 machines/                 # one folder per machine, its README saying more
 ├── methuselah/           #   the MacBook

@@ -1,7 +1,11 @@
 # penelope, Joel's personal Surface Laptop 4, as the guide installs it: its
 # NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
 # account. The hardware, niri, greetd and networking come from core.nix.
-{ config, ... }:
+{ config, lib, ... }:
+let
+  signers = import ../../personal/signers.nix;
+  systemctl = lib.getExe' config.systemd.package "systemctl";
+in
 {
   networking.hostName = "penelope";
 
@@ -80,6 +84,40 @@
   # first, and since unlocking the disk already proved it's Joel, niri
   # starts without asking again. Without it the greeter is tuigreet alone.
   jitsusama.login.account = "jitsusama";
+
+  # penelope updates itself to this repository's main when Joel's account
+  # asks, mycelium's node among what runs as it, so no switch waits on him
+  # here. As on methuselah, main counts only when GitHub signed it merging a
+  # change, or Joel did with a key of his own; an agent's key alone never
+  # moves it. A changed kernel waits for the next boot, and below 20% on
+  # battery it doesn't start.
+  jitsusama.update-to-main = {
+    repository = "https://github.com/Jitsusama/dotfiles";
+    output = "nixosConfigurations.penelope.config.system.build.toplevel";
+    signers = {
+      openpgp = [ ../../personal/github-merges.asc ];
+      ssh = map (
+        key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
+      ) signers.joel;
+    };
+    askers = [ "jitsusama" ];
+    # After a live switch it's whole when the greeter Joel signs in at, its
+    # Wi-Fi and the SSH optimus reaches it by all run; otherwise it goes back.
+    # One unit each, since is-active passes when any one of several is.
+    health =
+      map
+        (unit: [
+          systemctl
+          "is-active"
+          "--quiet"
+          unit
+        ])
+        [
+          "greetd.service"
+          "wifid.service"
+          "sshd.service"
+        ];
+  };
 
   # The release it was first installed with by the guide; read the release
   # notes before changing it.

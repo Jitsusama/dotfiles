@@ -11,7 +11,6 @@ darwin.nix          # the Mac: its name, Nix's settings and build group, the acc
                     # and the keys mycelium's links from penelope and optimus
                     # sign in with, and the builder account optimus's Nix
                     # signs in as, and what it updates itself from
-github-merges.asc   # the key GitHub signs its merges with, which main's head carries
 home.nix            # Joel's account: the agents' committer name
 ```
 
