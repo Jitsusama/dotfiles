@@ -21,8 +21,8 @@ again often, and nothing on it is dear.
 nixos.nix                 # penelope as the guide installs it: its disk, SSH
                           # from optimus, methuselah's host key, the dock it
                           # trusts, the builder optimus's Nix builds
-                          # through, the lid kept awake on a charger, and
-                          # the account
+                          # through, the lid kept awake on a charger, the
+                          # account, and what it updates itself from
 node-holds-the-lid.rules  # polkit's rule letting mycelium's node keep it
                           # awake with its lid shut while it runs work
 home.nix                  # Joel's account: Chrome, mycelium's link to
@@ -91,8 +91,23 @@ Boot keys, sealed, and boots under them.
    then a YubiKey's PIN and a touch, and seals the disk to the TPM. Restart,
    and the disk asks for the TPM's PIN from then on.
 
+## 🔄 Updating It
+
+penelope updates itself to main with core.nix's `update-to-main`, asked from
+Joel's account there or through mycelium, with nobody at it:
+
+```sh
+update-to-main ask
+```
+
+It builds main only when GitHub signed it merging a change, or Joel did with
+one of his own keys, and when it follows on from what penelope runs. It
+switches at once unless the kernel changed, which waits for the next boot,
+and goes back if its greeter, its Wi-Fi or SSH isn't running after.
+Below 20% on battery it doesn't start.
+
 ## 🔑 Signing
 
 Commits are signed with keys sealed in its TPM, as core's signing module
 says; until they're made there, git can't sign, and their public halves join
-the signers in `personal/home.nix`.
+the signers in `personal/signers.nix`.

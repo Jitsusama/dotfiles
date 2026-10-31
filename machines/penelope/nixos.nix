@@ -1,7 +1,11 @@
 # penelope, Joel's personal Surface Laptop 4, as the guide installs it: its
 # NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
 # account. The hardware, niri, greetd and networking come from core.nix.
-{ config, ... }:
+{ config, lib, ... }:
+let
+  signers = import ../../personal/signers.nix;
+  systemctl = lib.getExe' config.systemd.package "systemctl";
+in
 {
   networking.hostName = "penelope";
 
@@ -25,11 +29,14 @@
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPJqAsoQlLkci9Hi2MKEGpdyFPtNZLH1wYQa5ofTY2AH05qxHBjMh89kLS4ev+9T6DVTRQjQ7TR9BLY/DkZCheE= jitsusama@optimus"
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAXa4vhfKKZFJT7h88Yo70XedUORGkaxhdUkhzMw99qoWC5AKadmuY1K++B6/Bob9dcWOUJnoqkeLpLoAzua81Y= jitsusama@optimus agents"
-      # optimus's personal-realm node, with a key of its own in optimus's
-      # TPM, may only open mycelium's link in that realm: no shell, and
-      # nothing forwarded.
-      ''restrict,command="/etc/profiles/per-user/jitsusama/bin/mycelium link --realm personal" ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link''
     ];
+  };
+  # optimus's personal-realm node links here with a key of its own in
+  # optimus's TPM, which core pins to that realm's link or joining a session
+  # held here, as optimus: no shell, and nothing forwarded.
+  jitsusama.mycelium = {
+    account = "jitsusama";
+    linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
 
@@ -53,6 +60,13 @@
     "jitsusama"
     "builder"
   ];
+  # Two builds at once, each with three compilers, so a C++ build stays near
+  # six compilers and 1.5 GB in penelope's 7.2. At Nix's default, every
+  # thread at once, openvino-genai ran nine compilers beside rustc, took
+  # 10.8 GB of swap, and left Joel's session waiting on memory for 22% of
+  # a 10 s stretch (10-31).
+  nix.settings.cores = 3;
+  nix.settings.max-jobs = 2;
 
   # penelope works for the personal realm with its lid shut. On a charger,
   # the desk's monitor among them, a shut lid never puts it to sleep. On
@@ -80,6 +94,40 @@
   # first, and since unlocking the disk already proved it's Joel, niri
   # starts without asking again. Without it the greeter is tuigreet alone.
   jitsusama.login.account = "jitsusama";
+
+  # penelope updates itself to this repository's main when Joel's account
+  # asks, mycelium's node among what runs as it, so no switch waits on him
+  # here. As on methuselah, main counts only when GitHub signed it merging a
+  # change, or Joel did with a key of his own; an agent's key alone never
+  # moves it. A changed kernel waits for the next boot, and below 20% on
+  # battery it doesn't start.
+  jitsusama.update-to-main = {
+    repository = "https://github.com/Jitsusama/dotfiles";
+    output = "nixosConfigurations.penelope.config.system.build.toplevel";
+    signers = {
+      openpgp = [ ../../personal/github-merges.asc ];
+      ssh = map (
+        key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
+      ) signers.joel;
+    };
+    askers = [ "jitsusama" ];
+    # After a live switch it's whole when the greeter Joel signs in at, its
+    # Wi-Fi and the SSH optimus reaches it by all run; otherwise it goes back.
+    # One unit each, since is-active passes when any one of several is.
+    health =
+      map
+        (unit: [
+          systemctl
+          "is-active"
+          "--quiet"
+          unit
+        ])
+        [
+          "greetd.service"
+          "wifid.service"
+          "sshd.service"
+        ];
+  };
 
   # The release it was first installed with by the guide; read the release
   # notes before changing it.
