@@ -18,13 +18,18 @@ again often, and nothing on it is dear.
 ## 📁 Where Things Live
 
 ```text
-nixos.nix           # penelope as the guide installs it: its disk, SSH from
-                    # optimus, methuselah's host key, the dock it trusts,
-                    # the builder optimus's Nix builds through, and the
-                    # account
-home.nix            # Joel's account: Chrome, and mycelium's link to methuselah
-freeze-capture.nix  # while a freeze is chased: the kernel panics once the
-                    # disk stops answering, so pstore keeps its log
+nixos.nix                 # penelope as the guide installs it: its disk, SSH
+                          # from optimus, methuselah's host key, the dock it
+                          # trusts, the builder optimus's Nix builds
+                          # through, the lid kept awake on a charger, and
+                          # the account
+node-holds-the-lid.rules  # polkit's rule letting mycelium's node keep it
+                          # awake with its lid shut while it runs work
+home.nix                  # Joel's account: Chrome, mycelium's link to
+                          # methuselah, and what it declares to work placed
+                          # there
+freeze-capture.nix        # while a freeze is chased: the kernel panics once
+                          # the disk stops answering, so pstore keeps its log
 ```
 
 ## 🚀 Installing It
@@ -85,10 +90,6 @@ Boot keys, sealed, and boots under them.
 5. Sign in and run `guide installed`. It asks for a PIN for the TPM twice,
    then a YubiKey's PIN and a touch, and seals the disk to the TPM. Restart,
    and the disk asks for the TPM's PIN from then on.
-
-Its install from before has a plain ext4 disk that `nixos.nix` doesn't
-describe, so it can't switch to this. It stays as it is until the guide
-wipes it.
 
 ## 🔑 Signing
 
