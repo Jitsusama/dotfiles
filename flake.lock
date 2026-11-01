@@ -3,11 +3,11 @@
     "agentic-harness-pi": {
       "flake": false,
       "locked": {
-        "lastModified": 1787614339,
-        "narHash": "sha256-rUU9UQaGSEYH9Ii2AIj8eZGjVQ+h+8Rloj/fLarYKl8=",
+        "lastModified": 1793547446,
+        "narHash": "sha256-ZC75Er4YXnjMPK9FnEHkkfoLjzDWUXUckeQL+bmTVaM=",
         "owner": "Jitsusama",
         "repo": "agentic-harness.pi",
-        "rev": "06c5728cdb16a1f5974b78feba7369187b9e1144",
+        "rev": "a729d45e5bb62a53b4540677cf94b17416dc0aa9",
         "type": "github"
       },
       "original": {
@@ -34,11 +34,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1793487469,
-        "narHash": "sha256-t2u3rvNDL2U4rcG2UB+r7+8YJfMIch9K0RD50QLFfXw=",
+        "lastModified": 1793546682,
+        "narHash": "sha256-QMUc22QJs+dJ3+C/Eqqp006XF41hfoxuzDWPWuqI2s0=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "9e6e84ec08447714de242c1538efcbe59035abe8",
+        "rev": "8564cc22d9ef7e696d8955118f719a0bcb6b4195",
         "type": "github"
       },
       "original": {
@@ -160,11 +160,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793480218,
-        "narHash": "sha256-0v73Hjzw45ikq/iKfUu5gd/MP5QhVRHK+2iQZIySJU4=",
+        "lastModified": 1793488966,
+        "narHash": "sha256-nObdLsz2tNgTqRZY0QLi6/on7bwjZSIaHSsL8C6az+4=",
         "owner": "Jitsusama",
         "repo": "mycelium",
-        "rev": "5b9632154fdb545aca5dd9d696fdcce61a941976",
+        "rev": "1244f3e3c1072dd7e1f89ad13298441be65664a0",
         "type": "github"
       },
       "original": {
