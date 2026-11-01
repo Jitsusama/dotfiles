@@ -36,6 +36,9 @@ in
   # held here, as optimus: no shell, and nothing forwarded.
   jitsusama.mycelium = {
     account = "jitsusama";
+    # methuselah's node signs in with its agents' key from the Secure
+    # Enclave, so this is the key it uses for commits, pinned like optimus's.
+    linkedFrom.personal.methuselah = "sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBNBQUgGis2mignI9aGhDFOi7MMHjIgFCN7abqcsquQDsnjnYGAn7YyHtQPkg/0GDDyx994qyzJ7tSqea0x/hBxEAAAAEc3NoOg==";
     linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];

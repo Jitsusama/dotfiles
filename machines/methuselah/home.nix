@@ -19,6 +19,11 @@
   # What work placed here can count on wherever the laptop goes, and the
   # command a personal session starts with: pi, on Joel's Claude plan.
   jitsusama.mycelium.declares.reach = [ "internet" ];
+
+  # methuselah dials penelope as she dials it, so either can drive the other.
+  # The node signs in with the agents' key from the Secure Enclave, which
+  # penelope authorizes (nixos.nix there) and darwin.nix pins her host key for.
+  jitsusama.mycelium.links = [ "penelope.local" ];
   jitsusama.mycelium.agents.personal = "pi";
 
   home.stateVersion = "24.05";

@@ -76,6 +76,12 @@ in
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
 
+  # penelope's own host key, which mycelium's link to her checks.
+  programs.ssh.knownHosts.penelope = {
+    hostNames = [ "penelope.local" ];
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxQCGNt7AzUZc8Niz0KOE61rWUmwdxb9nGO7xk7U8BL";
+  };
+
   # methuselah updates itself to this repository's main when Joel's account
   # asks, so no switch here waits on him at the Mac. main counts only when
   # GitHub signed it, merging a change (its key, personal/github-merges.asc, from
