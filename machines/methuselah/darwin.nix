@@ -60,18 +60,13 @@ in
   '';
 
   system.primaryUser = "jitsusama";
-  users.users.jitsusama = {
-    home = "/Users/jitsusama";
-    # penelope's agents' key, from a TPM that asks nothing, so its personal
-    # node links here without a prompt.
-    openssh.authorizedKeys.keys = [
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM= jitsusama@penelope agents"
-    ];
-  };
-  # optimus's personal link key, from its TPM, pinned to its end of a link or
-  # an attach as optimus, so it never runs a shell here.
+  users.users.jitsusama.home = "/Users/jitsusama";
+  # The link keys of penelope and optimus, each from a TPM that asks
+  # nothing, pinned to its end of a link or an attach as that machine, so
+  # neither runs a shell here: any agent there may sign with its key.
   jitsusama.mycelium = {
     account = "jitsusama";
+    linkedFrom.personal.penelope = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM= jitsusama@penelope agents";
     linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];

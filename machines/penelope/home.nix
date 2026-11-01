@@ -9,7 +9,7 @@
 
   # penelope dials methuselah, whose Remote Login is on, so the two carry
   # each other's sessions; nixos.nix pins methuselah's host key, and
-  # methuselah authorizes penelope's agents' key.
+  # methuselah pins penelope's agents' key to the link.
   jitsusama.mycelium.links = [ "methuselah.local" ];
   # What work placed here can count on wherever the laptop goes.
   jitsusama.mycelium.declares.reach = [ "internet" ];
