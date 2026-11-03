@@ -37,6 +37,9 @@ in
   # This daemon won't pass a build from optimus on to the VM, so optimus
   # signs in to the VM itself, jumping through the builder account below.
   jitsusama.linux-builder.authorizedKeys = [ optimusOffload ];
+  # Joel restarts a wedged VM from optimus over SSH, where sudo would want
+  # this Mac's password; this lets him run just those two restarts without.
+  jitsusama.linux-builder.restartableBy = [ config.system.primaryUser ];
 
   # The account optimus's Nix signs in as to build here. Its key may only
   # speak Nix's daemon protocol, never open a shell, and forward only to
