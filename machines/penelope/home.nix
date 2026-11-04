@@ -1,5 +1,6 @@
 # Joel's account on penelope: Chrome, its link to methuselah, what it
-# declares to work placed there, its panel's variable refresh, and the
+# declares to work placed there, the work sessions its own may ask, its
+# panel's variable refresh, and the
 # home-manager release it was set up with. Commits are signed with keys
 # sealed in its TPM, as core's signing module says, which the guide made at
 # its first start; the personal modules list them among the allowed
@@ -14,6 +15,17 @@
   jitsusama.mycelium.links = [ "methuselah.local" ];
   # What work placed here can count on wherever the laptop goes.
   jitsusama.mycelium.declares.reach = [ "internet" ];
+
+  # A personal session here may ask work sessions for something, as one on
+  # methuselah may: the node keeps the message until its links carry it to
+  # optimus, where it crosses into work. Without it the node refuses with
+  # no_flow.
+  jitsusama.mycelium.flows = [
+    {
+      from = "personal";
+      to = "work";
+    }
+  ];
 
   # The panel, Sharp's LQ135P1JX51, takes any refresh from 20 to 60 Hz, so
   # niri refreshes it only when something on it changes. On battery, idle,
