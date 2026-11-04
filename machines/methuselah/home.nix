@@ -26,5 +26,15 @@
   jitsusama.mycelium.links = [ "penelope.local" ];
   jitsusama.mycelium.agents.personal = "pi";
 
+  # A personal session here may ask work sessions for something, as one on
+  # optimus may: the node keeps the message until its link to optimus
+  # carries it there, where it crosses into work.
+  jitsusama.mycelium.flows = [
+    {
+      from = "personal";
+      to = "work";
+    }
+  ];
+
   home.stateVersion = "24.05";
 }
