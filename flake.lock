@@ -34,11 +34,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1793811630,
-        "narHash": "sha256-Qapflmk4Xa1Uifa22mtukYsZmty/o9mO436YUHrb2sQ=",
+        "lastModified": 1793855753,
+        "narHash": "sha256-UZo8qzsZvuz8V37fAl98mIeorFAdMGBa2uwK4QWL34U=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "3492f3e68665a94140b18eb144c5be8288172bd9",
+        "rev": "242c4183a6bea597bdd185921e98055eae08ef05",
         "type": "github"
       },
       "original": {
