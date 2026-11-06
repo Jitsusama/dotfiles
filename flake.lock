@@ -34,11 +34,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1793980044,
-        "narHash": "sha256-tABEg6MkZgrTRA0U8OcNKhbI6kHQvmEGYh/hpRyZINM=",
+        "lastModified": 1793991668,
+        "narHash": "sha256-QLenHHWohp2d8F6tuqT34DjMofELvlHIwiUzmCpz7M8=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "7739d089cc1411e2e7feee1ba913a98f7967dddc",
+        "rev": "2406a891cbfb6896b42481707fd86281aab5ac4f",
         "type": "github"
       },
       "original": {
@@ -160,11 +160,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793799932,
-        "narHash": "sha256-pb+30ZJaCh1PZ9X9WlZMCadrL7gUB7BiHHTxXjVGQ/Y=",
+        "lastModified": 1793988472,
+        "narHash": "sha256-9DfMVeNufhgpOYOg+HiNCgjWIT71bUqY0od/2Kt2nTg=",
         "owner": "Jitsusama",
         "repo": "mycelium",
-        "rev": "7c7e317919b1ec60176b7a20c66aa9c6ecb1c0f4",
+        "rev": "68e01faa7e2fac35a4782491960bff9b67b115e1",
         "type": "github"
       },
       "original": {
