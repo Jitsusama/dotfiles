@@ -97,8 +97,11 @@ Boot keys, sealed, and boots under them.
 
 ## 🔄 Updating It
 
-penelope updates itself to main with core.nix's `update-to-main`, asked from
-Joel's account there or through mycelium, with nobody at it:
+penelope follows main by itself with core.nix's `update-to-main`: Joel's
+account asks whenever this repository's main or core.nix's main moves, and at
+least every ten minutes, building core.nix at its own main as optimus does
+rather than where the lock pins it. It can also be asked there or through
+mycelium:
 
 ```sh
 update-to-main ask
