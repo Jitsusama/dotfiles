@@ -114,10 +114,6 @@ in
     allowSigned = true;
     allowSignedApp = true;
   };
-  # The AirPlay receiver listens on every network the Mac joins, and this
-  # Mac works as a builder more than a screen. Playing to it again means
-  # setting this true.
-  system.defaults.CustomUserPreferences."com.apple.controlcenter".AirplayRecieverEnabled = false;
 
   # Read the changelog before changing it.
   system.stateVersion = 4;
