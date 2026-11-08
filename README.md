@@ -24,6 +24,7 @@ together.
 flake.nix                 # the index: the machines and the repository's own modules
 checks.nix                # what `nix flake check` runs
 treefmt.nix               # how the formatter formats and lints
+biome.jsonc               # how biome lints polkit's JavaScript
 personal/                 # what every personal machine adds
 ├── darwin.nix            #   for macOS: the apps Homebrew installs
 ├── nixos.nix             #   for NixOS
@@ -34,7 +35,7 @@ modules/                  # one folder per tool: claude, neovim, pi
 machines/                 # one folder per machine, its README saying more
 ├── methuselah/           #   the MacBook
 └── penelope/             #   the Surface Laptop 4
-docs/                     # how methuselah's commits are signed
+docs/                     # how Joel's commits are signed, and why
 ```
 
 ## 🚀 Applying It
@@ -46,8 +47,8 @@ darwin-rebuild build --flake .#methuselah
 sudo darwin-rebuild switch --flake .#methuselah
 ```
 
-penelope is installed by the guide from a USB stick rather than switched;
-[its README](machines/penelope/README.md) says why.
+penelope is installed by the guide from a USB stick, and from then on follows
+main by itself; [its README](machines/penelope/README.md) says how.
 
 Taking core's latest is one input: `nix flake update core`.
 
@@ -57,8 +58,12 @@ Taking core's latest is one input: `nix flake update core`.
 NixOS machine and a bare Mac, the personal modules on each, both machines, and
 the promises they make: penelope installs onto core's encrypted disk and
 boots under its own Secure Boot keys, then finishes itself with core's guide,
-and both machines commit as Joel and sign every commit. Evaluating builds
-nothing, so most checks take seconds; `neovim-loads` starts Neovim once.
+and both machines commit as Joel and sign every commit. Each condition of a
+promise fails with a line of its own naming the machine. Evaluating builds
+nothing, so most checks take seconds; what only fails when it runs is built
+for the machine of the system checking: `neovim-loads` starts Neovim once,
+`claude-skills-build` patches Claude Code's skills, and `pi-builds` builds
+pi.
 
 [core]: https://github.com/Jitsusama/core.nix
 [machines]: https://github.com/Jitsusama/core.nix/blob/main/docs/machines.md

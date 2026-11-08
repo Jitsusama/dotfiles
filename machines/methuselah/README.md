@@ -14,7 +14,10 @@ darwin.nix          # the Mac: its name, Nix's settings and build group, the acc
 nixos.nix           # the same Mac once it's wiped onto NixOS: its disk in the
                     # space Asahi's installer leaves, the account, its links,
                     # the builder account and what it updates itself from
-home.nix            # Joel's account, on either: the agents' committer name
+home.nix            # Joel's account, on either: the agents' committer name,
+                    # mycelium's link to penelope, what it declares to work
+                    # placed there, the agent its sessions start, and the
+                    # work sessions its own may ask
 ```
 
 ## 🐧 Onto NixOS
@@ -56,5 +59,6 @@ Its commits are signed by keys in its Secure Enclave, which can't be
 exported or backed up and end with the logic board. core.nix's
 `secure-enclave-signing` module signs with them, and its `se-keys` makes
 them on a new Mac. [The specification](../../docs/commit-signing-spec.md)
-says how the design came about and [the
-rationale](../../docs/commit-signing-rationale.md) says why.
+says what signs on each machine and [the
+rationale](../../docs/commit-signing-rationale.md) says why the design is
+what it is.

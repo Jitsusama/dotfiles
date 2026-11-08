@@ -1,8 +1,32 @@
-# Hardware-backed commit signing — rationale and constraints
+# Commit Signing: Rationale and Constraints
 
-Companion to `commit-signing-spec.md`. The spec says what to do; this says
-why, and what breaks if you change it. Read this before deviating from a
-decision in the spec.
+Companion to [the specification](commit-signing-spec.md), which says what
+signs now; this says why, and what breaks if it changes.
+
+## Where This Stands
+
+Everything after this section was written in September 2026 for the first
+design: a Mac's Secure Enclave through Secretive, to be followed by a
+YubiKey's PIV applet, with the agents under an email of their own. Where it
+says "the spec", it means that design's, since replaced. It's kept as the
+record of why each choice was made. What came of it:
+
+- **Held:** SSH signatures (Part 4), a key of the agents' own that never
+  asks beside one of Joel's that always does, keys that never leave their
+  hardware, and no gate on a timer (Parts 2 and 3).
+- **Replaced:** Secretive gave way to core.nix's `secure-enclave-signing`,
+  which makes CryptoTokenKit identities with `sc_auth` and needs no agent
+  or socket, so Part 7's notes on Secretive's prompts are history. Linux
+  machines sign from their TPM rather than a YubiKey, and the YubiKeys
+  open penelope's disk instead; the PIV slots, backups and PKI of Parts 5
+  and 6 were never built.
+- **Changed:** every key is listed under one email, since a forge shows
+  Verified only for a verified address on the account; whose commit it is
+  lives in the committer name and the key's fingerprint, and each key is
+  still revoked on its own.
+
+Read the specification for what to change, and this for what a change
+would cost.
 
 ---
 

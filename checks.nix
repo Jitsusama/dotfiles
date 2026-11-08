@@ -4,9 +4,12 @@
 # bare machine of both classes, as core.nix's checks do for core's, so a
 # module that quietly depends on another fails here rather than on a machine.
 # Then come the personal modules on each class, the machines themselves and the
-# promises they make. Evaluating builds nothing, so most checks take seconds;
-# neovim-loads starts Neovim once. Last, every check's name is held to the
-# glossary of the core this repository locks, as core's own names are.
+# promises they make, each condition of a promise failing with a line of its
+# own that names the machine. Evaluating builds nothing, so most checks take
+# seconds; what only fails when it runs is built for the machine of the
+# system checking it: Neovim is started once, and Claude Code's skills and
+# pi's package are built. Last, every check's name is held to the glossary of
+# the core this repository locks, as core's own names are.
 {
   self,
   core,
@@ -17,6 +20,9 @@
 }:
 let
   inherit (pkgs) lib;
+
+  # The bare machines, evaluates and holds are what core.nix's own checks
+  # use, written again here because core doesn't export them.
 
   # The least a machine needs to evaluate, with core's home-manager and
   # nixpkgs settings, which every machine has, and one account for
@@ -70,14 +76,19 @@ let
       builtins.unsafeDiscardStringContext machine.config.system.build.toplevel.drvPath
     );
 
-  # A check that passes when a condition about the machines holds.
+  # A check that passes when every condition about the machines holds. Each
+  # condition is given with what broke when it doesn't, and a failure prints
+  # every one that broke, a line each, so it says which.
   holds =
-    name: message: condition:
-    if condition then
+    name: conditions:
+    let
+      broken = map (condition: condition.broke) (lib.filter (condition: !condition.holds) conditions);
+    in
+    if broken == [ ] then
       pkgs.writeText name ""
     else
       pkgs.runCommandLocal name { } ''
-        echo ${lib.escapeShellArg message}
+        printf '%s\n' ${lib.escapeShellArgs broken}
         exit 1
       '';
 
@@ -94,7 +105,7 @@ let
   # runs on both classes of machine.
   homeOnBoth = {
     claude = [ self.homeModules.claude ];
-    neovim = [ ./modules/neovim/home.nix ];
+    neovim = [ self.homeModules.neovim ];
     pi = [ self.homeModules.pi ];
   };
 
@@ -105,36 +116,56 @@ let
   inherit (self.nixosConfigurations) penelope;
   inherit (self.darwinConfigurations) methuselah;
   methuselahOnNixos = self.nixosConfigurations.methuselah;
-  git = machine: machine.config.home-manager.users.jitsusama.programs.git;
+  machines = { inherit penelope methuselah; };
+  homeOf = machine: machine.config.home-manager.users.jitsusama;
+  git = machine: (homeOf machine).programs.git;
+
+  # The conditions a promise makes of each machine, given its name and the
+  # machine, so each says which machine broke it.
+  onEachMachine = conditions: lib.concatLists (lib.mapAttrsToList conditions machines);
+
+  # The machine of the system checking, whose builds this system can make, so
+  # a Mac checks methuselah's without a Linux builder.
+  machineHere = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
 
   # What only a Shopify machine reaches for: devx, the proxy and LLM gateway
   # it signs in to, and the tec toolchain it installs. A word is looked for
   # by replacing it rather than with lib.hasInfix, whose regular expression
   # overflows the stack on a file as long as some of these.
-  namesShopify =
-    text:
-    lib.any (word: builtins.replaceStrings [ word ] [ "" ] text != text) [
-      "devx"
-      "shopify-proxy"
-      "llm-gateway"
-      "tec/toolchain"
-    ];
+  shopifyWords = [
+    "devx"
+    "shopify-proxy"
+    "llm-gateway"
+    "tec/toolchain"
+  ];
+  says = word: text: builtins.replaceStrings [ word ] [ "" ] text != text;
 
-  # Everything a machine and its account set that could name a program: the
-  # environment, the paths, the files written, the packages, the shells'
-  # startup, pi's settings and its Ask row, and the services.
+  # Everything a machine and its account set that could name a program, each
+  # with the option it's set in: the environment, the paths, the files
+  # written, the packages, the shells' startup, pi's settings and its Ask row,
+  # and the services.
   whatItSets =
     machine:
     let
       system = machine.config;
-      home = system.home-manager.users.jitsusama;
+      home = homeOf machine;
       asJson = value: (builtins.tryEval (builtins.toJSON value)).value or "";
-      written = files: lib.mapAttrsToList (target: file: target + toString (file.text or null)) files;
-      named = packages: map lib.getName packages;
+      set = where: text: { inherit where text; };
+      ofAccount = where: text: set "home-manager's ${where}" text;
+      written =
+        option: files:
+        lib.mapAttrsToList (
+          target: file: set "${option}.${target}" (target + toString (file.text or null))
+        ) files;
+      named =
+        option: packages:
+        map (package: set "${option} ${lib.getName package}" (lib.getName package)) packages;
       # A service is read for what it runs and the environment it runs in,
       # not whole, since some of what modules derive from one fails to
       # evaluate for a service it doesn't suit.
-      runs = pick: services: lib.mapAttrsToList (_: service: asJson (pick service)) services;
+      runs =
+        option: pick: services:
+        lib.mapAttrsToList (name: service: set "${option}.${name}" (asJson (pick service))) services;
       systemdRuns = service: {
         script = service.script or "";
         path = service.path or [ ];
@@ -149,30 +180,32 @@ let
       };
     in
     [
-      (asJson home.home.sessionVariables)
-      (asJson home.home.sessionPath)
-      (asJson home.home.shellAliases)
-      (asJson home.jitsusama.pi.settings)
-      (asJson home.jitsusama.pi.ask)
-      (home.programs.zsh.envExtra or "")
-      (home.programs.zsh.profileExtra or "")
-      (home.programs.zsh.loginExtra or "")
-      (home.programs.zsh.initContent or "")
-      (home.programs.bash.profileExtra or "")
-      (home.programs.bash.bashrcExtra or "")
-      (home.programs.bash.initExtra or "")
-      (asJson system.environment.variables)
-      (system.environment.extraInit or "")
+      (ofAccount "home.sessionVariables" (asJson home.home.sessionVariables))
+      (ofAccount "home.sessionPath" (asJson home.home.sessionPath))
+      (ofAccount "home.shellAliases" (asJson home.home.shellAliases))
+      (ofAccount "jitsusama.pi.settings" (asJson home.jitsusama.pi.settings))
+      (ofAccount "jitsusama.pi.ask" (asJson home.jitsusama.pi.ask))
+      (ofAccount "programs.zsh.envExtra" (home.programs.zsh.envExtra or ""))
+      (ofAccount "programs.zsh.profileExtra" (home.programs.zsh.profileExtra or ""))
+      (ofAccount "programs.zsh.loginExtra" (home.programs.zsh.loginExtra or ""))
+      (ofAccount "programs.zsh.initContent" (home.programs.zsh.initContent or ""))
+      (ofAccount "programs.bash.profileExtra" (home.programs.bash.profileExtra or ""))
+      (ofAccount "programs.bash.bashrcExtra" (home.programs.bash.bashrcExtra or ""))
+      (ofAccount "programs.bash.initExtra" (home.programs.bash.initExtra or ""))
+      (set "environment.variables" (asJson system.environment.variables))
+      (set "environment.extraInit" (system.environment.extraInit or ""))
     ]
-    ++ runs (service: service.config) (home.launchd.agents or { })
-    ++ runs (service: service.Service or { }) (home.systemd.user.services or { })
-    ++ runs launchdRuns (system.launchd.user.agents or { })
-    ++ runs systemdRuns (system.systemd.services or { })
-    ++ runs systemdRuns (system.systemd.user.services or { })
-    ++ written home.home.file
-    ++ written system.environment.etc
-    ++ named home.home.packages
-    ++ named system.environment.systemPackages;
+    ++ runs "home-manager's launchd.agents" (service: service.config) (home.launchd.agents or { })
+    ++ runs "home-manager's systemd.user.services" (service: service.Service or { }) (
+      home.systemd.user.services or { }
+    )
+    ++ runs "launchd.user.agents" launchdRuns (system.launchd.user.agents or { })
+    ++ runs "systemd.services" systemdRuns (system.systemd.services or { })
+    ++ runs "systemd.user.services" systemdRuns (system.systemd.user.services or { })
+    ++ written "home-manager's home.file" home.home.file
+    ++ written "environment.etc" system.environment.etc
+    ++ named "home-manager's home.packages" home.home.packages
+    ++ named "environment.systemPackages" system.environment.systemPackages;
 
   checks =
     checkEach "home-on-nixos" (modules: bareNixos [ (inAccount modules) ]) homeOnBoth
@@ -194,10 +227,12 @@ let
         src = self;
       };
 
-      every-module-is-checked =
-        holds "every-module-is-checked"
-          "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}"
-          (unchecked == [ ]);
+      every-module-is-checked = holds "every-module-is-checked" [
+        {
+          holds = unchecked == [ ];
+          broke = "checks.nix doesn't add these modules to a bare machine: ${lib.concatStringsSep ", " unchecked}";
+        }
+      ];
 
       # The personal modules on each class of machine, as the machines use them.
       nixos-personal = evaluates "nixos-personal" (bareNixos [ self.nixosModules.personal ]);
@@ -216,172 +251,224 @@ let
         let
           inherit (penelope.config) boot jitsusama;
         in
-        holds "penelope-boots-under-its-own-keys"
-          "penelope doesn't install onto its NVMe disk as core lays it out, or doesn't boot through lanzaboote with its own keys."
-          (
-            boot.lanzaboote.enable
-            && !boot.loader.systemd-boot.enable
-            && boot.lanzaboote.pkiBundle == "/var/lib/sbctl"
-            && lib.hasPrefix "/dev/disk/by-id/nvme-" jitsusama.disk.device
-            && boot.initrd.luks.devices ? ${jitsusama.disk.name}
-          );
+        holds "penelope-boots-under-its-own-keys" [
+          {
+            holds = boot.lanzaboote.enable;
+            broke = "penelope doesn't boot through lanzaboote.";
+          }
+          {
+            holds = !boot.loader.systemd-boot.enable;
+            broke = "penelope turns systemd-boot on, which lanzaboote replaces.";
+          }
+          {
+            holds = boot.lanzaboote.pkiBundle == "/var/lib/sbctl";
+            broke = "penelope's Secure Boot keys aren't its own, in /var/lib/sbctl.";
+          }
+          {
+            holds = lib.hasPrefix "/dev/disk/by-id/nvme-" jitsusama.disk.device;
+            broke = "penelope doesn't install onto its NVMe disk.";
+          }
+          {
+            holds = boot.initrd.luks.devices ? ${jitsusama.disk.name};
+            broke = "penelope's disk isn't encrypted as core lays it out.";
+          }
+        ];
 
       # Installed, penelope finishes itself with core's guide, which seals its
       # disk to the TPM.
-      penelope-finishes-with-the-guide =
-        holds "penelope-finishes-with-the-guide" "penelope has no guide to seal its disk to the TPM."
-          (
-            penelope.config.environment.etc ? "guide/machine.json"
-            && lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages
-          );
+      penelope-finishes-with-the-guide = holds "penelope-finishes-with-the-guide" [
+        {
+          holds = penelope.config.environment.etc ? "guide/machine.json";
+          broke = "penelope has no guide/machine.json for the guide to finish it from.";
+        }
+        {
+          holds = lib.any (
+            package: lib.getName package == "guide"
+          ) penelope.config.environment.systemPackages;
+          broke = "penelope has no guide to seal its disk to the TPM.";
+        }
+      ];
 
       # penelope signs in as optimus does: Joel's account by itself after the
       # disk unlocks, and core's greeter in his look after a logout, rather
       # than tuigreet alone, which is what a machine naming no account gets.
       penelope-greets-in-joels-look =
-        holds "penelope-greets-in-joels-look"
-          "penelope's greeter is tuigreet alone, or Joel's account doesn't sign in by itself."
-          (
-            let
-              inherit (penelope.config.services.greetd) settings;
-            in
-            (settings.initial_session.user or null) == "jitsusama"
-            && !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)))
-          );
+        let
+          inherit (penelope.config.services.greetd) settings;
+        in
+        holds "penelope-greets-in-joels-look" [
+          {
+            holds = (settings.initial_session.user or null) == "jitsusama";
+            broke = "Joel's account doesn't sign in by itself on penelope.";
+          }
+          {
+            holds =
+              !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)));
+            broke = "penelope's greeter is tuigreet alone.";
+          }
+        ];
 
       # The machine of this system's Neovim starts with every plugin and the
       # personal modules' Lua without an error: core's index of the plugins is
       # written by starting it once and loading each, and fails on the first
       # error. The personal Lua once broke here by requiring a plugin core now
-      # loads only when wanted. Each system starts its own machine's, so a Mac
-      # checks methuselah's without a Linux builder.
-      neovim-loads =
-        let
-          machine = if pkgs.stdenv.hostPlatform.isLinux then penelope else methuselah;
-        in
-        machine.config.home-manager.users.jitsusama.xdg.configFile."nvim/lua/waiting.lua".source;
+      # loads only when wanted.
+      neovim-loads = (homeOf machineHere).xdg.configFile."nvim/lua/waiting.lua".source;
+
+      # Claude Code's skills as the machine of this system installs them: the
+      # patches apply with no fuzz, so one upstream has moved past fails here.
+      claude-skills-build = (homeOf machineHere).home.file.".claude/skills/agentic-harness-pi".source;
+
+      # pi as the machine of this system installs it, built from its npm
+      # tarball and the lock file beside its package.
+      pi-builds =
+        lib.findFirst (package: lib.getName package == "pi-coding-agent")
+          (throw "The machine of this system installs no pi-coding-agent package.")
+          (homeOf machineHere).home.packages;
 
       # Both machines leave pi's settings file pi's, declaring their own settings
       # through core's option: a link to the file in the store is replaced by
       # core's merge, and the next switch refuses to clobber what's there.
-      pi-settings-stay-pis =
-        holds "pi-settings-stay-pis"
-          "A personal machine links pi's settings file, or doesn't declare its model through core."
-          (
-            lib.all
-              (
-                machine:
-                let
-                  home = machine.config.home-manager.users.jitsusama;
-                in
-                !(home.home.file ? ".pi/agent/settings.json")
-                && home.jitsusama.pi.settings.defaultModel or null == "claude-sonnet-5"
-              )
-              [
-                penelope
-                methuselah
-              ]
-          );
+      pi-settings-stay-pis = holds "pi-settings-stay-pis" (
+        onEachMachine (
+          name: machine:
+          let
+            home = homeOf machine;
+          in
+          [
+            {
+              holds = !(home.home.file ? ".pi/agent/settings.json");
+              broke = "${name} links pi's settings file.";
+            }
+            {
+              holds = home.jitsusama.pi.settings.defaultModel or null == "claude-sonnet-5";
+              broke = "${name} doesn't declare pi's model, claude-sonnet-5, through core.";
+            }
+          ]
+        )
+      );
 
       # Both machines' pi names each package once, so the harness loads from
       # the version pi-packages swaps in and not a second time from git.
-      pi-loads-each-package-once =
-        holds "pi-loads-each-package-once"
-          "A personal machine's pi names a package twice, or the harness other than first."
-          (
-            lib.all
-              (
-                machine:
-                let
-                  home = machine.config.home-manager.users.jitsusama;
-                  inherit (home.jitsusama.pi.settings) packages;
-                in
-                lib.allUnique packages
-                && !(lib.any (lib.hasPrefix "git:") packages)
-                && lib.hasSuffix "/github.com/Jitsusama/agentic-harness.pi/current" (lib.head packages)
-              )
-              [
-                penelope
-                methuselah
-              ]
-          );
+      pi-loads-each-package-once = holds "pi-loads-each-package-once" (
+        onEachMachine (
+          name: machine:
+          let
+            inherit ((homeOf machine).jitsusama.pi.settings) packages;
+          in
+          [
+            {
+              holds = lib.allUnique packages;
+              broke = "${name}'s pi names a package twice.";
+            }
+            {
+              holds = !(lib.any (lib.hasPrefix "git:") packages);
+              broke = "${name}'s pi loads a package from git.";
+            }
+            {
+              holds =
+                packages != [ ]
+                && lib.hasSuffix "/github.com/Jitsusama/agentic-harness.pi/current" (lib.head packages);
+              broke = "${name}'s pi doesn't load the harness first, from pi-packages.";
+            }
+          ]
+        )
+      );
 
       # Both machines have one pi, on Joel's own Claude plan through Claude
       # Code's login, with no pi-claude beside it and no other login named.
-      one-pi-on-the-plan =
-        holds "one-pi-on-the-plan"
-          "A personal machine's pi isn't on the Claude plan, or keeps pi-claude or a login folder of its own."
-          (
-            lib.all
-              (
-                machine:
-                let
-                  home = machine.config.home-manager.users.jitsusama;
-                in
-                home.jitsusama.pi.plan == "claude"
-                && home.jitsusama.pi.settings.defaultProvider or null == "claude-code"
-                && !(lib.any (package: lib.getName package == "pi-claude") home.home.packages)
-                && !(home.home.sessionVariables ? PI_CLAUDE_CONFIG_DIR)
-              )
-              [
-                penelope
-                methuselah
-              ]
-          );
+      one-pi-on-the-plan = holds "one-pi-on-the-plan" (
+        onEachMachine (
+          name: machine:
+          let
+            home = homeOf machine;
+          in
+          [
+            {
+              holds = home.jitsusama.pi.plan == "claude";
+              broke = "${name}'s pi isn't on the Claude plan.";
+            }
+            {
+              holds = home.jitsusama.pi.settings.defaultProvider or null == "claude-code";
+              broke = "${name}'s pi doesn't sign in through Claude Code.";
+            }
+            {
+              holds = !(lib.any (package: lib.getName package == "pi-claude") home.home.packages);
+              broke = "${name} keeps pi-claude.";
+            }
+            {
+              holds = !(home.home.sessionVariables ? PI_CLAUDE_CONFIG_DIR);
+              broke = "${name}'s pi keeps a login folder of its own, PI_CLAUDE_CONFIG_DIR.";
+            }
+          ]
+        )
+      );
 
       # Nothing on a personal machine needs devx or a Shopify sign-in: no
       # setting, file, package, path or service names devx, Shopify's proxy,
       # its LLM gateway or its tec toolchain. Generated files are read as
       # their settings write them, not as built, so this builds nothing.
-      no-devx-for-personal-work =
-        holds "no-devx-for-personal-work"
-          "A personal machine's configuration names devx, shopify-proxy, the llm-gateway or the tec toolchain."
-          (
-            lib.all (machine: !(lib.any namesShopify (whatItSets machine))) [
-              penelope
-              methuselah
-            ]
-          );
+      no-devx-for-personal-work = holds "no-devx-for-personal-work" (
+        onEachMachine (
+          name: machine:
+          let
+            sets = whatItSets machine;
+          in
+          map (
+            word:
+            let
+              naming = lib.filter (set: says word set.text) sets;
+            in
+            {
+              holds = naming == [ ];
+              broke = "${name}'s ${lib.concatMapStringsSep ", " (set: set.where) naming} names ${word}.";
+            }
+          ) shopifyWords
+        )
+      );
 
       # Both machines' git reads the ignores home-manager writes, core's among
       # them, which an excludes file of their own would stop it reading, and
       # names no commit template, which git refuses a commit for when it's gone.
-      git-reads-cores-ignores =
-        holds "git-reads-cores-ignores"
-          "A personal machine's git names its own excludes file or a commit template."
-          (
-            lib.all
-              (
-                machine:
-                let
-                  inherit ((git machine)) settings;
-                in
-                !(settings ? core.excludesFile) && !(settings ? commit.template)
-              )
-              [
-                penelope
-                methuselah
-              ]
-          );
+      git-reads-cores-ignores = holds "git-reads-cores-ignores" (
+        onEachMachine (
+          name: machine:
+          let
+            inherit ((git machine)) settings;
+          in
+          [
+            {
+              holds = !(settings ? core.excludesFile);
+              broke = "${name}'s git names its own excludes file.";
+            }
+            {
+              holds = !(settings ? commit.template);
+              broke = "${name}'s git names a commit template.";
+            }
+          ]
+        )
+      );
 
       # Both machines commit as Joel outside work, and sign every commit, as
       # core's signing tells git in the include it writes last.
-      one-personal-git =
-        holds "one-personal-git" "A personal machine's git has another email or doesn't sign."
-          (
-            lib.all
-              (
-                machine:
-                let
-                  signing = lib.findFirst (include: include ? contents.gpg.format) { } (git machine).includes;
-                in
-                (git machine).settings.user.email == "joel@grrbrr.ca" && (signing.contents.commit.gpgSign or false)
-              )
-              [
-                penelope
-                methuselah
-              ]
-          );
+      one-personal-git = holds "one-personal-git" (
+        onEachMachine (
+          name: machine:
+          let
+            signing = lib.findFirst (include: include ? contents.gpg.format) { } (git machine).includes;
+          in
+          [
+            {
+              holds = (git machine).settings.user.email == "joel@grrbrr.ca";
+              broke = "${name}'s git commits as another email than joel@grrbrr.ca.";
+            }
+            {
+              holds = signing.contents.commit.gpgSign or false;
+              broke = "${name}'s git doesn't sign every commit.";
+            }
+          ]
+        )
+      );
     };
 in
 checks

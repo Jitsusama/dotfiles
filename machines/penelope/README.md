@@ -23,11 +23,12 @@ nixos.nix                 # penelope as the guide installs it: its disk, SSH
                           # trusts, the builder optimus's Nix builds
                           # through, the lid kept awake on a charger, the
                           # account, and what it updates itself from
-node-holds-the-lid.rules  # polkit's rule letting mycelium's node keep it
+node-holds-the-lid.js     # polkit's rule letting mycelium's node keep it
                           # awake with its lid shut while it runs work
 home.nix                  # Joel's account: Chrome, mycelium's link to
-                          # methuselah, and what it declares to work placed
-                          # there
+                          # methuselah, what it declares to work placed
+                          # there, the work sessions its own may ask, and
+                          # the panel's variable refresh and saturation
 freeze-capture.nix        # while a freeze is chased: the kernel panics once
                           # the disk stops answering, so pstore keeps its log
 ```
@@ -115,6 +116,6 @@ Below 20% on battery it doesn't start.
 
 ## 🔑 Signing
 
-Commits are signed with keys sealed in its TPM, as core's signing module
-says; until they're made there, git can't sign, and their public halves join
-the signers in `personal/signers.nix`.
+Commits are signed with keys sealed in its TPM, as core's `tpm-signing`
+module says. The guide made them at its first start, on 2026-10-25, and
+their public halves are among the signers in `personal/signers.nix`.

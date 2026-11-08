@@ -1,13 +1,13 @@
 # Claude Code loads skills using the same Agent Skills standard pi does,
 # so agentic-harness.pi's skills are largely reusable, but several assume
-# a pi extension (quest-workflow, tdd-workflow, review-integration, etc.)
-# is present to back a tool the skill instructs the model to call. Loading
-# those in Claude Code would tell the model to call a tool that doesn't
-# exist, so this only ships an allowlist: skills with no pi-specific
-# tooling, plus a few with a small patch stripping the parts that assume
-# one. The patches are diffed against upstream at build time, so an
-# upstream change big enough to invalidate one fails the build instead of
-# silently shipping stale advice. skills.sh copies and patches them.
+# a pi extension (quest-workflow, work-integration, review-integration,
+# etc.) is present to back a tool the skill instructs the model to call. Loading those in
+# Claude Code would tell the model to call a tool that doesn't exist, so
+# this only ships an allowlist: skills with no pi-specific tooling, plus a
+# few with a small patch stripping the parts that assume one. skills.sh
+# copies and patches them, applying each patch with no fuzz, so an upstream
+# change to any line a patch reads fails the build instead of silently
+# shipping stale advice; the claude-skills check builds it.
 {
   runCommand,
   patch,
