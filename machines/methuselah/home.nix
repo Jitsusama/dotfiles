@@ -1,5 +1,6 @@
 # Joel's account on methuselah, on macOS today and on NixOS after the wipe:
-# his agents' commits named as theirs, and its links. On macOS, windows are
+# his agents' commits named as theirs, its links, and on NixOS its
+# browser. On macOS, windows are
 # left to macOS, with no tiling manager, and commits are signed with keys
 # in its Secure Enclave, which core.nix's workstation role brings, picking
 # his key at a terminal and the agents' over pipes.
@@ -18,6 +19,15 @@
   targets.darwin.currentHostDefaults = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     "com.apple.controlcenter".AirplayReceiverEnabled = false;
   };
+
+  # Chrome isn't built for ARM Linux, so on NixOS methuselah browses with
+  # Chromium, as penelope does with Chrome. Widevine is added so it plays
+  # what's protected, such as Spotify's web player, whose client isn't
+  # built for ARM Linux either. nixpkgs takes it from ChromeOS's ARM build,
+  # fixed by Asahi's widevine-installer to load on Asahi's 16K-page kernel.
+  home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+    (pkgs.chromium.override { enableWideVine = true; })
+  ];
 
   # Every zsh reads .zshenv, and only one a person types in reads .zshrc, so
   # what a harness commits carries the agents' name and what Joel commits,
