@@ -96,6 +96,29 @@ in
     };
     askers = [ "jitsusama" ];
   };
+  # macOS's firewall, which ships off: a MacBook joins any network it's
+  # taken to, and the AirPlay receiver and other sharing answer there on
+  # every interface. Software Apple or a known developer signed may still
+  # take connections, so Remote Login, and the SSH optimus's builds and
+  # mycelium's links come in through, are untouched, as is the Linux VM,
+  # which answers only on loopback. Stealth leaves a port nothing answers on
+  # silent, ping included. macOS asks the person at the screen before an
+  # unsigned program, which anything Nix builds is, takes connections from
+  # the network; on 7 November only Apple's own listened past loopback
+  # here, so nothing asks. That's why it's this Mac's setting, not core's: a
+  # Mac takes it once its own listeners are checked. This one is moving to
+  # NixOS, whose firewall core already sets.
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+    allowSigned = true;
+    allowSignedApp = true;
+  };
+  # The AirPlay receiver listens on every network the Mac joins, and this
+  # Mac works as a builder more than a screen. Playing to it again means
+  # setting this true.
+  system.defaults.CustomUserPreferences."com.apple.controlcenter".AirplayRecieverEnabled = false;
+
   # Read the changelog before changing it.
   system.stateVersion = 4;
 }
