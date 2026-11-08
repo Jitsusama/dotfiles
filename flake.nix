@@ -12,9 +12,9 @@
     nix-darwin.follows = "core/nix-darwin";
     treefmt-nix.follows = "core/treefmt-nix";
     # Joel's agent harness, pi's package of it, read as files. pi itself
-    # loads its package from git, unpinned (modules/pi), so this pin is only
-    # what Claude Code's skills are built from, and updating it moves pi
-    # nowhere.
+    # loads the copy pi-packages keeps current, which core.nix names, so this
+    # pin is only what Claude Code's skills are built from (modules/claude),
+    # and updating it moves pi nowhere.
     agentic-harness-pi = {
       url = "github:Jitsusama/agentic-harness.pi";
       flake = false;
@@ -77,6 +77,7 @@
           inherit (self) homeModules;
         };
         claude = moduleFrom ./modules/claude/home.nix { inherit agentic-harness-pi; };
+        neovim = moduleFrom ./modules/neovim/home.nix { inherit core; };
         pi = moduleFrom ./modules/pi/home.nix { inherit core; };
       };
       darwinModules.personal = moduleFrom ./personal/darwin.nix { inherit (self) homeModules; };

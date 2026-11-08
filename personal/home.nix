@@ -16,8 +16,8 @@
     # Where the realm set below is declared.
     core.homeModules.mycelium
     homeModules.claude
+    homeModules.neovim
     homeModules.pi
-    ../modules/neovim/home.nix
   ];
 
   jitsusama.identity.email = "joel@grrbrr.ca";
