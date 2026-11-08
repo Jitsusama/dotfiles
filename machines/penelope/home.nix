@@ -1,6 +1,6 @@
 # Joel's account on penelope: Chrome, its link to methuselah, what it
 # declares to work placed there, the work sessions its own may ask, its
-# panel's variable refresh, and the
+# panel's variable refresh and saturation, and the
 # home-manager release it was set up with. Commits are signed with keys
 # sealed in its TPM, as core's signing module says, which the guide made at
 # its first start; the personal modules list them among the allowed
@@ -33,6 +33,11 @@
   # panel's, so it belongs to core's Surface module once a hardware module
   # can set a screen's lines; until then penelope, the one Surface, says it.
   jitsusama.niri.outputs."eDP-1" = [ "variable-refresh-rate" ];
+
+  # The panel's primaries are sRGB's, so niri shows it accurately, and
+  # beside a vivid screen Joel found it insanely washed out (2026-11-07). Shown more colourful in the display engine; the Dell
+  # beside it stays accurate. Chosen by eye with him.
+  jitsusama.niri.panelSaturation = 1.25;
 
   home.stateVersion = "24.05";
 }

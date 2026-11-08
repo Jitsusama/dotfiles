@@ -91,11 +91,13 @@ CI runs it.
 
 ## penelope
 
-penelope is the laptop the guide that installs core.nix machines is proven
-on, so it's wiped and installed again often. Its machine file is the system
-the guide installs: core's encrypted disk and Secure Boot. Never switch the
-install it runs today to it, since that install has a plain disk the new
-file doesn't describe; its [README](machines/penelope/README.md) says more.
+penelope is the laptop the guide that installs core.nix machines was proven
+on, and it runs what the guide installs: core's encrypted disk and Secure
+Boot. It follows this repository's main and core.nix's main by itself
+(update-to-main's follower) and builds its own system, so a merge to either
+reaches it within minutes. A change that compiles its kernel has the kernel
+built on a lent builder and copied to it first, since it's a small laptop
+Joel uses. Its [README](machines/penelope/README.md) says more.
 
 ## Changing core.nix Too
 
