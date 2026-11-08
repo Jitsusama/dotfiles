@@ -5,6 +5,14 @@
 let
   signers = import ../../personal/signers.nix;
   systemctl = lib.getExe' config.systemd.package "systemctl";
+  # Who may move a main penelope builds: GitHub, merging a change, or Joel
+  # with a key of his own; an agent's key alone never does.
+  mergers = {
+    openpgp = [ ../../personal/github-merges.asc ];
+    ssh = map (
+      key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
+    ) signers.joel;
+  };
 in
 {
   networking.hostName = "penelope";
@@ -98,22 +106,23 @@ in
   # starts without asking again. Without it the greeter is tuigreet alone.
   jitsusama.login.account = "jitsusama";
 
-  # penelope updates itself to this repository's main when Joel's account
-  # asks, mycelium's node among what runs as it, so no switch waits on him
-  # here. As on methuselah, main counts only when GitHub signed it merging a
-  # change, or Joel did with a key of his own; an agent's key alone never
-  # moves it. A changed kernel waits for the next boot, and below 20% on
-  # battery it doesn't start.
+  # penelope updates itself to this repository's main, with core.nix at its
+  # own main as optimus runs it rather than where the lock last pinned it.
+  # Joel's account follows both and asks whenever either moves, so no update
+  # waits on him or on a lock bump; mycelium's node may ask too. As on
+  # methuselah, main counts only when GitHub signed it merging a change, or
+  # Joel did with a key of his own. A changed kernel waits for the next boot,
+  # and below 20% on battery it doesn't start.
   jitsusama.update-to-main = {
     repository = "https://github.com/Jitsusama/dotfiles";
     output = "nixosConfigurations.penelope.config.system.build.toplevel";
-    signers = {
-      openpgp = [ ../../personal/github-merges.asc ];
-      ssh = map (
-        key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
-      ) signers.joel;
+    signers = mergers;
+    follows.core = {
+      repository = "https://github.com/Jitsusama/core.nix";
+      signers = mergers;
     };
     askers = [ "jitsusama" ];
+    follower = "jitsusama";
     # After a live switch it's whole when the greeter Joel signs in at, its
     # Wi-Fi and the SSH optimus reaches it by all run; otherwise it goes back.
     # One unit each, since is-active passes when any one of several is.
