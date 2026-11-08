@@ -1,7 +1,7 @@
 # methuselah once it runs NixOS, Joel's personal MacBook Air M2, still a
-# builder for optimus: its disk as the guide will lay it out in the space
-# Asahi's installer leaves free, the account, its links, and what it updates
-# itself from. The hardware, its kernel and boot chain, niri, greetd and
+# builder for optimus, as the guide installs it: its disk laid out in the
+# space Asahi's installer leaves free, the account, its links, and what it
+# updates itself from. The hardware, its kernel and boot chain, niri, greetd and
 # networking come from core.nix. It's built and checked here before the Mac
 # is wiped; until then, darwin.nix is what the Mac runs.
 { config, lib, ... }:
@@ -16,59 +16,24 @@ let
       key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
     ) signers.joel;
   };
-  # Light compression, no access-time writes, and discards in the
-  # background, as core lays out a disk the guide owns whole.
-  btrfs = subvolume: [
-    "subvol=${subvolume}"
-    "compress=zstd:1"
-    "noatime"
-    "discard=async"
-  ];
-  volume = "/dev/mapper/system";
 in
 {
   networking.hostName = "methuselah";
 
-  # macOS keeps its own partitions and Asahi's installer makes the ESP,
-  # whose partition UUID it leaves in the device tree for the guide to read
-  # (/proc/device-tree/chosen/asahi,efi-system-partition). The guide makes
-  # one encrypted partition in the free space after them, holding Btrfs with
-  # the subvolumes core's disk layout uses, unlocked by either YubiKey or
-  # the recovery words, since the Mac has no TPM. The ESP's UUID here is the
-  # one the guide will write; until the install it names no partition.
-  boot.initrd.luks.devices.system = {
-    device = "/dev/disk/by-partlabel/system";
-    allowDiscards = true;
-    bypassWorkqueues = true;
-    crypttabExtraOpts = [ "fido2-device=auto" ];
-  };
-  fileSystems = {
-    "/boot" = {
-      device = "/dev/disk/by-partuuid/00000000-0000-0000-0000-000000000000";
-      fsType = "vfat";
-      options = [ "umask=0077" ];
-    };
-    "/" = {
-      device = volume;
-      fsType = "btrfs";
-      options = btrfs "@";
-    };
-    "/home" = {
-      device = volume;
-      fsType = "btrfs";
-      options = btrfs "@home";
-    };
-    "/nix" = {
-      device = volume;
-      fsType = "btrfs";
-      options = btrfs "@nix";
-    };
-    "/var/log" = {
-      device = volume;
-      fsType = "btrfs";
-      options = btrfs "@log";
-      neededForBoot = true;
-    };
+  # macOS keeps its own partitions, and Asahi's installer makes the boot
+  # partition m1n1 names. The guide makes one encrypted partition in the
+  # free space beside them, laid out as core lays out a whole disk, and
+  # names that boot partition for it; either YubiKey or the recovery words
+  # open it, since the Mac has no TPM. The Mac has one internal disk, and a
+  # stick is a USB one, so nvme0n1 is always it.
+  jitsusama.disk = {
+    device = "/dev/nvme0n1";
+    shared = true;
+    # As much as its 24 GB of memory.
+    swapSize = "24G";
+    # The guide lays the disk out with a first key it holds in memory, and
+    # takes it off once the YubiKeys and the recovery key are enrolled.
+    installKey = "/run/guide/install-key";
   };
 
   users.users.jitsusama = {

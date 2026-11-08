@@ -30,8 +30,10 @@ before then:
 
 - **Keys:** with no TPM or Secure Enclave, its signing and link keys need
   a new home, a YubiKey or a key on the encrypted disk.
-- **Disk:** the ESP's UUID and the encrypted partition are written by the
-  guide at the install.
+- **Disk:** Asahi's installer shrinks macOS and makes the boot partition;
+  then the guide, from the stick `nix run .#methuselah-guide` writes on
+  optimus or the Mac, makes the encrypted partition in the free space,
+  leaving macOS's partitions as they are (core's `jitsusama.disk.shared`).
 - **Builds:** it builds aarch64-linux for optimus natively; its x86_64 and
   aarch64-darwin builds for optimus end with macOS.
 
