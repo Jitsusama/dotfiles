@@ -154,7 +154,9 @@ let
       ofAccount = where: text: set "home-manager's ${where}" text;
       written =
         option: files:
-        lib.mapAttrsToList (target: file: set "${option}.${target}" (target + toString (file.text or null))) files;
+        lib.mapAttrsToList (
+          target: file: set "${option}.${target}" (target + toString (file.text or null))
+        ) files;
       named =
         option: packages:
         map (package: set "${option} ${lib.getName package}" (lib.getName package)) packages;
@@ -280,7 +282,9 @@ let
           broke = "penelope has no guide/machine.json for the guide to finish it from.";
         }
         {
-          holds = lib.any (package: lib.getName package == "guide") penelope.config.environment.systemPackages;
+          holds = lib.any (
+            package: lib.getName package == "guide"
+          ) penelope.config.environment.systemPackages;
           broke = "penelope has no guide to seal its disk to the TPM.";
         }
       ];
@@ -298,7 +302,8 @@ let
             broke = "Joel's account doesn't sign in by itself on penelope.";
           }
           {
-            holds = !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)));
+            holds =
+              !(lib.hasInfix "tuigreet" (lib.head (lib.splitString " " settings.default_session.command)));
             broke = "penelope's greeter is tuigreet alone.";
           }
         ];
