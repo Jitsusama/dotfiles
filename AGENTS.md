@@ -29,7 +29,9 @@ jitsusama.identity.email = "joel@grrbrr.ca";
 
 1. core.nix's roles: `workstation` and `graphical`, plus `laptop` and the
    machine's hardware on NixOS, and for a machine the guide installs,
-   `disko`, `lanzaboote` and `guide`
+   `disko`, `lanzaboote` and `guide`; and the core modules a machine takes
+   on its own, as `flake.nix` lists them, such as `update-to-main` on both
+   and `linux-builder` on methuselah
 2. the personal modules, `personal/`, which import the tools' modules in
    `modules/`
 3. `machines/<machine>/`, settings for that one machine
@@ -37,8 +39,9 @@ jitsusama.identity.email = "joel@grrbrr.ca";
 A file that needs a flake input takes it as an outer function, and
 `flake.nix` gives it with `moduleFrom`, as core.nix gives its roles theirs:
 `personal/home.nix` takes `core` and this repository's `homeModules`,
-`modules/claude` takes the input it reads, and `modules/pi` takes `core`
-for the module declaring its settings. Nothing goes through `specialArgs`.
+`modules/claude` takes the input it reads, `modules/neovim` takes `core`
+for the Neovim its Lua builds on, and `modules/pi` takes `core` for the
+module declaring its settings. Nothing goes through `specialArgs`.
 
 This repository follows core.nix's [conventions][conventions] as they're
 written, and holds itself to core's [testing][testing] the same way: a
@@ -72,9 +75,13 @@ CI runs it.
   account on a bare machine of each class. `every-module-is-checked` fails
   until it is.
 - A promise the machines make, such as penelope booting under its own
-  Secure Boot keys, gets a `holds` check with a message saying what broke.
+  Secure Boot keys, gets a `holds` check: a list of conditions, each with
+  what broke when it doesn't hold, naming the machine, so a failure says
+  which.
 - Evaluating never runs anything, so what only fails when it runs needs a
-  check that builds it, as `neovim-loads` starts penelope's Neovim.
+  check that builds it, as `neovim-loads` starts the machine's Neovim,
+  `claude-skills-build` patches Claude Code's skills and `pi-builds` builds
+  pi.
 - A doc names only what exists: `docs-name-what-exists`, core's, fails on a
   link or a backticked path that names nothing, so a move or a rename fixes
   its mentions in the same change. A mention of something deliberately
@@ -106,10 +113,36 @@ merges, try both together with `--override-input core path:$HOME/src/core.nix`.
 
 ## Commit Signing
 
-methuselah signs from its Secure Enclave: [the
-specification](docs/commit-signing-spec.md) says how and [the
-rationale](docs/commit-signing-rationale.md) says why. Read both before
+Every machine signs with keys in its hardware, as core.nix builds it:
+methuselah's Secure Enclave and penelope's TPM. Only who may sign lives
+here, in `personal/signers.nix`. [The
+specification](docs/commit-signing-spec.md) says what signs now and [the
+rationale](docs/commit-signing-rationale.md) says why; read both before
 changing it.
+
+## Bindings
+
+How this repository holds the repository quality standard:
+
+- **Gate:** `nix flake check --keep-going`, every check in `checks.nix`,
+  run by hand before a merge since no CI runs here.
+- **Linters:** core.nix's, with its settings, through
+  `core.treefmtModules.treefmt`: nixfmt, deadnix and statix for Nix,
+  shellcheck for shell, stylua and luacheck for Lua (`.luacheckrc` says
+  which program runs which file, and is read as Lua itself), and rumdl for
+  Markdown. `treefmt.nix` adds biome, with every rule on but those
+  `biome.jsonc` turns off with their reasons, for polkit's JavaScript. The
+  `formatting` check runs them all, and fails on a file none reads.
+- **Data, read by no linter:** pi's `package-lock.json`, which npm writes,
+  and `personal/github-merges.asc`, GitHub's key, listed in `treefmt.nix`;
+  and treefmt-nix's own list of locks, patches, `LICENSE` and git's files.
+- **Exemptions:** shellcheck runs without its optional checks, as core's
+  module sets it; turning them on belongs in core. `skills.sh` disables
+  SC2154 at its top, saying why.
+- **Tests:** every test is a check in `checks.nix`, evaluating or building;
+  there are no VM or browser tests, so no sleeps and no skips.
+- **Limits:** no check holds files to 800 lines or folders to 40 entries,
+  since core exports none; review holds them.
 
 [core]: https://github.com/Jitsusama/core.nix
 [conventions]: https://github.com/Jitsusama/core.nix/blob/main/docs/conventions.md
