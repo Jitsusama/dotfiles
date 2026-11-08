@@ -25,6 +25,7 @@
         "mycelium": "mycelium",
         "neovim-pi": "neovim-pi",
         "nix-darwin": "nix-darwin",
+        "nixos-apple-silicon": "nixos-apple-silicon",
         "nixpkgs": "nixpkgs",
         "printf": "printf",
         "qmk": "qmk",
@@ -34,11 +35,11 @@
         "wallpapers": "wallpapers"
       },
       "locked": {
-        "lastModified": 1794092557,
-        "narHash": "sha256-gieEODIujcvndgbciWedpTMAASh/slWFyeYBG7ohPOY=",
+        "lastModified": 1794107075,
+        "narHash": "sha256-uGUguZ6LWejJWpiNrQg1zMuFEw+IL9xYSQd+zwXC81E=",
         "owner": "Jitsusama",
         "repo": "core.nix",
-        "rev": "e0d4f43bce07c2d21dcff8574f7cf1037a5701a3",
+        "rev": "75a5e01809f01ecfe8c3849ccc56c45030b13f11",
         "type": "github"
       },
       "original": {
@@ -160,11 +161,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793988472,
-        "narHash": "sha256-9DfMVeNufhgpOYOg+HiNCgjWIT71bUqY0od/2Kt2nTg=",
+        "lastModified": 1794095393,
+        "narHash": "sha256-sq8gkou9Rr+iWR95OeQNtd57doTDkUa47KQN3IabmVk=",
         "owner": "Jitsusama",
         "repo": "mycelium",
-        "rev": "68e01faa7e2fac35a4782491960bff9b67b115e1",
+        "rev": "972a1518dc1c82ae55d59d6dad982c68bd869dff",
         "type": "github"
       },
       "original": {
@@ -207,6 +208,31 @@
       "original": {
         "owner": "nix-darwin",
         "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "nixos-apple-silicon": {
+      "inputs": {
+        "flake-compat": [
+          "core"
+        ],
+        "nixpkgs": [
+          "core",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793951909,
+        "narHash": "sha256-mA17MzIYFxeoo6mOyuspry6WIm7/f8m7gDAcy3o/jj4=",
+        "owner": "nix-community",
+        "repo": "nixos-apple-silicon",
+        "rev": "73301d52f114946d53e62902692c36b0fea0c904",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixos-apple-silicon",
+        "rev": "73301d52f114946d53e62902692c36b0fea0c904",
         "type": "github"
       }
     },

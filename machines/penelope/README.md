@@ -1,8 +1,8 @@
 # penelope
 
-Joel's personal Surface Laptop 4. It's also where the guide that installs
-core.nix machines from a USB stick is proven, so it's wiped and installed
-again often, and nothing on it is dear.
+Joel's personal Surface Laptop 4, which he works on. It's also where the
+guide that installs core.nix machines from a USB stick was proven, and it
+runs what that guide installed.
 
 ## 💻 The Hardware
 
