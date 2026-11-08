@@ -40,6 +40,12 @@ in
   # Joel restarts a wedged VM from optimus over SSH, where sudo would want
   # this Mac's password; this lets him run just those two restarts without.
   jitsusama.linux-builder.restartableBy = [ config.system.primaryUser ];
+  # The VM is optimus's only native aarch64 builder, and a kernel or a whole
+  # NixOS system fills core's 60 GiB. 150 leaves this Mac's own disk about
+  # 34 GB. The image is only made when missing, so a larger size takes hold
+  # once /var/lib/linux-builder-vz/nixos.qcow2 is removed and the VM
+  # restarted.
+  jitsusama.linux-builder.disk = 150 * 1024;
 
   # The account optimus's Nix signs in as to build here. Its key may only
   # speak Nix's daemon protocol, never open a shell, and forward only to
