@@ -3,8 +3,22 @@
 # left to macOS, with no tiling manager, and commits are signed with keys
 # in its Secure Enclave, which core.nix's workstation role brings, picking
 # his key at a terminal and the agents' over pipes.
-{ config, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  # On macOS, the AirPlay receiver listens on every network the Mac joins,
+  # and this Mac works as a builder more than a screen. macOS reads the
+  # setting from this host's own defaults, spelled as here, when Control
+  # Center starts, at the next sign-in; playing to it again means setting
+  # it true.
+  targets.darwin.currentHostDefaults = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    "com.apple.controlcenter".AirplayReceiverEnabled = false;
+  };
+
   # Every zsh reads .zshenv, and only one a person types in reads .zshrc, so
   # what a harness commits carries the agents' name and what Joel commits,
   # his own.
