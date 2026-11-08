@@ -11,8 +11,26 @@ darwin.nix          # the Mac: its name, Nix's settings and build group, the acc
                     # and the keys mycelium's links from penelope and optimus
                     # sign in with, and the builder account optimus's Nix
                     # signs in as, and what it updates itself from
-home.nix            # Joel's account: the agents' committer name
+nixos.nix           # the same Mac once it's wiped onto NixOS: its disk in the
+                    # space Asahi's installer leaves, the account, its links,
+                    # the builder account and what it updates itself from
+home.nix            # Joel's account, on either: the agents' committer name
 ```
+
+## 🐧 Onto NixOS
+
+methuselah moves from macOS to NixOS on core.nix's MacBook Air M2
+hardware, which brings Asahi's kernel and boot chain. `nixos.nix` is built
+and checked here (`methuselah-on-nixos`) while the Mac still runs
+`darwin.nix`; the wipe waits on Joel at the Mac. What it still needs
+before then:
+
+- **Keys:** with no TPM or Secure Enclave, its signing and link keys need
+  a new home, a YubiKey or a key on the encrypted disk.
+- **Disk:** the ESP's UUID and the encrypted partition are written by the
+  guide at the install.
+- **Builds:** it builds aarch64-linux for optimus natively; its x86_64 and
+  aarch64-darwin builds for optimus end with macOS.
 
 ## 🚀 Applying It
 

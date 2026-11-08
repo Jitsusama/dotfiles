@@ -93,6 +93,20 @@
         ];
       };
 
+      # methuselah as it will run once it's wiped onto NixOS, built and checked
+      # beside the Mac it is today.
+      nixosConfigurations.methuselah = nixpkgs.lib.nixosSystem {
+        modules = [
+          core.nixosModules.workstation
+          core.nixosModules.graphical
+          core.nixosModules.laptop
+          core.nixosModules.apple-macbook-air-m2-a2681
+          core.nixosModules.update-to-main
+          self.nixosModules.personal
+          ./machines/methuselah/nixos.nix
+        ];
+      };
+
       nixosConfigurations.penelope = nixpkgs.lib.nixosSystem {
         modules = [
           core.nixosModules.workstation

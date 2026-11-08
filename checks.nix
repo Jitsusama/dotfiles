@@ -104,6 +104,7 @@ let
 
   inherit (self.nixosConfigurations) penelope;
   inherit (self.darwinConfigurations) methuselah;
+  methuselahOnNixos = self.nixosConfigurations.methuselah;
   git = machine: machine.config.home-manager.users.jitsusama.programs.git;
 
   # What only a Shopify machine reaches for: devx, the proxy and LLM gateway
@@ -204,6 +205,9 @@ let
 
       penelope = evaluates "penelope" penelope;
       methuselah = evaluates "methuselah" methuselah;
+      # methuselah as NixOS on its M2, evaluated from any system before the
+      # Mac is wiped onto it.
+      methuselah-on-nixos = evaluates "methuselah-on-nixos" methuselahOnNixos;
 
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
