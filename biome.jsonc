@@ -1,0 +1,17 @@
+// biome lints the JavaScript polkit runs (treefmt.nix), with every rule on
+// but the one below, and this file itself. polkit's engine is Duktape, which
+// parses no arrow functions, so the rule asking for one is off, and it gives
+// every rule its `polkit` object. Nothing here is formatted by biome.
+{
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "javascript": { "globals": ["polkit"] },
+  "linter": {
+    "rules": {
+      "preset": "all",
+      "complexity": {
+        "useArrowFunction": "off"
+      }
+    }
+  }
+}

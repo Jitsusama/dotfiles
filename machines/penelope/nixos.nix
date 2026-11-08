@@ -85,7 +85,7 @@ in
   # block against that: the rule lets mycelium's node, a service of Joel's
   # with no session, hold one while it runs work.
   services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
-  security.polkit.extraConfig = builtins.readFile ./node-holds-the-lid.rules;
+  security.polkit.extraConfig = builtins.readFile ./node-holds-the-lid.js;
 
   # penelope builds for optimus: optimus's nix-daemon logs in as builder with
   # its own key and speaks Nix's protocol, and core's nix-daemon module keeps
