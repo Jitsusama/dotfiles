@@ -2,8 +2,8 @@
 # builder for optimus, as the guide installs it: its disk laid out in the
 # space Asahi's installer leaves free, the account, its links, and what it
 # updates itself from. The hardware, its kernel and boot chain, niri, greetd and
-# networking come from core.nix. It's built and checked here before the Mac
-# is wiped; until then, darwin.nix is what the Mac runs.
+# networking come from core.nix. macOS stays beside it. It's built and checked
+# here before NixOS is installed; until then, darwin.nix is all the Mac runs.
 { config, lib, ... }:
 let
   signers = import ../../personal/signers.nix;
@@ -47,7 +47,7 @@ in
   # nothing, pinned to its end of a link or an attach as that machine, so
   # neither runs a shell here, as on the Mac today. methuselah's own link
   # key has no TPM or Secure Enclave to live in on Linux; where it lives is
-  # decided before the wipe.
+  # decided before the install.
   jitsusama.mycelium = {
     account = "jitsusama";
     linkedFrom.personal.penelope = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAKy/GVdnQYujyvYnzwc+AwH+HcZdT9U2jnF9xotfm/5cR01wwsViK6QTwoQbKHcgCcUyixzfYLM7/ClDDX5PTM= jitsusama@penelope agents";
