@@ -65,7 +65,9 @@
     pkgs.watch
 
     # Network and security
-    pkgs.awscli
+    # Version 2, since nixpkgs of 6 November pins version 1 to an older botocore than it ships,
+    # so version 1 fails to build and the binary cache holds none.
+    pkgs.awscli2
     pkgs.gitleaks
     pkgs.lychee
 
