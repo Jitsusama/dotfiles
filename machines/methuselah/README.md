@@ -11,7 +11,7 @@ darwin.nix          # the Mac: its name, Nix's settings and build group, the acc
                     # and the keys mycelium's links from penelope and optimus
                     # sign in with, and the builder account optimus's Nix
                     # signs in as, and what it updates itself from
-nixos.nix           # the same Mac once it's wiped onto NixOS: its disk in the
+nixos.nix           # the same Mac once NixOS runs beside macOS: its disk in the
                     # space Asahi's installer leaves, the account, its links,
                     # the builder account and what it updates itself from
 home.nix            # Joel's account, on either: the agents' committer name,
@@ -22,11 +22,11 @@ home.nix            # Joel's account, on either: the agents' committer name,
 
 ## 🐧 Onto NixOS
 
-methuselah moves from macOS to NixOS on core.nix's MacBook Air M2
-hardware, which brings Asahi's kernel and boot chain. `nixos.nix` is built
-and checked here (`methuselah-on-nixos`) while the Mac still runs
-`darwin.nix`; the wipe waits on Joel at the Mac. What it still needs
-before then:
+methuselah gains NixOS beside macOS, on core.nix's MacBook Air M2
+hardware, which brings core's own kernel and boot chain for it. macOS
+stays, one choice away at start. `nixos.nix` is built and checked here
+(`methuselah-on-nixos`) while the Mac still runs only `darwin.nix`; the
+install waits on Joel at the Mac. What it still needs before then:
 
 - **Keys:** with no TPM or Secure Enclave, its signing and link keys need
   a new home, a YubiKey or a key on the encrypted disk.
@@ -35,7 +35,7 @@ before then:
   optimus or the Mac, makes the encrypted partition in the free space,
   leaving macOS's partitions as they are (core's `jitsusama.disk.shared`).
 - **Builds:** it builds aarch64-linux for optimus natively; its x86_64 and
-  aarch64-darwin builds for optimus end with macOS.
+  aarch64-darwin builds for optimus come only while it runs macOS.
 
 ## 🚀 Applying It
 

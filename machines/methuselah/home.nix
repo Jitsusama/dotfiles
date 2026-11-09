@@ -1,4 +1,4 @@
-# Joel's account on methuselah, on macOS today and on NixOS after the wipe:
+# Joel's account on methuselah, on macOS and on the NixOS beside it:
 # his agents' commits named as theirs, its links, and on NixOS its
 # browser. On macOS, windows are
 # left to macOS, with no tiling manager, and commits are signed with keys
