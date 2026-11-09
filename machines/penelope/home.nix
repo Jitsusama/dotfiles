@@ -1,13 +1,27 @@
 # Joel's account on penelope: Chrome, its link to methuselah, what it
 # declares to work placed there, the work sessions its own may ask, its
 # panel's variable refresh and saturation, and the
-# home-manager release it was set up with. Commits are signed with keys
+# home-manager release it was set up with, and the feed for its Claude plan. Commits are signed with keys
 # sealed in its TPM, as core's signing module says, which the guide made at
 # its first start; the personal modules list them among the allowed
 # signers.
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   home.packages = [ pkgs.google-chrome ];
+
+  # Claude Code is signed in here, so the plan's feed reads how much of its
+  # five hours and week is used, and which plan it is, for the budget the
+  # personal modules declare.
+  jitsusama.spend-watch.feeds.claude = {
+    label = "Claude";
+    command = [ (lib.getExe config.jitsusama.spend-watch.claudePlanFeed) ];
+    budget = "claude";
+  };
 
   # penelope dials methuselah, whose Remote Login is on, so the two carry
   # each other's sessions; nixos.nix pins methuselah's host key, and
