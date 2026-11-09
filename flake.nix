@@ -105,8 +105,8 @@
         ];
       };
 
-      # methuselah as it will run once it's wiped onto NixOS, built and checked
-      # beside the Mac it is today.
+      # methuselah as it will run once NixOS is installed beside macOS, built
+      # and checked beside the Mac it is today.
       nixosConfigurations.methuselah = nixpkgs.lib.nixosSystem {
         modules = [
           core.nixosModules.workstation
