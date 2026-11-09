@@ -5,19 +5,26 @@
 {
   home-manager.sharedModules = [
     homeModules.personal
-    {
-      # pi here runs on Joel's own Claude plan (modules/pi), so spend-watch
-      # counts its turns against that plan rather than as one budget at list
-      # prices. Which plan it is, and its limits, are the sign-in's to say: a
-      # machine whose Claude Code is signed in adds the plan's feed, which
-      # reads them. It's on NixOS alone, since spend-watch runs only on Linux.
-      jitsusama.spend-watch.budgets.claude = {
-        label = "Claude plan";
-        kind = "plan";
-        whose = "own";
-        default = true;
-        providers = [ "claude-code" ];
-      };
-    }
+    (
+      { lib, options, ... }:
+      {
+        # pi here runs on Joel's own Claude plan (modules/pi), so spend-watch
+        # counts its turns against that plan rather than as one budget at list
+        # prices. Which plan it is, and its limits, are the sign-in's to say: a
+        # machine whose Claude Code is signed in adds the plan's feed, which
+        # reads them. It's on NixOS alone, since spend-watch runs only on Linux,
+        # and only where core's roles bring spend-watch, which this module's
+        # own check, on a bare NixOS, doesn't.
+        config = lib.optionalAttrs (options ? jitsusama.spend-watch) {
+          jitsusama.spend-watch.budgets.claude = {
+            label = "Claude plan";
+            kind = "plan";
+            whose = "own";
+            default = true;
+            providers = [ "claude-code" ];
+          };
+        };
+      }
+    )
   ];
 }
