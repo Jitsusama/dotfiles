@@ -61,15 +61,6 @@ in
   # holds its route, and is found there.
   jitsusama.network.trustedCables = [ "d0:c1:b5:22:58:b9" ];
 
-  # Joel's two YubiKeys, enrolled on optimus on 10 November for the origin
-  # every machine shares, so a touch of either answers polkit when it asks
-  # an administrator, as for run0 or a switch to a system penelope has
-  # never run; the password still works with neither there.
-  jitsusama.yubikey.administers.jitsusama = [
-    "+QwSPyArbHjhi4bI/QBWMGbFzTa4lxayiJ95++UoWkh23ldVwryhFXdexdY2HAxXxqMYI/+m4SGUtF8YDkdlKg==,/KrG5CBRkJTQbmbh+WEMMA34f5SGU4OFUREpy4+EelLNu4XT80VFTI3XygDjvWwBN9TIncwQIyNEcSBa59hYXA==,es256,+presence"
-    "DyTa3/drVhRNgh2wBA5Yk1xDjwzp9R3FFWMYUgV6pORT4SWJ7p8kfdbIPzGfygayVLzzPjYsH1q54YItn5NK2g==,UDjq1Bw49fiKuiWN2IhQY92Hx3vlhWoyHKpwUNUIga4Usm9N/T8KYkhVxiKnqPlXpImMAtcBqkbG6Naf93AIuQ==,es256,+presence"
-  ];
-
   # The resolver answers a .local name with a link-local IPv6 address and
   # no interface, which ssh can't connect to, so it asks for IPv4 alone.
   programs.ssh.extraConfig = ''
