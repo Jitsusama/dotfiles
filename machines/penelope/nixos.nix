@@ -71,6 +71,13 @@ in
     "jitsusama"
     "builder"
   ];
+  # optimus signs what it builds with this key, so what it copies here is
+  # taken as a cache's would be, without trusting the account that copies
+  # it. What optimus built before it had the key comes unsigned, which only
+  # a trusted account may copy here.
+  nix.settings.extra-trusted-public-keys = [
+    "optimus-1:kfGUJvh5HrsPAj6xUj7OqyJjATPJz0ouP98sRnjL4Uo="
+  ];
   # Two builds at once, each with three compilers, so a C++ build stays near
   # six compilers and 1.5 GB in penelope's 7.2. At Nix's default, every
   # thread at once, openvino-genai ran nine compilers beside rustc, took
