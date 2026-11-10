@@ -136,6 +136,8 @@
           # While the freeze of 2026-10-26 is chased; freeze-capture.nix says why.
           core.nixosModules.disk-loss-panic
           ./machines/penelope/freeze-capture.nix
+          # For one boot, to time amdgpu's load; module-load-timing.nix says why.
+          ./machines/penelope/module-load-timing.nix
         ];
       };
 
