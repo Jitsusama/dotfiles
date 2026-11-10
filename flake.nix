@@ -157,9 +157,27 @@
       # or a Mac: its whole install, sealed in the vault, for the guide on the
       # stick to install with no network. The Nano is enrolled first, since
       # it's the one almost always plugged in.
-      packages.x86_64-linux.guide = core.lib.guide penelopeGuide;
+      #
+      # It carries macOS 27.2's restore image too, so the same stick booted
+      # on any x86-64 laptop puts macOS back on methuselah or equilibrius
+      # when neither starts (`guide revive`); the image lists both. It's
+      # 25.6 GB, built where the stick is written, so a machine already
+      # holding a checked copy adds it first with `nix-store --add-fixed
+      # sha256`. When Apple stops signing it, take the newest from Apple.
+      packages.x86_64-linux.guide = core.lib.guide (
+        penelopeGuide
+        // {
+          appleRestores = [
+            {
+              url = "https://updates.cdn-apple.com/2026FallFCS/c9671975-52db-4fb5-9af2-00217169ba8d/UniversalMac_27.2_26B123_Restore.ipsw";
+              hash = "sha256-ZhOzToWJ2yICoB7DeiZIr7FB7OE0KBdRg/jz44Q4U08=";
+            }
+          ];
+        }
+      );
       # The stick a Mac writes is the same x86-64 Linux one, which it takes
-      # from a cache or an x86-64 Linux builder.
+      # from a cache or an x86-64 Linux builder, without macOS's image,
+      # which no builder has room to build.
       packages.aarch64-darwin.guide = core.lib.guide (penelopeGuide // { host = "aarch64-darwin"; });
       # `nix run .#methuselah-guide` writes methuselah's stick the same way:
       # aarch64 Linux on Asahi's kernel, from optimus or from the Mac itself,
