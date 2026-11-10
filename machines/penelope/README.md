@@ -31,6 +31,8 @@ home.nix                  # Joel's account: Chrome, mycelium's link to
                           # the panel's variable refresh and saturation
 freeze-capture.nix        # while a freeze is chased: the kernel panics once
                           # the disk stops answering, so pstore keeps its log
+module-load-timing.nix    # for one boot: kernel probes log each step of
+                          # every module's load, to find what holds amdgpu
 ```
 
 ## 🚀 Installing It
