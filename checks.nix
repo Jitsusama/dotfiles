@@ -449,6 +449,28 @@ let
         )
       );
 
+      # Neither machine's Nix trusts a person's account, or a group one is in:
+      # a trusted account sets the daemon's options that run as root, so
+      # every program running as it, agents included, would be root without
+      # a password. Only optimus's builds, through builder, are trusted.
+      nix-trusts-no-person = holds "nix-trusts-no-person" (
+        onEachMachine (
+          name: machine:
+          let
+            beyond = lib.subtractLists [
+              "root"
+              "builder"
+            ] machine.config.nix.settings.trusted-users;
+          in
+          [
+            {
+              holds = beyond == [ ];
+              broke = "${name}'s Nix trusts ${lib.concatStringsSep ", " beyond}, beyond root and builder.";
+            }
+          ]
+        )
+      );
+
       # Both machines commit as Joel outside work, and sign every commit, as
       # core's signing tells git in the include it writes last.
       one-personal-git = holds "one-personal-git" (

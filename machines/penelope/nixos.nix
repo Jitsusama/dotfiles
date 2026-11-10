@@ -67,14 +67,16 @@ in
     Host methuselah.local
       AddressFamily inet
   '';
-  nix.settings.trusted-users = [
-    "jitsusama"
-    "builder"
-  ];
+  # Only builder is trusted, for optimus's builds, as on methuselah. A
+  # trusted account can set the daemon's options that run as root, so
+  # trusting Joel's would make every program running as him, agents
+  # included, root here without his password. Updates build in root's own
+  # service, which needs no listing.
+  nix.settings.trusted-users = [ "builder" ];
   # optimus signs what it builds with this key, so what it copies here is
   # taken as a cache's would be, without trusting the account that copies
-  # it. What optimus built before it had the key comes unsigned, which only
-  # a trusted account may copy here.
+  # it. What optimus built before it had the key comes unsigned, so it
+  # can't be copied here, and penelope builds or fetches it itself.
   nix.settings.extra-trusted-public-keys = [
     "optimus-1:kfGUJvh5HrsPAj6xUj7OqyJjATPJz0ouP98sRnjL4Uo="
   ];
