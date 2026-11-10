@@ -123,6 +123,11 @@ in
     };
     askers = [ "jitsusama" ];
     follower = "jitsusama";
+    # A whole system's build of 1,757 pieces grew the daemon's worker to
+    # about 8 GB on this 7.4 GB laptop and oomd stopped it. In batches of at
+    # most 100, each started once 6 GiB of memory and swap are free, no one
+    # build is given that much at once.
+    batches = { };
     # After a live switch it's whole when the greeter Joel signs in at, its
     # Wi-Fi and the SSH optimus reaches it by all run; otherwise it goes back.
     # One unit each, since is-active passes when any one of several is.
