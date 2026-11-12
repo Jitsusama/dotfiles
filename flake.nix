@@ -131,6 +131,10 @@
           core.nixosModules.lanzaboote
           core.nixosModules.guide
           core.nixosModules.update-to-main
+          # Chrome as optimus has it: the theme, the open-tabs host and
+          # Vimium's keys; the account's half is below.
+          core.nixosModules.chrome
+          { home-manager.users.jitsusama.imports = [ core.homeModules.chrome ]; }
           self.nixosModules.personal
           ./machines/penelope/nixos.nix
           # While the freeze of 2026-10-26 is chased; freeze-capture.nix says why.

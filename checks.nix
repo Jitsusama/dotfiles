@@ -244,6 +244,28 @@ let
       # Mac is wiped onto it.
       methuselah-on-nixos = evaluates "methuselah-on-nixos" methuselahOnNixos;
 
+      # methuselah keeps itself current as penelope does: Joel's account
+      # follows this repository's main and core.nix's and asks whenever
+      # either moves, rather than waiting for someone to ask it.
+      methuselah-keeps-itself-current =
+        let
+          updates = methuselah.config.jitsusama.update-to-main;
+        in
+        holds "methuselah-keeps-itself-current" [
+          {
+            holds = updates.follower or null == "jitsusama";
+            broke = "methuselah has no follower in Joel's account, so it updates only when asked.";
+          }
+          {
+            holds = updates.follows ? core;
+            broke = "methuselah doesn't follow core.nix's main, so it waits on a lock bump.";
+          }
+          {
+            holds = methuselah.config.launchd.user.agents ? update-to-main-follows;
+            broke = "methuselah runs no follower agent for Joel's account.";
+          }
+        ];
+
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.
@@ -320,7 +342,6 @@ let
         let
           providers = (homeOf penelope).jitsusama.quickshell.launcher.providers;
           offOnPurpose = {
-            eero = "penelope doesn't take core's eero module, so it has no Home Network to show.";
             warp = "penelope installs no WARP, so it has no WARP link to show.";
           };
           off = lib.attrNames (lib.filterAttrs (_: provider: !provider.enable) providers);

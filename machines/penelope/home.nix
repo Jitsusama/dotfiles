@@ -13,6 +13,10 @@
 }:
 {
   home.packages = [ pkgs.google-chrome ];
+  # This Chrome is Joel's own, unmanaged and signed in to no work profile,
+  # so it takes Vimium, which he installs from the Web Store himself; its
+  # keys are held against Google's pages' own (core's modules/keys).
+  jitsusama.chrome.vimium = true;
 
   # Claude Code is signed in here, so the plan's feed reads how much of its
   # five hours and week is used, and which plan it is, for the budget the

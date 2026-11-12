@@ -39,8 +39,11 @@ install waits on Joel at the Mac. What it still needs before then:
 
 ## 🚀 Applying It
 
-methuselah updates itself to main with core.nix's `update-to-main`, asked
-from Joel's account here or through mycelium, with nobody at the Mac:
+methuselah follows this repository's main and core.nix's by itself with
+core.nix's `update-to-main`: Joel's account asks whenever either moves,
+waiting out a call and while someone is at the Mac, and shows a notice when
+it can't update. Its log is `~/Library/Logs/update-to-main-follows.log`. It
+can be asked from Joel's account here or through mycelium too:
 
 ```sh
 update-to-main ask
