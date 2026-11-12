@@ -247,11 +247,11 @@ let
       # methuselah keeps itself current as penelope does: Joel's account
       # follows this repository's main and core.nix's and asks whenever
       # either moves, rather than waiting for someone to ask it.
-      methuselah-follows-both-mains =
+      methuselah-keeps-itself-current =
         let
           updates = methuselah.config.jitsusama.update-to-main;
         in
-        holds "methuselah-follows-both-mains" [
+        holds "methuselah-keeps-itself-current" [
           {
             holds = updates.follower or null == "jitsusama";
             broke = "methuselah has no follower in Joel's account, so it updates only when asked.";
@@ -342,7 +342,6 @@ let
         let
           providers = (homeOf penelope).jitsusama.quickshell.launcher.providers;
           offOnPurpose = {
-            eero = "penelope doesn't take core's eero module, so it has no Home Network to show.";
             warp = "penelope installs no WARP, so it has no WARP link to show.";
           };
           off = lib.attrNames (lib.filterAttrs (_: provider: !provider.enable) providers);
