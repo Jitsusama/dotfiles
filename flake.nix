@@ -100,6 +100,8 @@
           core.darwinModules.graphical
           core.darwinModules.linux-builder
           core.darwinModules.update-to-main
+          # health, the day's tally of what methuselah's unified log said.
+          { home-manager.users.jitsusama.imports = [ core.homeModules.health ]; }
           self.darwinModules.personal
           ./machines/methuselah/darwin.nix
         ];
