@@ -8,6 +8,15 @@ let
   # Where the Linux VM's SSH answers, on this Mac's loopback.
   vmSsh = "127.0.0.1:${toString config.jitsusama.linux-builder.port}";
   signers = import ../../personal/signers.nix;
+  # Who may move main: GitHub merging a change (its key,
+  # personal/github-merges.asc, from github.com/web-flow.gpg), or Joel with a
+  # key of his own; an agent's key alone never moves the Mac.
+  mergers = {
+    openpgp = [ ../../personal/github-merges.asc ];
+    ssh = map (
+      key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
+    ) signers.joel;
+  };
 in
 {
   networking.hostName = "methuselah";
@@ -86,21 +95,20 @@ in
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxQCGNt7AzUZc8Niz0KOE61rWUmwdxb9nGO7xk7U8BL";
   };
 
-  # methuselah updates itself to this repository's main when Joel's account
-  # asks, so no switch here waits on him at the Mac. main counts only when
-  # GitHub signed it, merging a change (its key, personal/github-merges.asc, from
-  # github.com/web-flow.gpg), or Joel did with a key of his own; an agent's
-  # key alone never moves the Mac.
+  # methuselah updates itself to this repository's main and core.nix's, as
+  # penelope does: Joel's account follows both and asks whenever either moves,
+  # so no update waits on him or on a lock bump. It waits out a call and
+  # while he's at the Mac, and says so in a notice when it can't update.
   jitsusama.update-to-main = {
     repository = "https://github.com/Jitsusama/dotfiles";
     output = "darwinConfigurations.methuselah.system";
-    signers = {
-      openpgp = [ ../../personal/github-merges.asc ];
-      ssh = map (
-        key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
-      ) signers.joel;
+    signers = mergers;
+    follows.core = {
+      repository = "https://github.com/Jitsusama/core.nix";
+      signers = mergers;
     };
     askers = [ "jitsusama" ];
+    follower = "jitsusama";
   };
   # macOS's firewall, which ships off: a MacBook joins any network it's
   # taken to, and the AirPlay receiver and other sharing answer there on
