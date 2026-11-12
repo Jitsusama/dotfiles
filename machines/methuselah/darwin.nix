@@ -109,6 +109,35 @@ in
     };
     askers = [ "jitsusama" ];
     follower = "jitsusama";
+    # A switch goes back unless, within two minutes, what optimus leans on
+    # here is running again: the Linux VM, its only native aarch64 builder,
+    # and mycelium's agent, which holds the links, in Joel's account. That
+    # agent only runs while he's signed in, so with no session of his it
+    # counts as back. Each reads launchd's state line alone, never a job's
+    # environment, which can hold tokens.
+    health =
+      let
+        running =
+          target: "/bin/launchctl print ${target} | /usr/bin/grep -q '^[[:space:]]*state = running$'";
+        account = config.system.primaryUser;
+        mycelium = config.home-manager.users.${account}.launchd.agents.mycelium.config.Label;
+      in
+      [
+        [
+          "/bin/sh"
+          "-c"
+          (running "system/${config.launchd.daemons.linux-builder-vz.serviceConfig.Label}")
+        ]
+        [
+          "/bin/sh"
+          "-c"
+          ''
+            uid=$(/usr/bin/id -u ${account}) || exit 1
+            /bin/launchctl print "gui/$uid" > /dev/null 2>&1 || exit 0
+            ${running "\"gui/$uid/${mycelium}\""}
+          ''
+        ]
+      ];
   };
   # macOS's firewall, which ships off: a MacBook joins any network it's
   # taken to, and the AirPlay receiver and other sharing answer there on
