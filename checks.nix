@@ -285,6 +285,24 @@ let
           }
         ];
 
+      # methuselah keeps its own day's tally of what its unified log said, with
+      # core's health started by launchd, so the loop reads the Mac's faults
+      # and failing daemons from the Mac itself, as it does penelope's.
+      methuselah-keeps-its-health =
+        let
+          home = methuselah.config.home-manager.users.jitsusama;
+        in
+        holds "methuselah-keeps-its-health" [
+          {
+            holds = home.launchd.agents ? health && home.launchd.agents.health.enable;
+            broke = "methuselah runs no health agent in Joel's account, so nothing tallies what went wrong on it.";
+          }
+          {
+            holds = lib.any (package: lib.getName package == "health") home.home.packages;
+            broke = "methuselah has no health command for Joel to read the day's tally with.";
+          }
+        ];
+
       # penelope keeps its own day's tally of what its journals said, with
       # core's health, so the loop that makes it better reads its crashes,
       # device faults and failing services from the laptop itself.
