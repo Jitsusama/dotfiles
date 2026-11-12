@@ -266,6 +266,25 @@ let
           }
         ];
 
+      # After a switch methuselah goes back to the system it left unless what
+      # optimus leans on there comes back: the Linux VM, optimus's only native
+      # aarch64 builder, and mycelium's links in Joel's account.
+      methuselah-goes-back-without-its-builder-or-links =
+        let
+          health = map toString methuselah.config.jitsusama.update-to-main.health;
+          names = label: lib.any (lib.hasInfix label) health;
+        in
+        holds "methuselah-goes-back-without-its-builder-or-links" [
+          {
+            holds = names methuselah.config.launchd.daemons.linux-builder-vz.serviceConfig.Label;
+            broke = "methuselah keeps a switch whose Linux VM never came back, so optimus loses its aarch64 builder.";
+          }
+          {
+            holds = names methuselah.config.home-manager.users.jitsusama.launchd.agents.mycelium.config.Label;
+            broke = "methuselah keeps a switch whose mycelium agent never came back, so its links to optimus and penelope stay down.";
+          }
+        ];
+
       # penelope keeps its own day's tally of what its journals said, with
       # core's health, so the loop that makes it better reads its crashes,
       # device faults and failing services from the laptop itself.

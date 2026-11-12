@@ -50,8 +50,10 @@ update-to-main ask
 ```
 
 It builds main only when GitHub signed it merging a change, or Joel did with
-one of his own keys, and when it follows on from what the Mac runs. By hand,
-as before:
+one of his own keys, and when it follows on from what the Mac runs. After
+switching it goes back to the system it left unless, within two minutes, the
+Linux VM and mycelium's agent are running again; the agent counts only while
+Joel is signed in. By hand, as before:
 
 ```sh
 darwin-rebuild build --flake .#methuselah
