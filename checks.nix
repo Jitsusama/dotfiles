@@ -266,6 +266,24 @@ let
           }
         ];
 
+      # penelope keeps its own day's tally of what its journals said, with
+      # core's health, so the loop that makes it better reads its crashes,
+      # device faults and failing services from the laptop itself.
+      penelope-keeps-its-health =
+        let
+          home = penelope.config.home-manager.users.jitsusama;
+        in
+        holds "penelope-keeps-its-health" [
+          {
+            holds = home.systemd.user.services ? health;
+            broke = "penelope runs no health daemon in Joel's account, so nothing tallies what went wrong on it.";
+          }
+          {
+            holds = lib.any (package: lib.getName package == "health") home.home.packages;
+            broke = "penelope has no health command for Joel to read the day's tally with.";
+          }
+        ];
+
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.
