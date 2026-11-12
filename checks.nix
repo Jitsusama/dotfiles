@@ -308,6 +308,40 @@ let
           }
         ];
 
+      # penelope's launcher finds every kind of thing core gives it but those
+      # named here as off on purpose, each with why. core turns a few places
+      # on by another module's unit or option, named by a string, and when
+      # one of those names changed, Home Network went off on every machine
+      # while every check passed (eero-watch, renamed eero-daemon, found
+      # 2026-11-11). core's every-place-is-on-where-its-source-is holds that
+      # on a made-up machine; this holds it on penelope, so a place that goes
+      # off here unasked fails naming it, and a reason no longer true does too.
+      penelope-turns-on-every-launcher-place =
+        let
+          providers = (homeOf penelope).jitsusama.quickshell.launcher.providers;
+          offOnPurpose = {
+            eero = "penelope doesn't take core's eero module, so it has no Home Network to show.";
+            warp = "penelope installs no WARP, so it has no WARP link to show.";
+          };
+          off = lib.attrNames (lib.filterAttrs (_: provider: !provider.enable) providers);
+          unasked = lib.subtractLists (lib.attrNames offOnPurpose) off;
+          backOn = lib.subtractLists off (lib.attrNames offOnPurpose);
+        in
+        holds "penelope-turns-on-every-launcher-place" [
+          {
+            holds = unasked == [ ];
+            broke =
+              "penelope's launcher has these places off with no reason given: "
+              + "${lib.concatStringsSep ", " unasked}.";
+          }
+          {
+            holds = backOn == [ ];
+            broke =
+              "penelope's launcher has these places on, though they're named as off on "
+              + "purpose: ${lib.concatStringsSep ", " backOn}.";
+          }
+        ];
+
       # The machine of this system's Neovim starts with every plugin and the
       # personal modules' Lua without an error: core's index of the plugins is
       # written by starting it once and loading each, and fails on the first
