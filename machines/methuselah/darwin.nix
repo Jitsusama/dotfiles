@@ -32,12 +32,15 @@ in
     # trusted user can. nix-darwin keeps root beside it.
     settings.trusted-users = [ "builder" ];
     # The Linux builder's line, after nix-darwin's empty `builders`, so it
-    # counts.
+    # counts, and core's line naming the key the Mac signs its builds with.
     extraOptions = ''
       !include linux-builder.conf
+      !include signing.conf
     '';
   };
   ids.gids.nixbld = 350;
+  # It's nix-darwin's daemon that starts again to read the signing line.
+  jitsusama.nix-daemon.label = "org.nixos.nix-daemon";
 
   # Linux builds go to the VM at utility QoS, so they yield to Joel's own
   # programs. Here nix-darwin runs Nix, so it's nix-darwin's daemon that

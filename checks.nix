@@ -266,6 +266,23 @@ let
           }
         ];
 
+      # methuselah's Nix signs what it builds with the Mac's own key, which
+      # core makes and names, so optimus takes its builds by trusting that key.
+      methuselah-signs-what-it-builds =
+        let
+          inherit (methuselah) config;
+        in
+        holds "methuselah-signs-what-it-builds" [
+          {
+            holds = lib.hasInfix "!include signing.conf" config.nix.extraOptions;
+            broke = "methuselah's Nix never reads signing.conf, so it signs nothing it builds.";
+          }
+          {
+            holds = config.jitsusama.nix-daemon.label == config.launchd.daemons.nix-daemon.serviceConfig.Label;
+            broke = "methuselah restarts a Nix daemon it doesn't run, so its own never reads the signing line.";
+          }
+        ];
+
       # After a switch methuselah goes back to the system it left unless what
       # optimus leans on there comes back: the Linux VM, optimus's only native
       # aarch64 builder, and mycelium's links in Joel's account.
