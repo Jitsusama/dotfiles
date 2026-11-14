@@ -1,7 +1,12 @@
 # penelope, Joel's personal Surface Laptop 4, as the guide installs it: its
 # NVMe disk encrypted as core lays it out, Secure Boot with its own keys, and the
 # account. The hardware, niri, greetd and networking come from core.nix.
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   signers = import ../../personal/signers.nix;
   systemctl = lib.getExe' config.systemd.package "systemctl";
@@ -56,6 +61,12 @@ in
     hostNames = [ "methuselah.local" ];
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPSbRSaae8/rtKXp4BAHE1JwCI7qwFU1plO3INqjssss";
   };
+  # The host key of methuselah's Linux VM, which answers on that Mac's
+  # loopback, so it's named by an alias rather than its address.
+  programs.ssh.knownHosts.methuselah-linux = {
+    hostNames = [ "methuselah-linux" ];
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJBWcxb/Blaqt1auOtE+F8QUWrUotiC5qBJ+UuEWdVCb";
+  };
   # The dock on Joel's desk, its cable trusted as his Wi-Fi is, so penelope
   # finds methuselah and optimus by their .local names over the link that
   # holds its route, and is found there.
@@ -73,10 +84,40 @@ in
 
   # The resolver answers a .local name with a link-local IPv6 address and
   # no interface, which ssh can't connect to, so it asks for IPv4 alone.
+  # Root reaches methuselah's Linux VM to build there as optimus does:
+  # through the Mac's builder account, whose key may only forward to the
+  # VM's SSH, with a key of root's own made once below.
   programs.ssh.extraConfig = ''
     Host methuselah.local
       AddressFamily inet
+
+    Host methuselah-builder
+      HostName methuselah.local
+      User builder
+      AddressFamily inet
+      IdentityFile /etc/nix/methuselah-builder_ed25519
+      IdentitiesOnly yes
+
+    Host methuselah-linux
+      HostName 127.0.0.1
+      Port 31022
+      User builder
+      ProxyJump methuselah-builder
+      HostKeyAlias methuselah-linux
+      IdentityFile /etc/nix/methuselah-builder_ed25519
+      IdentitiesOnly yes
   '';
+  # The key never sits in a Nix value, so it stays on this laptop; its
+  # public half is what methuselah lets in.
+  system.activationScripts.methuselah-builder-key = {
+    deps = [ "etc" ];
+    text = ''
+      if [ ! -e /etc/nix/methuselah-builder_ed25519 ]; then
+        ${lib.getExe' pkgs.openssh "ssh-keygen"} -q -t ed25519 -N "" -C "penelope root builds" \
+          -f /etc/nix/methuselah-builder_ed25519
+      fi
+    '';
+  };
   # Only builder is trusted, for optimus's builds, as on methuselah. A
   # trusted account can set the daemon's options that run as root, so
   # trusting Joel's would make every program running as him, agents

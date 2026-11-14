@@ -350,6 +350,28 @@ let
         }
       ];
 
+      # penelope's root reaches methuselah's Linux VM to build there, with a
+      # key it makes once and the VM's host key pinned, as optimus does.
+      penelope-reaches-methuselahs-builder =
+        let
+          inherit (penelope.config) programs system;
+          key = "/etc/nix/methuselah-builder_ed25519";
+        in
+        holds "penelope-reaches-methuselahs-builder" [
+          {
+            holds = lib.hasInfix "IdentityFile ${key}" programs.ssh.extraConfig;
+            broke = "penelope's ssh doesn't sign in to methuselah's builder with root's builder key.";
+          }
+          {
+            holds = lib.hasInfix "-f ${key}" (system.activationScripts.methuselah-builder-key.text or "");
+            broke = "penelope never makes the key its ssh signs in to methuselah's builder with.";
+          }
+          {
+            holds = programs.ssh.knownHosts ? methuselah-linux;
+            broke = "penelope doesn't pin the host key of methuselah's Linux VM, so ssh refuses it.";
+          }
+        ];
+
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.

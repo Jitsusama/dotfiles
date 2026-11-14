@@ -19,7 +19,8 @@ runs what that guide installed.
 
 ```text
 nixos.nix                 # penelope as the guide installs it: its disk, SSH
-                          # from optimus, methuselah's host key, the dock it
+                          # from optimus, methuselah's host key, root's way
+                          # to methuselah's Linux builder, the dock it
                           # trusts, the builder optimus's Nix builds
                           # through, the lid kept awake on a charger, the
                           # account, and what it updates itself from
