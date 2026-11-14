@@ -95,6 +95,7 @@ in
       HostName methuselah.local
       User builder
       AddressFamily inet
+      ConnectTimeout 10
       IdentityFile /etc/nix/methuselah-builder_ed25519
       IdentitiesOnly yes
 
@@ -137,6 +138,9 @@ in
   # 10.8 GB of swap, and left Joel's session waiting on memory for 22% of
   # a 10 s stretch (10-31).
   nix.settings.cores = 3;
+  # methuselah's VM fetches what a cache holds itself, rather than this
+  # laptop sending it over Wi-Fi.
+  nix.settings.builders-use-substitutes = true;
   nix.settings.max-jobs = 2;
 
   # penelope works for the personal realm with its lid shut. On a charger,
@@ -186,10 +190,21 @@ in
     };
     askers = [ "jitsusama" ];
     follower = "jitsusama";
+    # Heavy pieces build on methuselah's Linux VM rather than this laptop,
+    # such as core's patched Qt, which no cache holds. Away from home, or when the
+    # VM fails one, it builds here as before, two at a time with three cores
+    # each, unless the laptop is already busy.
+    elsewhere = true;
+    builders = "ssh-ng://methuselah-linux x86_64-linux - 4 1 big-parallel,benchmark";
+    here = {
+      maxJobs = 2;
+      cores = 3;
+    };
     # A whole system's build of 1,757 pieces grew the daemon's worker to
-    # about 8 GB on this 7.4 GB laptop and oomd stopped it. In batches of at
-    # most 100, each started once 6 GiB of memory and swap are free, no one
-    # build is given that much at once.
+    # about 8 GB on this 7.4 GB laptop and oomd stopped it, and the worker
+    # grows the same wherever its pieces build. In batches of at most 100, no
+    # one build is given that much at once; those built here each start once
+    # 6 GiB of memory and swap are free.
     batches = { };
     # After a live switch it's whole when the greeter Joel signs in at, its
     # Wi-Fi and the SSH optimus reaches it by all run; otherwise it goes back.
