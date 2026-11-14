@@ -398,6 +398,36 @@ let
           }
         ];
 
+      # penelope's updates send their heavy pieces to methuselah's Linux VM,
+      # building here only what it can't take, and still in batches, since the
+      # daemon's worker grows with a build's pieces wherever they build.
+      penelope-builds-on-methuselah =
+        let
+          inherit (penelope.config.jitsusama) update-to-main;
+        in
+        holds "penelope-builds-on-methuselah" [
+          {
+            holds = update-to-main.elsewhere;
+            broke = "penelope's updates build every piece on the laptop.";
+          }
+          {
+            holds = lib.hasPrefix "ssh-ng://methuselah-linux " (toString update-to-main.builders);
+            broke = "penelope's updates don't send their heavy pieces to methuselah's Linux VM.";
+          }
+          {
+            holds = update-to-main.here != null;
+            broke = "penelope's updates fail away from home, where methuselah's VM can't be reached, rather than building on the laptop.";
+          }
+          {
+            holds = update-to-main.batches != null;
+            broke = "penelope's updates give one build every piece at once, which grew the daemon's worker past the laptop's memory.";
+          }
+          {
+            holds = penelope.config.nix.settings.builders-use-substitutes or false;
+            broke = "methuselah's VM gets every input from penelope over Wi-Fi rather than from the cache.";
+          }
+        ];
+
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.
