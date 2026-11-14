@@ -283,6 +283,32 @@ let
           }
         ];
 
+      # methuselah lets penelope's root through to its Linux VM to build, and
+      # nothing more: its key forwards only to the VM, never to a session of
+      # the builder account, which this Mac's Nix trusts.
+      methuselah-lets-penelope-build =
+        let
+          inherit (methuselah) config;
+          penelopes = lib.filter (lib.hasInfix "penelope root builds");
+          lines = penelopes config.users.users.builder.openssh.authorizedKeys.keys;
+        in
+        holds "methuselah-lets-penelope-build" [
+          {
+            holds = penelopes config.jitsusama.linux-builder.authorizedKeys != [ ];
+            broke = "methuselah's Linux VM doesn't let penelope's root in, so penelope builds everything itself.";
+          }
+          {
+            holds = lines != [ ];
+            broke = "methuselah's builder account doesn't let penelope's root jump through to the VM.";
+          }
+          {
+            holds = lib.all (
+              line: lib.hasPrefix "restrict," line && lib.hasInfix ''command="/usr/bin/false"'' line
+            ) lines;
+            broke = "penelope's key opens a session on methuselah's builder account, which the Mac's Nix trusts.";
+          }
+        ];
+
       # After a switch methuselah goes back to the system it left unless what
       # optimus leans on there comes back: the Linux VM, optimus's only native
       # aarch64 builder, and mycelium's links in Joel's account.
