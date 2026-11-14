@@ -109,9 +109,12 @@ in
   # penelope builds for optimus: optimus's nix-daemon logs in as builder with
   # its own key and speaks Nix's protocol, and core's nix-daemon module keeps
   # those builds below Joel's programs. The key can run nothing else, so a
-  # trusted store user is all it gets.
+  # trusted store user is all it gets. Its user manager lingers: optimus
+  # logs in every minute to prove it, and a manager started at each login
+  # and stopping 10 seconds after made a switch meeting it go back.
   users.users.builder = {
     isSystemUser = true;
+    linger = true;
     group = "builder";
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [

@@ -338,6 +338,18 @@ let
           }
         ];
 
+      # optimus proves penelope as a builder every minute by logging in as
+      # builder, and each login starts builder's user manager, which stops
+      # 10 seconds after. A switch meeting one stopping fails that account's
+      # activation, and update-to-main takes the whole machine back, as at
+      # 10:02 on 14 November; lingering keeps that manager running.
+      penelope-switches-while-optimus-builds = holds "penelope-switches-while-optimus-builds" [
+        {
+          holds = penelope.config.users.users.builder.linger == true;
+          broke = "penelope starts and stops builder's user manager at each of optimus's logins, so a switch meeting one stopping goes back.";
+        }
+      ];
+
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and
       # boots through lanzaboote with Secure Boot keys of its own, so the guide
       # that installs it and the firmware that enforces its keys agree.
