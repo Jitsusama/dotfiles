@@ -5,6 +5,9 @@ let
   # optimus's root key for sending builds out (its
   # /etc/nix/offload_ed25519.pub).
   optimusOffload = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRkdxraohorYagcirm3lEonh6at0F7DvFoLuEqBQajh nix-offload";
+  # penelope's root key for building on the Linux VM, which it makes once
+  # (its /etc/nix/methuselah-builder_ed25519.pub).
+  penelopeBuilds = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINVeqxOe/LBuKV4fRWUMp/gAfODVUGG7IY/AA8mwJzT6 penelope root builds";
   # Where the Linux VM's SSH answers, on this Mac's loopback.
   vmSsh = "127.0.0.1:${toString config.jitsusama.linux-builder.port}";
   signers = import ../../personal/signers.nix;
@@ -47,8 +50,12 @@ in
   # starts again to read the VM's line.
   jitsusama.linux-builder.nixDaemon = "org.nixos.nix-daemon";
   # This daemon won't pass a build from optimus on to the VM, so optimus
-  # signs in to the VM itself, jumping through the builder account below.
-  jitsusama.linux-builder.authorizedKeys = [ optimusOffload ];
+  # signs in to the VM itself, jumping through the builder account below,
+  # and penelope does the same for its own heavy builds.
+  jitsusama.linux-builder.authorizedKeys = [
+    optimusOffload
+    penelopeBuilds
+  ];
   # Joel restarts a wedged VM from optimus over SSH, where sudo would want
   # this Mac's password; this lets him run just those two restarts without.
   jitsusama.linux-builder.restartableBy = [ config.system.primaryUser ];
@@ -61,7 +68,9 @@ in
 
   # The account optimus's Nix signs in as to build here. Its key may only
   # speak Nix's daemon protocol, never open a shell, and forward only to
-  # the Linux VM's SSH.
+  # the Linux VM's SSH. penelope's may only forward to the VM: it builds
+  # nothing for the Mac, and builder is trusted by this Mac's daemon, so a
+  # session of its own would be more than it needs.
   users.knownUsers = [ "builder" ];
   users.users.builder = {
     uid = 450;
@@ -71,6 +80,7 @@ in
     isHidden = true;
     openssh.authorizedKeys.keys = [
       ''restrict,port-forwarding,permitopen="${vmSsh}",command="/run/current-system/sw/bin/nix-daemon --stdio" ${optimusOffload}''
+      ''restrict,port-forwarding,permitopen="${vmSsh}",command="/usr/bin/false" ${penelopeBuilds}''
     ];
   };
   # Remote Login here admits only com.apple.access_ssh's members, a group
