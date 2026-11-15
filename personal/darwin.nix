@@ -1,7 +1,10 @@
 # What every personal Mac adds to core.nix's roles: the apps Homebrew
-# installs beside core's, with the personal modules in every account.
+# installs beside core's, with the personal modules in every account, and
+# what it follows when it updates itself.
 { homeModules }:
 {
+  imports = [ ./follows-main.nix ];
+
   home-manager.sharedModules = [ homeModules.personal ];
 
   homebrew.casks = [

@@ -10,16 +10,6 @@ let
   penelopeBuilds = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINVeqxOe/LBuKV4fRWUMp/gAfODVUGG7IY/AA8mwJzT6 penelope root builds";
   # Where the Linux VM's SSH answers, on this Mac's loopback.
   vmSsh = "127.0.0.1:${toString config.jitsusama.linux-builder.port}";
-  signers = import ../../personal/signers.nix;
-  # Who may move main: GitHub merging a change (its key,
-  # personal/github-merges.asc, from github.com/web-flow.gpg), or Joel with a
-  # key of his own; an agent's key alone never moves the Mac.
-  mergers = {
-    openpgp = [ ../../personal/github-merges.asc ];
-    ssh = map (
-      key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
-    ) signers.joel;
-  };
 in
 {
   networking.hostName = "methuselah";
@@ -108,20 +98,11 @@ in
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxQCGNt7AzUZc8Niz0KOE61rWUmwdxb9nGO7xk7U8BL";
   };
 
-  # methuselah updates itself to this repository's main and core.nix's, as
-  # penelope does: Joel's account follows both and asks whenever either moves,
-  # so no update waits on him or on a lock bump. It waits out a call and
-  # while he's at the Mac, and says so in a notice when it can't update.
+  # methuselah updates itself as every personal machine does
+  # (personal/follows-main.nix). It waits out a call and while he's at the
+  # Mac, and says so in a notice when it can't update.
   jitsusama.update-to-main = {
-    repository = "https://github.com/Jitsusama/dotfiles";
     output = "darwinConfigurations.methuselah.system";
-    signers = mergers;
-    follows.core = {
-      repository = "https://github.com/Jitsusama/core.nix";
-      signers = mergers;
-    };
-    askers = [ "jitsusama" ];
-    follower = "jitsusama";
     # A switch goes back unless, within two minutes, what optimus leans on
     # here is running again: the Linux VM, its only native aarch64 builder,
     # and mycelium's agent, which holds the links, in Joel's account. That

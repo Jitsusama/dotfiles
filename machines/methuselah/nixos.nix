@@ -4,19 +4,7 @@
 # updates itself from. The hardware, its kernel and boot chain, niri, greetd and
 # networking come from core.nix. macOS stays beside it. It's built and checked
 # here before NixOS is installed; until then, darwin.nix is all the Mac runs.
-{ config, lib, ... }:
-let
-  signers = import ../../personal/signers.nix;
-  systemctl = lib.getExe' config.systemd.package "systemctl";
-  # Who may move a main methuselah builds: GitHub, merging a change, or Joel
-  # with a key of his own; an agent's key alone never does.
-  mergers = {
-    openpgp = [ ../../personal/github-merges.asc ];
-    ssh = map (
-      key: ''${config.home-manager.users.jitsusama.jitsusama.identity.email} namespaces="git" ${key}''
-    ) signers.joel;
-  };
-in
+{ config, ... }:
 {
   networking.hostName = "methuselah";
 
@@ -86,38 +74,10 @@ in
   # starts without asking again.
   jitsusama.login.account = "jitsusama";
 
-  # methuselah updates itself to this repository's main, with core.nix at
-  # its own main, as penelope does: Joel's account follows both and asks
-  # whenever either moves, and mycelium's node may ask too. main counts only
-  # when GitHub signed it merging a change, or Joel did with a key of his
-  # own. A changed kernel waits for the next boot.
-  jitsusama.update-to-main = {
-    repository = "https://github.com/Jitsusama/dotfiles";
-    output = "nixosConfigurations.methuselah.config.system.build.toplevel";
-    signers = mergers;
-    follows.core = {
-      repository = "https://github.com/Jitsusama/core.nix";
-      signers = mergers;
-    };
-    askers = [ "jitsusama" ];
-    follower = "jitsusama";
-    # After a live switch it's whole when the greeter, its Wi-Fi and the SSH
-    # optimus builds through all run; otherwise it goes back. One unit each,
-    # since is-active passes when any one of several is.
-    health =
-      map
-        (unit: [
-          systemctl
-          "is-active"
-          "--quiet"
-          unit
-        ])
-        [
-          "greetd.service"
-          "wifid.service"
-          "sshd.service"
-        ];
-  };
+  # methuselah updates itself as every personal machine does
+  # (personal/follows-main.nix), and mycelium's node may ask too. A changed
+  # kernel waits for the next boot.
+  jitsusama.update-to-main.output = "nixosConfigurations.methuselah.config.system.build.toplevel";
 
   # The release it will first be installed with; read the release notes
   # before changing it.
