@@ -193,9 +193,12 @@ in
     # Heavy pieces build on methuselah's Linux VM rather than this laptop,
     # such as core's patched Qt, which no cache holds. Away from home, or when the
     # VM fails one, it builds here as before, two at a time with three cores
-    # each, unless the laptop is already busy.
+    # each, unless the laptop is already busy. The VM has four cores and the
+    # Mac beside it is busy with its own work, so it takes two pieces at a
+    # time: at four, three crates' tests that race or wait on a clock
+    # failed there on 14 November, and each time the batch came back here.
     elsewhere = true;
-    builders = "ssh-ng://methuselah-linux x86_64-linux - 4 1 big-parallel,benchmark";
+    builders = "ssh-ng://methuselah-linux x86_64-linux - 2 1 big-parallel,benchmark";
     here = {
       maxJobs = 2;
       cores = 3;
