@@ -28,6 +28,7 @@ biome.jsonc               # how biome lints polkit's JavaScript
 personal/                 # what every personal machine adds
 ├── darwin.nix            #   for macOS: the apps Homebrew installs
 ├── nixos.nix             #   for NixOS
+├── follows-main.nix      #   on both: the mains a machine updates itself to, and who may move them
 ├── home.nix              #   for the account: identity, tools and git
 ├── signers.nix           #   the keys that sign Joel's commits, his own and his agents'
 └── github-merges.asc     #   the key GitHub signs its merges with, which main's head carries
