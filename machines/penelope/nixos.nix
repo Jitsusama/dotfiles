@@ -174,8 +174,12 @@
     # Mac beside it is busy with its own work, so it takes two pieces at a
     # time: at four, three crates' tests that race or wait on a clock
     # failed there on 14 November, and each time the batch came back here.
+    # It offers no big-parallel: penelope's kernel and its other heaviest
+    # pieces build only on optimus, which signs them with the key penelope
+    # trusts and copies them here, or on penelope itself, never on the
+    # Rosetta VM, whose output nothing here can check (17 November).
     elsewhere = true;
-    builders = "ssh-ng://methuselah-linux x86_64-linux - 2 1 big-parallel,benchmark";
+    builders = "ssh-ng://methuselah-linux x86_64-linux - 2 1 benchmark";
     here = {
       maxJobs = 2;
       cores = 3;

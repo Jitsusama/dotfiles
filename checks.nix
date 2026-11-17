@@ -426,6 +426,17 @@ let
             holds = penelope.config.nix.settings.builders-use-substitutes or false;
             broke = "methuselah's VM gets every input from penelope over Wi-Fi rather than from the cache.";
           }
+          {
+            holds = !(lib.hasInfix "big-parallel" (toString update-to-main.builders));
+            broke = "penelope's updates offer methuselah's Rosetta VM big-parallel work, such as its kernel, whose output penelope can't check, since only optimus's key and the cache's are trusted.";
+          }
+          {
+            holds =
+              penelope.config.nix.settings.extra-trusted-public-keys == [
+                "optimus-1:kfGUJvh5HrsPAj6xUj7OqyJjATPJz0ouP98sRnjL4Uo="
+              ];
+            broke = "penelope trusts a key besides optimus's and the cache's, so a store path built elsewhere is taken as built by either.";
+          }
         ];
 
       # penelope installs onto its own NVMe disk, encrypted as core lays it out, and

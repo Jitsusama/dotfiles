@@ -103,8 +103,10 @@ on, and it runs what the guide installs: core's encrypted disk and Secure
 Boot. It follows this repository's main and core.nix's main by itself
 (update-to-main's follower) and builds its own system, so a merge to either
 reaches it within minutes. A change that compiles its kernel has the kernel
-built on a lent builder and copied to it first, since it's a small laptop
-Joel uses. Its [README](machines/penelope/README.md) says more.
+built on optimus, which signs it with the one key penelope trusts besides
+the cache's, and copied to it first, since it's a small laptop Joel uses.
+Nothing else builds penelope's heaviest pieces: its updates offer
+methuselah's VM no big-parallel work. Its [README](machines/penelope/README.md) says more.
 
 ## Changing core.nix Too
 
