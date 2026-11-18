@@ -138,13 +138,16 @@ How this repository holds the repository quality standard:
 - **Data, read by no linter:** pi's `package-lock.json`, which npm writes,
   and `personal/github-merges.asc`, GitHub's key, listed in `treefmt.nix`;
   and treefmt-nix's own list of locks, patches, `LICENSE` and git's files.
-- **Exemptions:** shellcheck runs without its optional checks, as core's
-  module sets it; turning them on belongs in core. `skills.sh` disables
-  SC2154 at its top, saying why.
+- **Exemptions:** the formatting check runs shellcheck as core's module
+  sets it, and `every-script-meets-shellcheck-at-its-strictest` adds the
+  optional checks that find faults, as core's does. `skills.sh` disables
+  SC2154 at its top, saying why, which `every-suppression-says-why` holds.
 - **Tests:** every test is a check in `checks.nix`, evaluating or building;
   there are no VM or browser tests, so no sleeps and no skips.
-- **Limits:** no check holds files to 800 lines or folders to 40 entries,
-  since core exports none; review holds them.
+- **Limits:** core's rules, each a check: `every-long-file-says-why`
+  holds code files to 800 lines and folders to 40 entries unless they say
+  why, and `programs-live-in-their-own-files` keeps programs past five
+  lines out of Nix strings.
 
 [core]: https://github.com/Jitsusama/core.nix
 [conventions]: https://github.com/Jitsusama/core.nix/blob/main/docs/conventions.md
