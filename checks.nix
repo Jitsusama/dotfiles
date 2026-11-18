@@ -227,6 +227,23 @@ let
         src = self;
       };
 
+      # Every code file past 800 lines and folder of more than 40 entries says
+      # why it stays whole, as core's do.
+      every-long-file-says-why = core.lib.everyLongFileSaysWhy pkgs { src = self; };
+
+      # No program past five lines is written as a string in Nix, as core's
+      # aren't: each lives in a file of its own, read by its linter.
+      programs-live-in-their-own-files = core.lib.programsLiveInTheirOwnFiles pkgs { src = self; };
+
+      # Every lint suppression says why where it's made, as core's do.
+      every-suppression-says-why = core.lib.everySuppressionSaysWhy pkgs { src = self; };
+
+      # Every shell script meets shellcheck's optional checks that find faults,
+      # as core's do, beyond the ones the formatting check turns on.
+      every-script-meets-shellcheck-at-its-strictest =
+        core.lib.everyScriptMeetsShellcheckAtItsStrictest pkgs
+          { src = self; };
+
       every-module-is-checked = holds "every-module-is-checked" [
         {
           holds = unchecked == [ ];
