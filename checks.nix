@@ -21,60 +21,18 @@
 let
   inherit (pkgs) lib;
 
-  # The bare machines, evaluates and holds are what core.nix's own checks
-  # use, written again here because core doesn't export them.
-
-  # The least a machine needs to evaluate, with core's home-manager and
-  # nixpkgs settings, which every machine has, and one account for
-  # home-manager to configure.
-  bareNixos =
-    modules:
-    nixpkgs.lib.nixosSystem {
-      modules = [
-        core.nixosModules.home-manager
-        core.nixosModules.nixpkgs
-        {
-          nixpkgs.hostPlatform = "x86_64-linux";
-          boot.loader.grub.enable = false;
-          fileSystems."/" = {
-            device = "none";
-            fsType = "tmpfs";
-          };
-          users.users.someone.isNormalUser = true;
-          home-manager.users.someone.home.stateVersion = "26.05";
-          system.stateVersion = "26.05";
-        }
-      ]
-      ++ modules;
-    };
-
+  # The bare machines are built from core.nix's own, as its checks build
+  # theirs: the least machine of each class, with core's home-manager and
+  # nixpkgs settings and one account, someone, for home-manager to
+  # configure, with the given modules added. evaluates is core's check
+  # that a machine evaluates and warns of nothing.
+  bareNixos = modules: nixpkgs.lib.nixosSystem { modules = [ core.lib.bareNixosModule ] ++ modules; };
   bareDarwin =
-    modules:
-    nix-darwin.lib.darwinSystem {
-      modules = [
-        core.darwinModules.home-manager
-        core.darwinModules.nixpkgs
-        {
-          nixpkgs.hostPlatform = "aarch64-darwin";
-          system.primaryUser = "someone";
-          users.users.someone.home = "/Users/someone";
-          home-manager.users.someone.home.stateVersion = "26.05";
-          system.stateVersion = 6;
-        }
-      ]
-      ++ modules;
-    };
+    modules: nix-darwin.lib.darwinSystem { modules = [ core.lib.bareDarwinModule ] ++ modules; };
+  evaluates = core.lib.evaluates pkgs;
 
   # Home-manager modules, given to the bare machine's one account.
   inAccount = modules: { home-manager.users.someone.imports = modules; };
-
-  # A check that passes when the machine evaluates. Writing out the path of
-  # its derivation forces the whole configuration while building none of it.
-  evaluates =
-    name: machine:
-    pkgs.writeText name (
-      builtins.unsafeDiscardStringContext machine.config.system.build.toplevel.drvPath
-    );
 
   # A check that passes when every condition about the machines holds. Each
   # condition is given with what broke when it doesn't, and a failure prints
