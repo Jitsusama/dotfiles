@@ -300,6 +300,20 @@ let
           }
         ];
 
+      # methuselah builds what optimus's root sends it, which an agent may ask
+      # for, only in Nix's sandbox, never relaxed, where a derivation could
+      # ask its way out.
+      methuselah-sandboxes-what-it-builds =
+        let
+          inherit (methuselah.config.nix.settings) sandbox;
+        in
+        holds "methuselah-sandboxes-what-it-builds" [
+          {
+            holds = builtins.isBool sandbox && sandbox;
+            broke = "methuselah builds optimus's derivations outside Nix's sandbox, with the Mac's network and files.";
+          }
+        ];
+
       # methuselah lets penelope's root through to its Linux VM to build, and
       # nothing more: its key forwards only to the VM, never to a session of
       # the builder account, which this Mac's Nix trusts.
