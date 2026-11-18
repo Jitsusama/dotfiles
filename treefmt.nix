@@ -5,6 +5,10 @@
 # by a linter or listed here as data, and the check fails on one that's
 # neither, so a new kind of file can't slip past them all.
 { lib, pkgs, ... }:
+let
+  # polkit's rules, the JavaScript polkit runs.
+  polkitRules = [ "machines/*/*.js" ];
+in
 {
   settings.on-unmatched = "fatal";
 
@@ -21,7 +25,10 @@
   settings.formatter.stylua.includes = [ ".luacheckrc" ];
 
   # polkit's rules, read by biome as the JavaScript polkit runs, with every
-  # rule on but those biome.jsonc turns off, and biome.jsonc itself.
+  # rule on but those biome.jsonc turns off, and biome.jsonc itself. Core's
+  # linter reads every other .js file as the JavaScript QML imports, which
+  # polkit's isn't, so it leaves these to this one.
+  settings.formatter.qt-javascript-lint.excludes = polkitRules;
   settings.formatter.polkit-javascript-lint = {
     command = lib.getExe pkgs.biome;
     options = [
@@ -30,9 +37,6 @@
       "--max-diagnostics=none"
       "--config-path=biome.jsonc"
     ];
-    includes = [
-      "machines/*/*.js"
-      "biome.jsonc"
-    ];
+    includes = polkitRules ++ [ "biome.jsonc" ];
   };
 }
