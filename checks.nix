@@ -302,15 +302,25 @@ let
 
       # methuselah builds what optimus's root sends it, which an agent may ask
       # for, only in Nix's sandbox, never relaxed, where a derivation could
-      # ask its way out.
+      # ask its way out. A line in extraOptions would come after the setting
+      # in nix.conf and win, so none there may name the sandbox.
       methuselah-sandboxes-what-it-builds =
         let
-          inherit (methuselah.config.nix.settings) sandbox;
+          inherit (methuselah.config) nix;
+          inherit (nix.settings) sandbox;
         in
         holds "methuselah-sandboxes-what-it-builds" [
           {
             holds = builtins.isBool sandbox && sandbox;
             broke = "methuselah builds optimus's derivations outside Nix's sandbox, with the Mac's network and files.";
+          }
+          {
+            holds = (nix.settings.sandbox-fallback or true) == false;
+            broke = "methuselah builds without the sandbox when it can't set one up.";
+          }
+          {
+            holds = !lib.hasInfix "sandbox" nix.extraOptions;
+            broke = "methuselah's extraOptions names the sandbox, after and over its setting.";
           }
         ];
 

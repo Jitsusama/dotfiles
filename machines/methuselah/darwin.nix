@@ -26,9 +26,14 @@ in
     settings.trusted-users = [ "builder" ];
     # optimus's root sends this Mac aarch64-darwin builds that any agent may
     # ask its daemon for, so each runs in Nix's sandbox, away from the
-    # network and the Mac's files. nix-darwin leaves it off, and "relaxed"
-    # would let a derivation out by asking for __noChroot.
+    # Mac's files and, unless it's a fixed-output fetch, the network.
+    # nix-darwin leaves it off, and "relaxed" would let a derivation out by
+    # asking for __noChroot or its own sandbox profile, which "true" refuses.
+    # A sandbox that can't be set up fails the build rather than running it
+    # bare. The builder is trusted, so a client's own sandbox setting would
+    # win for its connection: optimus's root sends its own, which is true.
     settings.sandbox = true;
+    settings.sandbox-fallback = false;
     # The Linux builder's line, after nix-darwin's empty `builders`, so it
     # counts, and core's line naming the key the Mac signs its builds with.
     extraOptions = ''
