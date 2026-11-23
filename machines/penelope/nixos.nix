@@ -43,6 +43,9 @@
     linkedFrom.personal.optimus = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOmKJWW7RcdxOhuqYvu/xU7R0ktu509y7dJVtuKNKP+vUgsHucMkl6uhEUa4LSw/om7fdytbPgkDnpnM2GJnWtM= jitsusama@optimus personal link";
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
+  # Chrome, which home.nix installs, is unfree, and home-manager uses the
+  # system's nixpkgs, so it's named here.
+  nixpkgs.config.allowUnfreePackages = [ "google-chrome" ];
 
   # methuselah's own host key, which mycelium's link to it checks.
   programs.ssh.knownHosts.methuselah = {

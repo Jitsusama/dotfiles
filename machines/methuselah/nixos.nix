@@ -30,6 +30,14 @@
     extraGroups = [ "wheel" ];
   };
   home-manager.users.jitsusama.imports = [ ./home.nix ];
+  # Widevine, which home.nix's Chromium is built with, is unfree, and makes
+  # that Chromium unfree too. home-manager uses the system's nixpkgs, so
+  # they're named here.
+  nixpkgs.config.allowUnfreePackages = [
+    "chromium"
+    "chromium-unwrapped"
+    "widevine-cdm"
+  ];
 
   # The link keys of penelope and optimus, each from a TPM that asks
   # nothing, pinned to its end of a link or an attach as that machine, so
