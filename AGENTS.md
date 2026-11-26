@@ -86,6 +86,10 @@ CI runs it.
   link or a backticked path that names nothing, so a move or a rename fixes
   its mentions in the same change. A mention of something deliberately
   elsewhere, such as a file in core.nix, is listed in its `exempt` with why.
+- A code comment names only what exists: `comments-name-what-exists`,
+  core's, fails on a comment naming a path from one of the top folders that
+  names nothing, so a comment is fixed in the change that moves what it
+  names.
 - Every folder says what it holds: `every-folder-says-what-it-holds`, core's,
   fails on one with no README, no entry file opening with a comment, no line
   of its parent's README opening with its name and, at the top, no line of
