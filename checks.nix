@@ -178,6 +178,11 @@ let
         exempt = [ ];
       };
 
+      # Every code comment names only what exists, as core's do: a comment
+      # naming a path from one of this repository's top folders that names
+      # nothing fails.
+      comments-name-what-exists = core.lib.commentsNameWhatExists pkgs { src = self; };
+
       # Every folder says what it holds, as core's do: in a README, the opening
       # comment of its entry file, a line of its parent's README opening with
       # its name, or for a top folder a line of the README's map.
